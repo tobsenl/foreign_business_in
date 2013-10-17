@@ -3,21 +3,95 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
-	<!--
-	 	注入依赖关系bean
-	  -->
-	<!-- 
-	sqlSessionFactory	外事系统表库
-	sqlSessionFactory2	内部系统组织架构权限库
-	-->
 	
-	<bean id="DBhelper" class="com.test.dao.DBhelper">
-		<property name="usermapper">
-			<ref local="IUserMapper" />
+	<bean id="springContextUtil" class="cn.com.jnpc.foreign.utils.springContextUtil" scope="singleton"></bean>
+	
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+		<!---<constructor-arg index="1" value="BATCH" /> 如果想要进行批量操作可加入这个属性 -->
+	</bean>
+
+	<!-- 将所有的mapper借口全部都按照自动规则载入spring -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="cn.com.jnpc.foreign.mapper" />
+	</bean>
+	
+	<!-- po类的配置 -->
+	<bean id="FiAttachment" class="cn.com.jnpc.foreign.po.FiAttachment"></bean>
+	<bean id="FiBlob" class="cn.com.jnpc.foreign.po.FiBlob"></bean>
+	<bean id="FiForeigner" class="cn.com.jnpc.foreign.po.FiForeigner"></bean>
+	<bean id="FiInvitation" class="cn.com.jnpc.foreign.po.FiInvitation"></bean>
+	<bean id="FiMiddle" class="cn.com.jnpc.foreign.po.FiMiddle"></bean>
+	<bean id="FiResidencePermit" class="cn.com.jnpc.foreign.po.FiResidencePermit"></bean>
+	<bean id="FiInout" class="cn.com.jnpc.foreign.po.FiInout"></bean>
+	
+	<!-- Mapper 的协助类 Example -->
+	<bean id="FiBlobExample" class="cn.com.jnpc.foreign.model.FiBlobExample"></bean>
+	<bean id="FiMiddleExample" class="cn.com.jnpc.foreign.model.FiMiddleExample"></bean>
+	<bean id="FiResidencePermitExample" class="cn.com.jnpc.foreign.model.FiResidencePermitExample"></bean>
+	<bean id="FiAttachmentExample" class="cn.com.jnpc.foreign.model.FiAttachmentExample"></bean>
+	<bean id="FiForeignerExample" class="cn.com.jnpc.foreign.model.FiForeignerExample"></bean>
+	<bean id="FiInoutExample" class="cn.com.jnpc.foreign.model.FiInoutExample"></bean>
+	<bean id="FiInvitationExample" class="cn.com.jnpc.foreign.model.FiInvitationExample"></bean>
+		
+	<!-- service配置 -->
+	<bean id="ForeignServices" class="cn.com.jnpc.foreign.service.ForeignServices"></bean>
+	<bean id="AttachmentServices" class="cn.com.jnpc.foreign.service.AttachmentServices"></bean>
+	<bean id="ResidencePermitServices" class="cn.com.jnpc.foreign.service.ResidencePermitServices"></bean>
+	<bean id="InvitationServices" class="cn.com.jnpc.foreign.service.InvitationServices"></bean>
+	<bean id="MiddleServices" class="cn.com.jnpc.foreign.service.MiddleServices"></bean>
+	<bean id="InOutServices" class="cn.com.jnpc.foreign.service.InOutServices"></bean>
+	
+	<!-- 将对应的dao装载入系统 -->
+	<bean id="foreignDao" class="cn.com.jnpc.foreign.daoImpl.foreignImpl">
+		<property name="sqlSessionTemplate">
+			<ref local="sqlSession" />
 		</property>
 	</bean>
-	<bean id="IUserMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.test.Ifact.IUserMapper" />
-		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	<bean id="attachmentDao" class="cn.com.jnpc.foreign.daoImpl.attachmentImpl">
+		<property name="sqlSessionTemplate">
+			<ref local="sqlSession" />
+		</property>
 	</bean>
+	
+	<bean id="fiBlobDao" class="cn.com.jnpc.foreign.daoImpl.fiBlobImpl">
+		<property name="sqlSessionTemplate">
+			<ref local="sqlSession" />
+		</property>
+	</bean>
+	
+	<bean id="ResidencePermitDao" class="cn.com.jnpc.foreign.daoImpl.ResidencePermitImpl">
+		<property name="sqlSessionTemplate">
+			<ref local="sqlSession" />
+		</property>
+	</bean>
+	<bean id="invitationDao" class="cn.com.jnpc.foreign.daoImpl.invitationImpl">
+		<property name="sqlSessionTemplate">
+			<ref local="sqlSession" />
+		</property>
+	</bean>
+	<bean id="fiMiddleDao" class="cn.com.jnpc.foreign.daoImpl.fiMiddleImpl">
+		<property name="sqlSessionTemplate">
+			<ref local="sqlSession" />
+		</property>
+	</bean>
+	<bean id="fiInOutDao" class="cn.com.jnpc.foreign.daoImpl.fiInOutImpl">
+		<property name="sqlSessionTemplate">
+			<ref local="sqlSession" />
+		</property>
+	</bean>
+	
+	
+	
+	<!-- 此配置毫无用处  无法进行 接口注入  因为 controll 属于servlet容器.控制
+	<bean id="foreignController" class="cn.com.jnpc.foreign.controller.foreignController">
+		<property name="db">
+			<ref local="fiBlobDao" />
+		</property>
+	</bean>
+	 -->
+	 
+	<!-- <bean id="IfiBlobMapper" class="org.mybatis.spring.mapper.MapperFactoryBean"> 
+		<property name="mapperInterface" value="cn.com.jnpc.foreign.Ifact.IfiBlobMapper" 
+		/> <property name="sqlSessionFactory" ref="sqlSessionFactory" /> </bean> -->
 </beans>

@@ -1,7 +1,7 @@
 /**
  * foreign_business_in
  * @author senl_chen
- * 2013-8-27
+ * 2013-9-11
  * cn.com.jnpc.foreign.vo.package-info.java
  */
 /**

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kinds>
+	<kind>
+		<id>1</id>
+		<name>居留许可</name>
+	</kind>
+	<kind>
+		<id>2</id>
+		<name>F签证</name>
+	</kind>
+	<kind>
+		<id>3</id>
+		<name>Z签证</name>
+	</kind>
+</kinds>

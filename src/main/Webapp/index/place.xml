@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addresses>
+	<totalResultsCount>4</totalResultsCount>
+	<address>
+		<id>1</id>
+		<name>专家一村</name>
+		<detail></detail>
+	</address>
+	<address>
+		<id>2</id>
+		<name>专家二村</name>
+		<detail></detail>
+	</address>
+	<address>
+		<id>3</id>
+		<name>核电宾馆</name>
+		<detail></detail>
+	</address>
+	<address>
+		<id>4</id>
+		<name>明珠香榭尔酒店</name>
+		<detail></detail>
+	</address>
+</addresses>

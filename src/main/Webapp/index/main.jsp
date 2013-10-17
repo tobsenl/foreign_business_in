@@ -5,8 +5,8 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html >  
+<html >
 <head>
 <title></title>
 <meta Http-equiv="content-type" Content="text/html; Charset=UTF-8">
