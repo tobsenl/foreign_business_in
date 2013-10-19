@@ -104,7 +104,7 @@
                         <a href="<%=basePath%>foreign/foreign_inout.html" target="main">专家出入境信息填写</a>
                     </li>
                     <li>
-                        <a href="/Demon/Is_here.html" target="main">是否在连维护</a>
+                        <a href="<%=basePath%>foreign/foreign_ishere.html" target="main">是否在连维护</a>
                     </li>
                     <li>
                         <a href="#" target="main">邀请函启用操作</a>

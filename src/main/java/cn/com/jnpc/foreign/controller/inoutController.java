@@ -35,7 +35,7 @@ public class inoutController {
           dateFormat, false)); 
     }
     
-    @RequestMapping(value = "/inout_insert.html")
+    @RequestMapping(value = "/inout_insert.html",headers="")
     public @ResponseBody String inout_store(
 	    @ModelAttribute(value = "inoutform") FiInout inout,
 	    HttpServletRequest request, HttpServletResponse response) {
@@ -45,6 +45,10 @@ public class inoutController {
 	User user = (User) Untils.getSessionP(request, "user");
 	List id_list=null;
 	String id=Untils.NotNull(request.getParameter("inout_pp_id"))?request.getParameter("inout_pp_id"):"";
+	response.setContentType("text/Xml;charset=utf-8");
+	response.setHeader("Cache-Control", "no-cache");
+	response.setHeader("pragma", "no-cache");
+	response.setDateHeader("expires", 0);
 	if(Untils.NotNull(id)){
 	    id_list=new ArrayList();
 	    String [] li=id.split(",");
@@ -55,6 +59,7 @@ public class inoutController {
 		}
 	    }
 	    message=inoutServices.store(inout,id_list,user);
+	    
 	    return message;
 	}else{
 	    return "数据异常,请确认提交的内容是否正确!";

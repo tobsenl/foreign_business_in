@@ -307,7 +307,7 @@ public class InvitationServices {
     }
     public List<FiInvitation> Queryandforeign(String foreign_id_q,String invitation_id_q,String is_use_q,String indate_q,PageMybatis page) {
 	StringBuffer buffer=new StringBuffer();
-	buffer.append(" t1.* from fi_foreigner t1 where 1=1 ");
+	buffer.append(page.getQuerysql());
 	if(Untils.NotNull(invitation_id_q)){
 	    buffer.append(" and t1.INVITATION_ID = '");
 	    buffer.append(invitation_id_q+"'");
@@ -324,12 +324,16 @@ public class InvitationServices {
 	    List<FiMiddle> middle_list=middleservice.QueryByForeign(foreign_id_q);
 	    if(middle_list!=null && middle_list.size()>0){
 		buffer.append(" and (t1.id in (");
+		int j=0;
 		for(int i=0;i<middle_list.size();i++){
         		FiMiddle middle=middle_list.get(i);
-        		if(i==0){
-        		    buffer.append(middle.getFkInvitationId());
-        		}else{
-        		    buffer.append(","+middle.getFkInvitationId());
+        		if(Untils.NotNull(middle.getFkInvitationId())){
+                		if(j==0){
+                		    j++;
+                		    buffer.append(middle.getFkInvitationId());
+                		}else{
+                		    buffer.append(","+middle.getFkInvitationId());
+                		}
         		}
     	    	}
 		buffer.append(" )) ");

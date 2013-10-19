@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import cn.com.jnpc.ems.dto.User;
 import cn.com.jnpc.foreign.dao.fiInOutDao;
+import cn.com.jnpc.foreign.model.FiInoutExample;
 import cn.com.jnpc.foreign.po.FiForeigner;
 import cn.com.jnpc.foreign.po.FiInout;
 import cn.com.jnpc.foreign.utils.Untils;
@@ -56,5 +57,15 @@ public class InOutServices {
 	    return "信息保存出错请重新提交";
 	}
     }
-
+    
+    public List<FiInout> QueryByid_fi(String id){
+	List<FiInout> out=null;
+	if(Untils.NotNull(id)){
+	    FiInoutExample inoutexamp=new FiInoutExample();
+	    inoutexamp.createCriteria().andFkForeignerIdEqualTo(id);
+	    inoutexamp.setOrderByClause(" CREATE_DATE desc");
+	    out=inoutDao.selectByExample("selectByExample", inoutexamp);
+	}
+	return out;
+    }
 }

@@ -16,10 +16,6 @@ import static org.apache.ibatis.jdbc.SqlBuilder.WHERE;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.criteria.From;
-
-import org.apache.ibatis.jdbc.SQL;
-
 import cn.com.jnpc.foreign.model.FiForeignerExample;
 import cn.com.jnpc.foreign.model.FiForeignerExample.Criteria;
 import cn.com.jnpc.foreign.model.FiForeignerExample.Criterion;

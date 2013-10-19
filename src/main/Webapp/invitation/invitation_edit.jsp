@@ -180,7 +180,7 @@ float: left;
                  	success : function(data){
                  		if(data){
                  			var content="";
-                 			for(var i=0;i<data.length;i++){
+                 			$.each(data,function(x,inv){
                  				content=content+"<div class='row_'>";
                  				content=content+"	<div class='content'>";
                  				content=content+"		<div class='cols'>";
@@ -201,9 +201,9 @@ float: left;
                  				}else{
                  					var time=inv.stayTime.split(",");
                  					if(time.length > 1){
-                 						content=content+"	time[0]个月time[1]天";
+                 						content=content+time[0]+"个月"+time[1]+"天";
                  					}else if(time.length >0){
-                 						content=content+"	time[0]个月";
+                 						content=content+time[0]+"个月";
                  					}
                  				}
                  				content=content+"		</div>";
@@ -242,8 +242,9 @@ float: left;
                  				content=content+"</div>";
                  				content=content+"</div>";
                  				content=content+"</div>";
-                 			}
-                 			$(".row_list").html(content);
+                 			});
+                 			$("#row_list").html("");
+                 			$("#row_list").html(content);
                  		}
                  	}
         	};

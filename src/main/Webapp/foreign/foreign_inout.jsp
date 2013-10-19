@@ -31,6 +31,7 @@
 <script src="<%=basePath%>script/ui/jquery.ui.resizable.js" type="text/javascript"></script>
 <script src="<%=basePath%>script/ui/jquery.ui.dialog.js" type="text/javascript"></script>
 <script src="<%=basePath%>script/jquery.form.js" type="text/javascript"></script>
+<script src="<%=basePath%>/script/My97DatePicker/WdatePicker.js"></script>
 
 <link rel="stylesheet" href="<%=basePath%>style/jquery-ui/base/jquery-ui.css" />
 <link href="<%=basePath%>style/page.css" Rel="stylesheet" Type="text/css">
@@ -156,7 +157,9 @@
         </style>
         <script>
             $(document).ready(function(){
-            	
+            	function trim(str){ //删除左右两端的空格
+            	     return str.replace(/(^\s*)|(\s*$)/g, "");
+            	}
             	var queryoptions={
              		   dataType:  'json',
              		   success : function(data){
@@ -164,9 +167,7 @@
              			   if(data.length>0){
              				   $("#row_list").html("");
              				   var inner_html="";
- 	            			   for(var i=0;i<data.length;i++){
- 	            				   var obj=data[i];
- 	            				   //alert(obj.id);
+             				  $.each(data,function(x,obj){
  	            				   inner_html=inner_html+"<div class='row'>";
              					   inner_html=inner_html+"<div class='content'>";
              					   inner_html=inner_html+"<div class='cols' style='width: 5%;'>";
@@ -209,7 +210,8 @@
              					  
              					   inner_html=inner_html+"</div>";
              					   inner_html=inner_html+"</div>";
- 	            			   }
+ 	            			   });
+ 	            			   $("#row_list").html("");
  	            			   $("#row_list").html(inner_html);
              			   }else{
              				   alert("未查询到匹配数据！");
@@ -224,6 +226,7 @@
             	
             	var options={
             		dataType:  'json',
+            		url:"<%=basePath%>inout/inout_insert.html",
                		success : function(data){
                			alert(data);
                		}	
@@ -363,11 +366,18 @@
 	   				var id="";
 	   				var value="";
 	   				$.each(temp,function(x,v){
-	   					id=id+$(v).val()+",";
-	   					value=value+$(v).parent(".cols").next().html()+",";
+	   					var te=$(v).parent(".cols").next().html();
+	   					te=trim(te);
+						if($(v).val() != "0"){
+		   					id=id+$(v).val()+",";
+						}if(te != "姓名"){
+							//alert(te);
+		   					value=value+te+",";
+						}
 	   				});
 	   				if(id != ""){
 	   					$("#inout_pp_id").val(id);
+	   				alert(id);
 	   				}
 	   				if(value !=""){
 	   					$("#inout_pp").html(value);
@@ -643,14 +653,14 @@
 				</form>
         </div>
         <div id="inout" title="出入境登记">
-        <form:form action="/inout/inout_insert.html" method="get" id="inoutform">
+        <form:form method="get" id="inoutform">
             <div class="row">
                 <div class="cols11">
                     出入境人员:
                 </div>
                 <div class="cols22">
                     <label id="inout_pp"></label>
-                    <input type="hidden" id="inout_pp_id"/>
+                    <input  id="inout_pp_id" name="inout_pp_id"/>
                 </div>
             </div>
             <div class="row">

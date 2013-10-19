@@ -1,19 +1,15 @@
 package cn.com.jnpc.foreign.utils;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.PropertyResourceBundle;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 import javax.naming.Context;
@@ -25,17 +21,9 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.catalina.connector.Request;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-
-import cn.com.jnpc.ems.dto.User;
 import cn.com.jnpc.foreign.controller.invitationController;
-import net.sf.json.JSONObject;
 
 public final class Untils {
     public final static int BY_PROPERTIES = 1;

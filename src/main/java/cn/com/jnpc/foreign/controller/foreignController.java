@@ -3,7 +3,9 @@ package cn.com.jnpc.foreign.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +21,9 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import cn.com.jnpc.ems.dto.User;
 import cn.com.jnpc.foreign.po.FiForeigner;
+import cn.com.jnpc.foreign.po.FiInout;
 import cn.com.jnpc.foreign.service.ForeignServices;
+import cn.com.jnpc.foreign.service.InOutServices;
 import cn.com.jnpc.foreign.utils.Untils;
 import cn.com.jnpc.foreign.utils.springContextUtil;
 import cn.com.jnpc.foreign.vo.PageMybatis;
@@ -128,14 +132,16 @@ public class foreignController {
 	String contry_from=Untils.NotNull(request.getParameter("contry"))?request.getParameter("contry"):"";
 	String numb_invitation=Untils.NotNull(request.getParameter("numb"))?request.getParameter("numb"):"";
 	String post=Untils.NotNull(request.getParameter("post"))?request.getParameter("post"):"";
+	String is_here_=Untils.NotNull(request.getParameter("is_here_"))?request.getParameter("is_here_"):"";
 	
 	PageMybatis page=new PageMybatis();
 	page.setNowpage("1");
 	page.setPageurl(Untils.requestPath(request));
 	
 	foreignServices = (ForeignServices) springContextUtil.getBean("ForeignServices");
-	if(Untils.NotNull(numb_invitation) || Untils.NotNull(foreignname) || Untils.NotNull(passport_id) || Untils.NotNull(contry_from) || Untils.NotNull(post)){
-	    foreignlist= foreignServices.QueryandInvitation(foreignname,passport_id,contry_from,numb_invitation,post,page);
+	if(Untils.NotNull(numb_invitation) || Untils.NotNull(foreignname) || Untils.NotNull(passport_id) || Untils.NotNull(contry_from) || Untils.NotNull(post) || Untils.NotNull(is_here_)){
+	    page.setQuerysql(" t1.* from fi_foreigner t1 where 1=1");
+	    foreignlist= foreignServices.QueryandInvitation(foreignname,passport_id,contry_from,numb_invitation,post,is_here_,page);
 	}else{
 	    page.setQuerysql(" t1.* from fi_foreigner t1 where 1=1");
 	    foreignlist= foreignServices.QueryList("All",page);
@@ -151,6 +157,7 @@ public class foreignController {
 		object.put("companydepartment",forei.getCompanyDepartment());
 		object.put("passportid",forei.getPassportId());
 		object.put("role",forei.getRole());
+		object.put("isHere",forei.getIsHere());
 		list.add(object);
 	    }
 	}
@@ -169,6 +176,87 @@ public class foreignController {
 	    out.close();
 	}
 	return null;
+    }
+    @RequestMapping(value = "/AjaxQuery_inout.html")
+    public String AjaxQueryInOut(HttpServletRequest request,
+	    HttpServletResponse response) {
+	foreigner foreign=null;
+	String id=Untils.NotNull(request.getParameter("foreign_id"))?request.getParameter("foreign_id"):"";
+	foreignServices = (ForeignServices) springContextUtil.getBean("ForeignServices");
+	List<FiInout> inout=null;
+	if(Untils.NotNull(id)){
+	    foreign= foreignServices.QueryByid(id);
+	    inout=foreignServices.QueryByInOut(id);
+	}
+	List<JSONObject> list=new ArrayList();
+//	List list=new ArrayList();
+	if(foreign!=null){
+//	    Map object = new HashMap();
+	    JSONObject object = new JSONObject();
+	    object.put("foreign",foreign);
+	    object.put("inout_list",inout);
+	    list.add(object);
+	}
+	response.setContentType("text/Xml;charset=utf-8");
+	response.setHeader("Cache-Control", "no-cache");
+	response.setHeader("pragma", "no-cache");
+	response.setDateHeader("expires", 0);
+	PrintWriter out = null;
+	try {
+	    out = response.getWriter();
+	    out.println(list);
+	    
+	} catch (IOException ex1) {
+	    ex1.printStackTrace();
+	} finally {
+	    out.close();
+	}
+	return null;
+    }
+    @RequestMapping(value = "/foreign_hereis.html")
+    public String Edit_hereis(HttpServletRequest request,
+	    HttpServletResponse response) {
+	String id=Untils.NotNull(request.getParameter("inhere_id_list"))?request.getParameter("inhere_id_list"):"";
+	String status=Untils.NotNull(request.getParameter("is_here_status"))?request.getParameter("is_here_status"):"";
+	foreignServices = (ForeignServices) springContextUtil.getBean("ForeignServices");
+	String s="";
+	JSONObject object = new JSONObject();
+	try{
+	if(Untils.NotNull(id)){
+	    if(Untils.NotNull(status)){
+		String [] array=id.split(",");
+		for (int i = 0; i < array.length; i++) {
+		    if(Untils.NotNull(array[i])){
+			FiForeigner foreign_=foreignServices.QueryByid_fi(array[i]);
+			foreign_.setIsHere(Integer.parseInt(status));
+			foreignServices.UpdataObject(foreign_);
+		    }
+		}
+		
+	    }
+	}
+	
+	object.put("message","是否再连信息保存成功！");
+	}catch(Exception e){
+	    object.put("message","是否再连信息保存失败！");
+	}finally{
+	    	response.setContentType("text/Xml;charset=utf-8");
+		response.setHeader("Cache-Control", "no-cache");
+		response.setHeader("pragma", "no-cache");
+		response.setDateHeader("expires", 0);
+		PrintWriter out = null;
+        	try {
+        	    out = response.getWriter();
+        	    out.println(object);
+        	    return null;
+        	} catch (IOException ex1) {
+        	    ex1.printStackTrace();
+        	    return null;
+        	} finally {
+        	    out.close();
+        	    return null;
+        	}
+	}
     }
     @RequestMapping(value = "/AjaxQuery_detail.html")
     public String AjaxQueryDetail(HttpServletRequest request,
@@ -237,7 +325,12 @@ public class foreignController {
 	    page.setPageurl(Untils.requestPath(request));
 	    model.addAttribute("page", page);
 	    return "/foreign/foreign_inout";
-	}else{
+	}else if(kind.equals("ishere")){
+	    page.setPageurl(Untils.requestPath(request));
+	    model.addAttribute("page", page);
+	    return "/foreign/foreign_ishere";
+	}
+	else{
 	    return "";
 	}
     }

@@ -76,6 +76,7 @@ public class invitationController{
 	page.setNowpage("1");
 	List<FiInvitation> list=null;
 	if(Untils.NotNull(foreign_id_q) || Untils.NotNull(indate_q) || Untils.NotNull(is_use_q) || Untils.NotNull(invitation_id_q)){
+	    page.setQuerysql(" t1.* from fi_invitation t1 where 1=1 ");
 	    list= invitationServices.Queryandforeign(foreign_id_q,invitation_id_q,is_use_q,indate_q,page);
 	}else{
 	    page.setQuerysql(" t1.* from fi_invitation t1 where 1=1 ");
@@ -101,7 +102,7 @@ public class invitationController{
 	PrintWriter out = null;
 	try {
 	    out = response.getWriter();
-	    out.println(list);
+	    out.println(list_jason);
 	    
 	} catch (IOException ex1) {
 	    ex1.printStackTrace();
