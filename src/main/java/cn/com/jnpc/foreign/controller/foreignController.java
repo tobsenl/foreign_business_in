@@ -2,6 +2,7 @@ package cn.com.jnpc.foreign.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,7 +66,7 @@ public class foreignController {
 	  MultipartFile pp_attachment = (CommonsMultipartFile) multipartRequest.getFile("pp_attachment");
 	  MultipartFile ee_attachment = (CommonsMultipartFile) multipartRequest.getFile("ee_attachment");
 	  
-	String massage = foreignServices.storeUpdata(foreign, pp_attachment,
+	String message = foreignServices.storeUpdata(foreign, pp_attachment,
 		ee_attachment, user);
 	response.setContentType("text/Xml;charset=utf-8");
 	response.setHeader("Cache-Control", "no-cache");
@@ -74,8 +75,9 @@ public class foreignController {
 	PrintWriter out = null;
 	try {
 	    out = response.getWriter();
-	    out.println(massage);
-
+	    JSONObject object1 = new JSONObject();
+	    object1.put("message", message);
+	    out.println(object1);
 	} catch (IOException ex1) {
 	    ex1.printStackTrace();
 	} finally {
@@ -215,12 +217,13 @@ public class foreignController {
     }
     @RequestMapping(value = "/foreign_hereis.html")
     public String Edit_hereis(HttpServletRequest request,
-	    HttpServletResponse response) {
+	    HttpServletResponse response){
 	String id=Untils.NotNull(request.getParameter("inhere_id_list"))?request.getParameter("inhere_id_list"):"";
 	String status=Untils.NotNull(request.getParameter("is_here_status"))?request.getParameter("is_here_status"):"";
 	foreignServices = (ForeignServices) springContextUtil.getBean("ForeignServices");
 	String s="";
 	JSONObject object = new JSONObject();
+	String message="";
 	try{
 	if(Untils.NotNull(id)){
 	    if(Untils.NotNull(status)){
@@ -236,26 +239,28 @@ public class foreignController {
 	    }
 	}
 	
-	object.put("message","是否再连信息保存成功！");
+	message="是否再连信息保存成功！";
 	}catch(Exception e){
-	    object.put("message","是否再连信息保存失败！");
+	    message="是否再连信息保存失败！";
 	}finally{
-	    	response.setContentType("text/Xml;charset=utf-8");
+	    response.setContentType("text/Xml;charset=utf-8");
 		response.setHeader("Cache-Control", "no-cache");
 		response.setHeader("pragma", "no-cache");
 		response.setDateHeader("expires", 0);
 		PrintWriter out = null;
-        	try {
-        	    out = response.getWriter();
-        	    out.println(object);
-        	    return null;
-        	} catch (IOException ex1) {
-        	    ex1.printStackTrace();
-        	    return null;
-        	} finally {
-        	    out.close();
-        	    return null;
-        	}
+		try {
+		    out = response.getWriter();
+		    JSONObject object1 = new JSONObject();
+		    object1.put("message", message);
+		    out.println(object1);
+		    
+		} catch (IOException ex1) {
+		    ex1.printStackTrace();
+		} finally {
+		    out.close();
+		}
+//	    return new String(message.getBytes("utf-8"),"ISO-8859-1");
+	    return null;
 	}
     }
     @RequestMapping(value = "/AjaxQuery_detail.html")
@@ -317,20 +322,17 @@ public class foreignController {
 	page.setNowpage("1");
 	List<FiForeigner> list= foreignServices.QueryList("All",page);
 	model.addAttribute("foreign_list", list);
+	page.setPageurl(Untils.requestPath(request));
+	model.addAttribute("page", page);
 	if(kind.equals("edit")){
-	    page.setPageurl(Untils.requestPath(request));
-	    model.addAttribute("page", page);
 	    return "/foreign/foreign_edit";
 	}else if(kind.equals("inout")){
-	    page.setPageurl(Untils.requestPath(request));
-	    model.addAttribute("page", page);
 	    return "/foreign/foreign_inout";
 	}else if(kind.equals("ishere")){
-	    page.setPageurl(Untils.requestPath(request));
-	    model.addAttribute("page", page);
 	    return "/foreign/foreign_ishere";
-	}
-	else{
+	}else if(kind.equals("extension")){
+	    return "/foreign/foreign_extension";
+	}else{
 	    return "";
 	}
     }

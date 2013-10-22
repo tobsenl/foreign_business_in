@@ -234,7 +234,7 @@
                		}	
             	};
             	
-            	$("#inoutform").ajaxForm(options);
+            	$("#extensionform").ajaxForm(options);
                 $("#message").dialog({
                     autoOpen: false,
                     modal: true,
@@ -264,13 +264,13 @@
                         }
                     }
                 });
-                $("#inout").dialog({
+                $("#extension").dialog({
                     autoOpen: false,
                     modal: true,
                     width: 700,
                     buttons: {
                         确定: function(){
-                        	$("#inoutform").submit();
+                        	$("#extensionform").submit();
                             $(this).dialog("close");
                         },
                         关闭: function(){
@@ -349,6 +349,29 @@
    					}
    				}
    			});
+               $.get("<%=basePath%>index/place.xml",function(y){
+   				var contrylist=$(y).find("address");
+   				if(contrylist.length > 0){
+   					for(var i=0;i<contrylist.length;i++){
+   						var o=contrylist[i];
+   						var id=$(o).find("id").text();
+   						var name=$(o).find("name").text();
+   						var detail=$(o).find("detail").text();
+   						$("#_Address").children().last().after("<option value='"+id+"'>"+name+"</option>")
+   					}
+   				}
+   			});
+   			$.get("<%=basePath%>index/permit_kind.xml",function(y){
+   				var contrylist=$(y).find("kind");
+   				if(contrylist.length > 0){
+   					for(var i=0;i<contrylist.length;i++){
+   						var o=contrylist[i];
+   						var id=$(o).find("id").text();
+   						var name=$(o).find("name").text();
+   						$("#residencePermitKind").children().last().after("<option value='"+id+"'>"+name+"</option>")
+   					}
+   				}
+   			});
    			$.get("<%=basePath%>index/Company3th.xml",function(y){
 				var contrylist=$(y).find("company");
 				if(contrylist.length > 0){
@@ -363,7 +386,7 @@
    			$("#query").click(function(){
    				$("#queryform").submit();
    			});
-	   			$("#inout_write").click(function(){
+	   			$("#extension_write").click(function(){
 	   				var temp=$("input[type='checkbox']:checked");
 	   				var id="";
 	   				var value="";
@@ -378,13 +401,23 @@
 						}
 	   				});
 	   				if(id != ""){
-	   					$("#inout_pp_id").val(id);
+	   					$("#extension_id").val(id);
 	   				alert(id);
 	   				}
 	   				if(value !=""){
-	   					$("#inout_pp").html(value);
+	   					$("#extension_pp").html(value);
 	   				}
-	   				$("#inout").dialog("open");
+	   				$("#extension").dialog("open");
+	   			});
+	   			$("#address").blur(function(){
+	   				var temp_address=$("#_Address  option:selected").text()+","+$("#address").val();
+	   				//alert(temp_address);
+	   				$("#rpAddress").val(temp_address);
+	   			});
+	   			$("#_Address").change(function (){
+	   				var temp_address=$("#_Address  option:selected").text()+","+$("#address").val();
+	   				//alert(temp_address);
+	   				$("#rpAddress").val(temp_address);
 	   			});
             });
         </script>
@@ -529,8 +562,8 @@
             </c:forEach>
             </div>
             <div class="row" style="float: left;width: 20%;">
-                <button id="inout_write">
-                    出入境资料填写
+                <button id="extension_write">
+                   签证延期资料填写
                 </button>
             </div>
             <DIV style="float: right;width: 80%;text-align: right;" >
@@ -654,44 +687,54 @@
 					</div>
 				</form>
         </div>
-        <div id="inout" title="出入境登记">
-        <form:form method="post" id="inoutform">
+        <div id="extension" title="出入境登记">
+        <form:form method="post" id="extensionform">
             <div class="row">
                 <div class="cols11">
-                    出入境人员:
+                    签证延期人员:
                 </div>
                 <div class="cols22">
-                    <label id="inout_pp"></label>
-                    <input  id="inout_pp_id" name="inout_pp_id"/>
+                    <label id="extension_pp"></label>
+                    <input  id="extension_id" name="extension_id"/>
                 </div>
             </div>
             <div class="row">
                 <div class="cols11">
-                    出境/入境
+                   签证类型
                 </div>
                 <div class="cols22">
-                    <select id="type" name="type" >
-                        <option value=""></option>
-                        <option value="0">出境</option>
-                        <option value="1">入境</option>
-                    </select>
+                    <select id="residencePermitKind" name="residencePermitKind">
+									<option value="0"></option>
+									<!-- 
+									<option value="1">居留许可</option>
+									<option value="2">F签证</option>
+									<option value="3">Z签证</option>
+									 -->
+					</select>
                 </div>
             </div>
             <div class="row">
                 <div class="cols11">
-                    时间
+                    签证有效期至
                 </div>
                 <div class="cols22">
-                    <input class="Wdate" id="begintime" type="text" name="begintime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})"/>
+                    <input class="Wdate" id="rpExpEnddate" type="text" name="rpExpEnddate"
+										onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'%y-%M-%d'})" />
                 </div>
             </div>
             <div class="row">
                 <div class="cols11">
-         来华任务<!-- 入境必填 -->
+         居留地址
                 </div>
                 <div class="cols22">
-                    <textarea id="content" name="content">
-                    </textarea>
+                   <select id="_Address" name="_Address">
+								<option value="0"></option>
+								<!-- 
+								<option value="1">专家1村</option>
+								<option value="2">专家2村</option>
+								 -->
+				   </select>小区<input type="text" id="address"> <input type="hidden"
+								id="rpAddress" name="rpAddress" />
                 </div>
             </div>
             </form:form>

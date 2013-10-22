@@ -127,6 +127,11 @@ body {
 			//alert(temp_address);
 			$("#rp_Address").val(temp_address);
 		});
+		$("#_Address").change(function (){
+				var temp_address=$("#_Address  option:selected").text()+","+$("#address").val();
+				//alert(temp_address);
+				$("#rp_Address").val(temp_address);
+		});
 		
 			$.get("<%=basePath%>index/country.xml",function(y){
 				var contrylist=$(y).find("country");

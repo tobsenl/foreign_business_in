@@ -107,10 +107,10 @@
                         <a href="<%=basePath%>foreign/foreign_ishere.html" target="main">是否在连维护</a>
                     </li>
                     <li>
-                        <a href="#" target="main">邀请函启用操作</a>
+                        <a href="<%=basePath%>invitation/invitation_beuse.html" target="main">邀请函启用操作</a>
                     </li>
                     <li>
-                        <a href="/Demon/Visa_extension.html" target="main">签证延期</a>
+                        <a href="<%=basePath%>foreign/foreign_extension.html" target="main">签证延期</a>
                     </li>
                 </ul>
                 <h3><span ></span>信息查询</h3>

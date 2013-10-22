@@ -37,14 +37,20 @@ public class InOutServices {
 		String str = (String) list_id.get(i);
 		if (Untils.NotNull(str)) {
 		    FiForeigner foreign = foreignServices.QueryByid_fi(str);
-		    inout.setFkForeignerId(str);
-		    inout.setFkInvitationId(foreign.getFkInvitationId());
-		    inout.setCreateDate(new Date());
-		    inout.setStatus(0);
-		    if (user != null) {
-			inout.setCreateUser(user.getAccount());
+		    if(Untils.NotNull(foreign.getFkInvitationId())){
+        		    inout.setFkForeignerId(str);
+        		    inout.setFkInvitationId(foreign.getFkInvitationId());
+        		    inout.setCreateDate(new Date());
+        		    inout.setStatus(0);
+        		    if (user != null) {
+        			inout.setCreateUser(user.getAccount());
+        		    }
+        		    inoutDao.InsertReturObject("insert",inout);
+		    }else{
+			return foreign.getName()+"无对应邀请函";
+			//这里还需要添加 1.判断写入时是否存在邀请函。存在则可以写inout；
+			//2.判断上条是否为out 为out则不能填写out 但是可以填写in 反之其他的可以填写out但是不能填写in
 		    }
-		    inoutDao.InsertReturObject("insert",inout);
 		} else {
 		    continue;
 		}

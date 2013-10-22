@@ -226,7 +226,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           		   }
              	}
              };
-         	
+			var options={
+					dataType:  'json',
+	          		success : function(datas){
+						if(datas){
+							alert(datas);
+						}
+					},
+					beforeSubmit:checklist//这里验证之后还是会提交
+				};
  			$("#rpExpEnddate_,#rpAddress_,#upload_ee").css("display","none");
          	$("#queryform").ajaxForm(queryoptions);
          	
@@ -364,7 +372,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    				var value="";
    				if(temp){
    					if(temp != ""){
-   						$.each(temp,function(x,v){
+   						if(temp.length > 1){
+	   						$.each(temp,function(x,v){
+	   							var te=$(v).parent(".cols").next().html();
+	   							te=trim(te);
+	   							if($(v).val() != "0"){
+	   		   						id=id+$(v).val()+",";
+	   							}if(te != "姓名"){
+	   		   						value=value+te+",";
+	   							}
+	   		   				});
+   						}else if (temp.length == 1){
    							var te=$(v).parent(".cols").next().html();
    							te=trim(te);
    							if($(v).val() != "0"){
@@ -372,7 +390,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    							}if(te != "姓名"){
    		   						value=value+te+",";
    							}
-   		   				});
+   						}
    					}
    				}
    				if(id != ""){
@@ -382,12 +400,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    					alert("请勾选要修改的人员后再点击尝试！");
    					return false;
    				}
-			};
-			var options={
-				success:function(data){
-					alert(data.message);
-				},
-				beforeSubmit:checklist//这里验证之后还是会提交
 			};
 			$("#query").click(function(){
 				$("#queryform").submit();

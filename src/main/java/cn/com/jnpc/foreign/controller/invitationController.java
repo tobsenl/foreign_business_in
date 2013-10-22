@@ -25,6 +25,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import cn.com.jnpc.ems.dto.User;
 import cn.com.jnpc.foreign.po.FiForeigner;
 import cn.com.jnpc.foreign.po.FiInvitation;
+import cn.com.jnpc.foreign.service.ForeignServices;
 import cn.com.jnpc.foreign.service.InvitationServices;
 import cn.com.jnpc.foreign.service.MiddleServices;
 import cn.com.jnpc.foreign.utils.DateUtil;
@@ -49,8 +50,8 @@ public class invitationController{
 	    HttpServletResponse response) {
 	return "/invitation/invitation_info";
     }
-    @RequestMapping(value = "/invitation_edit.html")
-    public String invitationQueryAll(HttpServletRequest request,
+    @RequestMapping(value = "/invitation_{kind}.html")//edit beuse
+    public String invitationQueryAll(@PathVariable("kind") String kind,HttpServletRequest request,
 	    HttpServletResponse response,Model model) {
 	invitationServices = (InvitationServices) springContextUtil
 		.getBean("InvitationServices");
@@ -61,7 +62,13 @@ public class invitationController{
 	model.addAttribute("invitation_list", list);
 	page.setPageurl(Untils.requestPath(request));
 	model.addAttribute("page", page);
-	return "/invitation/invitation_edit";
+	if(kind.equals("edit")){
+	    return "/invitation/invitation_edit";
+	}else if(kind.equals("beuse")){
+	    return "/invitation/invitation_beuse";
+	}else{
+	    return "";
+	}
     }
     @RequestMapping(value = "/invitation_query.html")
     public String invitationQuery(HttpServletRequest request,
@@ -75,11 +82,10 @@ public class invitationController{
 	PageMybatis page=new PageMybatis();
 	page.setNowpage("1");
 	List<FiInvitation> list=null;
+	page.setQuerysql(" t1.* from fi_invitation t1 where 1=1 ");
 	if(Untils.NotNull(foreign_id_q) || Untils.NotNull(indate_q) || Untils.NotNull(is_use_q) || Untils.NotNull(invitation_id_q)){
-	    page.setQuerysql(" t1.* from fi_invitation t1 where 1=1 ");
 	    list= invitationServices.Queryandforeign(foreign_id_q,invitation_id_q,is_use_q,indate_q,page);
 	}else{
-	    page.setQuerysql(" t1.* from fi_invitation t1 where 1=1 ");
 	    list= invitationServices.QueryList("All",page);
 	}
 	List list_jason=new ArrayList();
@@ -170,7 +176,7 @@ public class invitationController{
     }
     @RequestMapping(value = "/invitation_updata.html")
 //    public String addinvitation(HttpServletRequest request,Model model,HttpServletResponse response) throws IOException {
-	public String addinvitation(@ModelAttribute(value="from1") FiInvitation invitation,
+	public String updateinvitation(@ModelAttribute(value="from1") FiInvitation invitation,
 		HttpServletRequest request,Model model,HttpServletResponse response) throws IOException {
 	String gobackTimes = Untils.NotNull(request
 		.getParameter("gobackTimes")) ? request
@@ -183,7 +189,52 @@ public class invitationController{
 	String massage=invitationServices.storeUpdata(invitation,request,attachment,user);
 	//model.addAttribute("return_info", massage);
 	//return "/invitation/invitation_info";
-		return null;
+	return null;
+    }
+    @RequestMapping(value = "/invitation_usedit.html")
+    public String Edit_usedit(HttpServletRequest request,
+	    HttpServletResponse response){
+	String id=Untils.NotNull(request.getParameter("usedit_id_list"))?request.getParameter("usedit_id_list"):"";
+	String status=Untils.NotNull(request.getParameter("usedit_status"))?request.getParameter("usedit_status"):"";
+	invitationServices = (InvitationServices) springContextUtil.getBean("InvitationServices");
+	String s="";
+	JSONObject object = new JSONObject();
+	String message="";
+	try{
+	if(Untils.NotNull(id)){
+	    if(Untils.NotNull(status)){
+		String [] array=id.split(",");
+		for (int i = 0; i < array.length; i++) {
+		    if(Untils.NotNull(array[i])){
+			String numb_id=array[i];
+			message=invitationServices.UpdataInvitation(numb_id,status);
+		    }
+		}
+		
+	    }
+	}
+	}catch(Exception e){
+	    message="邀请函"+(status.equals("1")?"启用失败":"无法正常失效");
+	}finally{
+	    	response.setContentType("text/Xml;charset=utf-8");
+		response.setHeader("Cache-Control", "no-cache");
+		response.setHeader("pragma", "no-cache");
+		response.setDateHeader("expires", 0);
+		PrintWriter out = null;
+		try {
+		    out = response.getWriter();
+		    JSONObject object1 = new JSONObject();
+		    object1.put("message", message);
+		    out.println(object1);
+		    
+		} catch (IOException ex1) {
+		    ex1.printStackTrace();
+		} finally {
+		    out.close();
+		}
+//	    return new String(message.getBytes("utf-8"),"ISO-8859-1");
+	    return null;
+	}
     }
 
 }

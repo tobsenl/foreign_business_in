@@ -23,31 +23,6 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<bean
-		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-		<!-- 设置为true以忽略对Accept Header的支持 -->
-		<property name="ignoreAcceptHeader" value="true" />
-		<property name="defaultContentType" value="text/html; charset=UTF-8" />
-		<property name="mediaTypes">
-			<map>
-				<entry key="html" value="text/html; charset=UTF-8" />
-				<entry key="json" value="application/json; charset=UTF-8" />
-			</map>
-		</property>
-		<property name="viewResolvers">
-			<list>
-				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
-				<bean
-					class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
-					<property name="prefix" value="" />
-					<property name="suffix" value=".html" />
-					<property name="contentType" value="text/html; charset=UTF-8" />
-				</bean>
-			</list>
-		</property>
-	</bean>
-
-
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<!-- 指定所上传文件的总大小不能超过200KB。注意maxUploadSize属性的限制不是针对单个文件，而是所有文件的容量之和 -->
@@ -66,10 +41,4 @@
 			</props>
 		</property>
 	</bean>
-	<!-- 适配器 -->
-
-	<!-- 配置拦截器 -->
-	<!-- <mvc:interceptors> <mvc:interceptor> <mvc:mapping path="/user/*"/> 
-		<bean class="net/inno/commons/interceptor/MyInterceptor"></bean> </mvc:interceptor> 
-		</mvc:interceptors> -->
 </beans>

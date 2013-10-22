@@ -101,7 +101,7 @@ public class InvitationServices {
 		    user, 0);
 
 	    // 为invitation 填充数据
-	    fiinvitation=new FiInvitation();
+	    fiinvitation = new FiInvitation();
 	    fiinvitation.setCreateDate(new Date());
 	    if (user != null) {
 		fiinvitation.setCreateUser(user.getAccount());
@@ -133,10 +133,11 @@ public class InvitationServices {
 		for (int j = 0; j < list_m_id.size(); j++) {
 		    FiMiddle middle = list_m_id.get(j);
 		    middle.setFkInvitationId(fiinvitation_id);
-		    FiForeigner foreign=foreignservice.QueryByid_fi(middle.getFkPersonId());
-//		    foreign.setFkInvitationId(fiinvitation_id);
-//		    foreignservice.UpdataObject(foreign);
-		    //此处由需求部门特别提出。目的是为了方便查看以往的邀请函对应的护照号码.
+		    FiForeigner foreign = foreignservice.QueryByid_fi(middle
+			    .getFkPersonId());
+		    // foreign.setFkInvitationId(fiinvitation_id);
+		    // foreignservice.UpdataObject(foreign);
+		    // 此处由需求部门特别提出。目的是为了方便查看以往的邀请函对应的护照号码.
 		    middle.setFkPersonPpid(foreign.getPassportId());
 		    middleservice.UpdataObject(middle);
 		}
@@ -151,45 +152,46 @@ public class InvitationServices {
 	    return "新建失败!";
 	}
     }
-    
-    public String storeUpdata(FiInvitation new_invitation,HttpServletRequest request, MultipartFile attachment,
-	    User user) {
+
+    public String storeUpdata(FiInvitation new_invitation,
+	    HttpServletRequest request, MultipartFile attachment, User user) {
 	// 获取行数max
 	String r_numb = request.getParameter("numb");
 	int numb = Untils.NotNull(r_numb) ? Integer.parseInt(r_numb) : 0;
-	//首先进行查询.
-	
+	// 首先进行查询.
+
 	try {
 	    List<FiMiddle> list_m_id = new ArrayList<FiMiddle>();
 	    // 进行循环将删除行的error数据剔除
-	    List<FiMiddle> list_old_m = middleservice.QueryByInvitation(new_invitation);
-	    
+	    List<FiMiddle> list_old_m = middleservice
+		    .QueryByInvitation(new_invitation);
+
 	    for (int i = 1; i <= numb; i++) {
 		String r_foreign_id = request.getParameter("foreign_id" + i);
 		String foreign_id = Untils.NotNull(r_foreign_id) ? r_foreign_id
 			: "";
 		if (Untils.NotNull(foreign_id)) {
 		    // 生成middle数据不含 invitationID
-		    int x=0;
-		    FiMiddle tempmiddle=null;
-		    FiMiddle middle_id =null;
+		    int x = 0;
+		    FiMiddle tempmiddle = null;
+		    FiMiddle middle_id = null;
 		    for (FiMiddle fiMiddle : list_old_m) {
-			String person_id=fiMiddle.getFkPersonId();
-			if(person_id.equals(foreign_id)){
-			    x=x+1;
-			    tempmiddle=fiMiddle;
+			String person_id = fiMiddle.getFkPersonId();
+			if (person_id.equals(foreign_id)) {
+			    x = x + 1;
+			    tempmiddle = fiMiddle;
 			}
 		    }
-		    if(x == 0){
-		    middle_id = middleservice.InsertReturObject(
-			    foreign_id, user);
-		    }else{
-			if(tempmiddle!=null){
+		    if (x == 0) {
+			middle_id = middleservice.InsertReturObject(foreign_id,
+				user);
+		    } else {
+			if (tempmiddle != null) {
 			    tempmiddle.setFkPersonId(foreign_id);
 			    middle_id = middleservice.UpdataObject(tempmiddle);
 			}
 		    }
-		    if(middle_id != null){
+		    if (middle_id != null) {
 			list_m_id.add(middle_id);
 		    }
 		} else {
@@ -197,48 +199,51 @@ public class InvitationServices {
 		}
 	    }
 	    for (FiMiddle fiMiddle : list_old_m) {
-		String old_id=fiMiddle.getFkPersonId();
-		int x=0;
-		FiMiddle tempmiddle=null;
+		String old_id = fiMiddle.getFkPersonId();
+		int x = 0;
+		FiMiddle tempmiddle = null;
 		for (FiMiddle fiMiddle2 : list_m_id) {
-		    String new_id=fiMiddle2.getFkPersonId();
-		    if(!old_id.equals(new_id)){
-			x=x+1;
+		    String new_id = fiMiddle2.getFkPersonId();
+		    if (!old_id.equals(new_id)) {
+			x = x + 1;
 		    }
 		}
-		if(x > 0){
+		if (x > 0) {
 		    middleservice.deleteByPrimaryKey(old_id);
 		}
 	    }
 	    for (int j = 0; j < list_m_id.size(); j++) {
-		    FiMiddle middle = list_m_id.get(j);
-		    middle.setFkInvitationId(new_invitation.getId()+"");
-		    FiForeigner foreign=foreignservice.QueryByid_fi(middle.getFkPersonId());
-//		    foreign.setFkInvitationId(fiinvitation_id);
-//		    foreignservice.UpdataObject(foreign);
-		    middle.setFkPersonPpid(foreign.getPassportId());
-		    middleservice.UpdataObject(middle);
-		}
-	    FiAttachment attch=null;
+		FiMiddle middle = list_m_id.get(j);
+		middle.setFkInvitationId(new_invitation.getId() + "");
+		FiForeigner foreign = foreignservice.QueryByid_fi(middle
+			.getFkPersonId());
+		// foreign.setFkInvitationId(fiinvitation_id);
+		// foreignservice.UpdataObject(foreign);
+		middle.setFkPersonPpid(foreign.getPassportId());
+		middleservice.UpdataObject(middle);
+	    }
+	    FiAttachment attch = null;
 	    // 保存附件
-	    if(Untils.NotNull(new_invitation.getFkAttachmentId()) || attachment.getSize()>0){
-		if(Untils.NotNull(new_invitation.getFkAttachmentId())){
-		    attch = attchServices.UpdataReturnObject(attachment,
-		    user, "0");
-		}else{
-		    attch = attchServices.InsertReturObject(attachment,
-			    user, 0);
+	    if (Untils.NotNull(new_invitation.getFkAttachmentId())
+		    || attachment.getSize() > 0) {
+		if (Untils.NotNull(new_invitation.getFkAttachmentId())) {
+		    attch = attchServices.UpdataReturnObject(attachment, user,
+			    "0");
+		} else {
+		    attch = attchServices
+			    .InsertReturObject(attachment, user, 0);
 		}
-	    	if (attch != null) {
+		if (attch != null) {
 		    attch.setCardId(fiinvitation.getInvitationId());
 		    attch.setEndTime(fiinvitation.getArrivedDate());
 		    attch.setStartTime(fiinvitation.getLeavingDate());
-		    attch.setKfParentId(new_invitation.getId()+"");
+		    attch.setKfParentId(new_invitation.getId() + "");
 		    attchServices.UpdataObject(attch);
 		}
 	    }
 	    // 为invitation 填充数据
-	    fiinvitation=invitationDao.SelectById("selectByPrimaryKey",new_invitation.getId());
+	    fiinvitation = invitationDao.SelectById("selectByPrimaryKey",
+		    new_invitation.getId());
 	    fiinvitation.setEditDate(new Date());
 	    if (user != null) {
 		fiinvitation.setEditUser(user.getAccount());
@@ -249,13 +254,12 @@ public class InvitationServices {
 	    fiinvitation.setLeavingDate(new_invitation.getLeavingDate());
 	    fiinvitation.setInvitationId(new_invitation.getInvitationId());
 	    // 为 invitation 填充 附件ID
-	    if(attch!=null){
+	    if (attch != null) {
 		fiinvitation.setFkAttachmentId(attch.getId() + "");
 	    }
 
 	    // 保存invitation
-	    invitationDao.UptataReturnObj("updateByPrimaryKey",
-		    fiinvitation);
+	    invitationDao.UptataReturnObj("updateByPrimaryKey", fiinvitation);
 	    return "成功修改!";
 	} catch (Exception e) {
 	    log.info(e.getMessage());
@@ -264,13 +268,12 @@ public class InvitationServices {
 	    return "修改失败!";
 	}
     }
-    
 
     public List<FiInvitation> QueryByNumb(String id) {
 	List<String> list = new ArrayList<String>();
 	String[] a = id.split(",");
 	for (int i = 0; i < a.length; i++) {
-	    if(Untils.NotNull(a[i])){
+	    if (Untils.NotNull(a[i])) {
 		list.add(a[i]);
 	    }
 	}
@@ -280,6 +283,7 @@ public class InvitationServices {
 		"selectByExample", example);
 	return invitation;
     }
+
     public FiInvitation QueryById(String id) {
 	FiInvitationExample example = new FiInvitationExample();
 	example.createCriteria().andIdEqualTo(Integer.parseInt(id));
@@ -287,65 +291,120 @@ public class InvitationServices {
 		"selectByExample", example);
 	return invitation.get(0);
     }
+
     public List QueryLinkForeign(List<FiInvitation> invitation_id) {
-	List<FiMiddle> middle_list=middleservice.QueryByInvitation(invitation_id);
-	List list=null;
-	if(Untils.NotNull(middle_list) && middle_list.size()>0){
-	    list=new ArrayList();
-	    for(int i=0;i<middle_list.size();i++){
-		FiMiddle middle=middle_list.get(i);
-		Map map=new HashMap();
+	List<FiMiddle> middle_list = middleservice
+		.QueryByInvitation(invitation_id);
+	List list = null;
+	if (Untils.NotNull(middle_list) && middle_list.size() > 0) {
+	    list = new ArrayList();
+	    for (int i = 0; i < middle_list.size(); i++) {
+		FiMiddle middle = middle_list.get(i);
+		Map map = new HashMap();
 		map.put("id", middle.getFkPersonId());
-		//此处由需求部门特别提出。目的是为了方便查看以往的邀请函对应的护照号码.
+		// 此处由需求部门特别提出。目的是为了方便查看以往的邀请函对应的护照号码.
 		map.put("passportId", middle.getFkPersonPpid());
-		FiForeigner foreign=foreignservice.QueryByid_fi(middle.getFkPersonId());
+		FiForeigner foreign = foreignservice.QueryByid_fi(middle
+			.getFkPersonId());
 		map.put("name", foreign.getName());
 		list.add(map);
 	    }
 	}
 	return list;
     }
-    public List<FiInvitation> Queryandforeign(String foreign_id_q,String invitation_id_q,String is_use_q,String indate_q,PageMybatis page) {
-	StringBuffer buffer=new StringBuffer();
+
+    public List<FiInvitation> Queryandforeign(String foreign_id_q,
+	    String invitation_id_q, String is_use_q, String indate_q,
+	    PageMybatis page) {
+	StringBuffer buffer = new StringBuffer();
 	buffer.append(page.getQuerysql());
-	if(Untils.NotNull(invitation_id_q)){
+	if (Untils.NotNull(invitation_id_q)) {
 	    buffer.append(" and t1.INVITATION_ID = '");
-	    buffer.append(invitation_id_q+"'");
-	}if(Untils.NotNull(is_use_q)){
-	    buffer.append(" and t1.IS_USE = '");
-	    buffer.append(is_use_q+"'");
-	}if(Untils.NotNull(indate_q)){
+	    buffer.append(invitation_id_q + "'");
+	}
+	if (Untils.NotNull(is_use_q)) {
+	    buffer.append(" and t1.IS_USE = ");
+	    buffer.append(is_use_q + "");
+	}
+	if (Untils.NotNull(indate_q)) {
 	    buffer.append(" and t1.ARRIVED_DATE = to_date('");
 	    buffer.append(indate_q);
 	    buffer.append("','yyyy-mm-dd hh24:mi:ss')");
 	}
-	if(Untils.NotNull(foreign_id_q)){
-	    //通过fimiddle的fk_foreign_id in ()
-	    List<FiMiddle> middle_list=middleservice.QueryByForeign(foreign_id_q);
-	    if(middle_list!=null && middle_list.size()>0){
+	if (Untils.NotNull(foreign_id_q)) {
+	    // 通过fimiddle的fk_foreign_id in ()
+	    List<FiMiddle> middle_list = middleservice
+		    .QueryByForeign(foreign_id_q);
+	    if (middle_list != null && middle_list.size() > 0) {
 		buffer.append(" and (t1.id in (");
-		int j=0;
-		for(int i=0;i<middle_list.size();i++){
-        		FiMiddle middle=middle_list.get(i);
-        		if(Untils.NotNull(middle.getFkInvitationId())){
-                		if(j==0){
-                		    j++;
-                		    buffer.append(middle.getFkInvitationId());
-                		}else{
-                		    buffer.append(","+middle.getFkInvitationId());
-                		}
-        		}
-    	    	}
+		int j = 0;
+		for (int i = 0; i < middle_list.size(); i++) {
+		    FiMiddle middle = middle_list.get(i);
+		    if (Untils.NotNull(middle.getFkInvitationId())) {
+			if (j == 0) {
+			    j++;
+			    buffer.append(middle.getFkInvitationId());
+			} else {
+			    buffer.append("," + middle.getFkInvitationId());
+			}
+		    }
+		}
 		buffer.append(" )) ");
 	    }
-	    //将获取的fimiddle集合 循环得到 invitation_id
-	    //然后拼接sql
+	    // 将获取的fimiddle集合 循环得到 invitation_id
+	    // 然后拼接sql
 	}
 	page.setQuerysql(buffer.toString());
 	return invitationDao.SelectAll("selectByPage", page);
     }
-    public List<FiInvitation> QueryList(String method,PageMybatis page) {
-	return invitationDao.SelectAll("selectByPage",page);
-	
+
+    public List<FiInvitation> QueryList(String method, PageMybatis page) {
+	return invitationDao.SelectAll("selectByPage", page);
+    }
+
+    public FiInvitation UpdataObject(FiInvitation invitation) {
+	return invitationDao.UptataReturnObj("updateByPrimaryKey", invitation);
+    }
+
+    public String UpdataInvitation(String invitation_id, String status) {
+	// 在启用邀请函的同时需要动态修改这里的信息.
+	// 启用.失效都将对应存入 foreign 将foreign添加字段用于存放invitation状态.
+	// 1 启用 2失效 0未启用
+	FiInvitation invitation = QueryById(invitation_id);
+	String message = "";
+	boolean statu = false;
+	if (status.equals("1")) {
+	    if ((invitation.getIsUse() + "").equals("0")) {
+		message = "邀请函正常启用!";
+		statu = true;
+	    } else if ((invitation.getIsUse() + "").equals("1")) {
+		message = invitation.getInvitationId() + "  该邀请函已经处于使用状态!";
+		statu = false;
+	    } else if ((invitation.getIsUse() + "").equals("2")) {
+		message = invitation.getInvitationId() + "该邀请函已经处于失效状态!无法启用!";
+		statu = false;
+	    }
+	} else if (status.equals("2")) {
+	    if ((invitation.getIsUse() + "").equals("2")) {
+		message = invitation.getInvitationId() + "该邀请函已经处于失效状态!";
+		statu = false;
+	    } else {
+		message = "邀请函成功修改为失效!";
+		statu = true;
+	    }
+	}
+	if (statu) {
+	    invitation.setIsUse(Integer.parseInt(status));
+
+	    List<FiMiddle> middle = middleservice.QueryByInvitation(invitation);
+	    for (FiMiddle fiMiddle : middle) {
+		FiForeigner foreign = foreignservice.QueryByid_fi(fiMiddle
+			.getFkPersonId());
+		foreign.setFkInvitationId(invitation.getId() + "");
+		foreignservice.UpdataObject(foreign);
+	    }
+	    UpdataObject(invitation);
+	}
+	return message;
     }
 }

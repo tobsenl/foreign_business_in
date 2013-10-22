@@ -173,7 +173,9 @@ float: left;
         </style>
         <script>
         $(document).ready(function(){
-        	
+        	function trim(str){ //删除左右两端的空格
+          	     return str.replace(/(^\s*)|(\s*$)/g, "");
+          	}
         	//查询列表的option
         	var queryformoptions={
         			dataType:  'json', 
@@ -236,12 +238,12 @@ float: left;
                  					content=content+inv.arrivedDate;
                  				}
                  				content=content+"		</div>";
-                 				content=content+"	<div style='width: 100%;text-align: center;' class='edit'>";
-                 				content=content+"                    edit";
-                 				content=content+"		<input type='hidden' value='";
-                 				content=content+inv.id;
-                 				content=content+"'>";
-                 				content=content+"</div>";
+                 				//content=content+"	<div style='width: 100%;text-align: center;' class='edit'>";
+                 				//content=content+"                    edit";
+                 				//content=content+"		<input type='hidden' value='";
+                 				//content=content+inv.id;
+                 				//content=content+"'>";
+                 				//content=content+"</div>";
                  				content=content+"</div>";
                  				content=content+"</div>";
                  			});
@@ -262,23 +264,11 @@ float: left;
         	$("#form1").ajaxForm(formoptions);
         	
         	function clearform(){
-				/*
-				$("#invitationId").val("");
-    			$("#id").val("");
-    			$("#fkAttachmentId").val("");
-    			$("#month").val("");
-    			$("#day").val("");
-    			$("input[name='gobackTimes']").removeAttr("checked");
-    			//$("input[name='gobackTimes'][value=1]").removeAttr("checked");
-    			$("#arrivedDate").val("");
-    			$("#leavingDate").val("");
-    			$("#stayTime").val("");
-    			*/
     			$("#form1").clearForm();
     			$("#showlist").html("");
     			$("#numb").val("0");
 			}
-        	
+        	/*
         	$("#row_list").on("click",".edit",function(e){
         		var e=$(e.target);
             	var id=$(e).find("input[type='hidden']").val();
@@ -335,17 +325,21 @@ float: left;
                     }
                 }
 			});
+			*/
 			$(".button").on("click","#query",function(){
 				$("#queryform").submit();
 			});
 			$(".button").on("click","#clear",function(){
-				$("#foreign_id_q").val("");
-				$("#foreign_name_q").val("");
-				$("#invitation_id_q").val("");
-				$("#indate_q").val("");
-				$("input[name='is_use_q']").removeAttr("checked");
+				$("#queryform").clearForm();
 			});
 			
+			$("#allcheckbox").click(function(e){
+	         	   if($(this).attr("checked") == "checked"){
+	         		   $("input[type='checkbox']").removeAttr("checked");
+	         	   }else{
+	         		   $("input[type='checkbox'][disabled!='disabled']").attr("checked",'true');
+	         	   }
+	        });
 			
 			function split( val ) {
 				return val.split( /,\s*/ );
@@ -410,8 +404,62 @@ float: left;
 				}
 			});
 			
+			var checklist =function(formData, jqForm, options){
+				var temp=$("input[type='checkbox']:checked");
+   				var id="";
+   				var value="";
+   				if(temp){
+   					if(temp != ""){
+   						alert($(temp).val());
+   						if($(temp).val() != "0"){
+   							var te=$(temp).parent(".cols").next().html();
+   							te=trim(te);
+   							if($(temp).val() != "0"){
+   		   						id=id+$(temp).val()+",";
+   							}if(te != "邀请函号码"){
+   		   						value=value+te+",";
+   							}
+   						}else if(temp.length > 1){
+	   						$.each(temp,function(x,v){
+	   							var te=$(v).parent(".cols").next().html();
+	   							te=trim(te);
+	   							if($(v).val() != "0"){
+	   		   						id=id+$(v).val()+",";
+	   							}if(te != "邀请函号码"){
+	   		   						value=value+te+",";
+	   							}
+	   		   				});
+   						}
+   					}
+   				}
+   				if(id != ""){
+   					$("#usedit_id_list").val(id);
+   					return true;
+   				}else{   					
+   					alert("请勾选要操作的邀请函后再点击尝试！");
+   					return false;
+   				}
+			};
+			var options={
+					dataType:  'json',
+	          		success : function(datas){
+						if(datas){
+							alert(datas);
+						}
+					},
+					beforeSubmit:checklist//这里验证之后还是会提交
+			};
+			$("#used").click(function(){
+				$("input[name='usedit_status']").val("1");
+				$(this).ajaxSubmit(options);
+			});
+			$("#lapse").click(function(){
+				$("input[name='usedit_status']").val("2");
+				$(this).ajaxSubmit(options);
+			});
+			
+			
 			$(".button").on("focus","#query",function(e){
-			//$(".button").on("focus","#clear",function(){
 				var _now=$("#foreign_name_q").val();
 				var terms=split(_now);
 				var temp="";
@@ -431,122 +479,6 @@ float: left;
 				});
 				$("#foreign_id_q").val(temp);
 			});
-			
-			var m = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-			$("#day,#month").blur(function(){
-				var day=$("#day").val() == 0 ?"":$("#day").val();
-				var month=$("#month").val() == 0?"":$("#month").val();
-				var time=month+","+day;
-				$("#stayTime").val(time);
-				var arrived_date=$("input[name='arrivedDate']").val();
-				getplantime(arrived_date);
-			});
-			function getplantime(arrived_date){
-				var iday=0;
-				var imonth=0;
-				var month=$("#month").val();
-				var day=$("#day").val();
-				if(day != "" && typeof(day)!="undefined"){
-					iday = parseInt(day);
-				}
-				if(month != "" && typeof(month)!="undefined"){
-					imonth = parseInt(month);
-				}
-				//选取的年月日
-				//alert(arrived_date !="");
-			if(arrived_date !=""){
-				var timelist=arrived_date.split('-');
-				var year_= parseInt(timelist[0]);//年
-				var month_= parseInt(timelist[1]);//月
-				var day_= parseInt(timelist[2]);//日
-				
-				if(iday > 0 || imonth > 0){
-					if(imonth > 0){
-							imonth=month_+imonth;
-							var t_size_year=Math.floor(imonth/12);
-							year_= year_ + t_size_year;
-							month_= imonth - (t_size_year*12);
-					}
-					if(iday > 0){
-						//alert("was into");
-						iday=day_+iday;
-						var chushu=1;
-						if(month_=== 2 && (year_/4==0&&year_/100!=0)||(year_/400==0)){
-							chushu=m[month_-1]+1;
-						}else{
-							chushu=m[month_-1];
-						}
-						var t_size_day=Math.floor(iday/chushu);
-						month_= month_ + t_size_day;
-						day_= iday - (t_size_day*chushu);
-					}
-					$("input[name='leavingDate']").val(year_+"-"+month_+"-"+day_);
-				}
-			}
-			}
-			$("input[name='arrivedDate']").focus(function(){
-				WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'%y-%M-%d',onpicking:function(dp){
-					var arrived_date=dp.cal.getNewDateStr();
-					//填写的停留时间
-					getplantime(arrived_date);
-				}});
-			});
-	        $(function(){
-	        	//添加元素的删除
-	    		$(".row").on("click",".cols4",function(e){
-	    			e=$(e.target);
-	    			//var numb=$("#numb").val();
-	    			if( e.attr("class") == "clos6" ){
-	    				//numb=parseInt(numb)-1;
-	    				e=$(e).parent();
-	    				$(e).remove();
-	    				//$("#numb").val(numb);
-	    			}
-	    		});
-	            
-	            $("#select_foeign").autocomplete({
-	                source:function(request,response) {
-	    				//alert(request);
-	    				$.getJSON("foreign/AjaxQuery.html?entryValue="+request.term,
-	    						function(date){
-	    					if(date){
-	    						//此处构建数据结构：
-	    						response(
-	    						data = $.map(date,function(obj){
-	    							return {
-	    								value: request.term,
-	    								label: " 姓名: "+obj.name+ " 护照号（ "+obj.id+" ）",
-	    								id: obj.id
-	    							}
-	    						})
-	    						);
-	    					}
-	    				});
-	    				},
-	                select: function(e,ui){
-	                	var numb=$("#numb").val();
-		   				var obj_row=$(".row").find(".cols4");
-		   				var add=1;
-		   					if(obj_row.length > 0){
-			   					for(var i=0 ; i < obj_row.length ; i++){
-			   						var v_id=$(obj_row[i]).find("input").val();
-			   						if(v_id == ui.item.id){
-			   							add=0;
-			   							break;
-			   						}
-			   					}
-		   					}
-		   					if(add == 0){
-		   						alert("已存在相同外籍人员！请重新选择！");
-		   					}else{
-		   						numb=parseInt(numb)+1;
-		   						$("#showlist").append("<div class='cols4'><input type='hidden' name='foreign_id"+numb+"' value='"+ui.item.id+"' /><div class='clos5'>"+ui.item.label+"</div><div class='clos6'>X</div></div>");
-		   						$("#numb").val(numb);
-		   					}
-	   			 	}
-	            });
-	        });
 		});
         </script>
 </head>
@@ -577,14 +509,13 @@ float: left;
 					<div class="row_">
 						<div class="title ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all">
 							<div class="cols">
-                            	<input type="checkbox">
+                            	<input type="checkbox" id="allcheckbox" value="0">
                         	</div>
 							<div class="cols">邀请函号码</div>
 							<div class="cols">申请签证有效期</div>
 							<div class="cols">使用状态</div>
 							<div class="cols">往返次数</div>
 							<div class="cols">拟入境日期</div>
-							<div class="cols">编辑</div>
 						</div>
 					</div>
 					<div id="row_list">
@@ -592,7 +523,12 @@ float: left;
 					<div class="row_">
 						<div class="content">
 							<div class="cols">
-                            	<input type="checkbox" value="${inv.id}">
+								<c:if test='${inv.isUse != 2}'>
+		                            	<input type="checkbox" value="${inv.id}" />
+								</c:if>
+								<c:if test='${inv.isUse == 2}'>
+		                            	<input type="checkbox" value="${inv.id}" disabled="disabled" />
+								</c:if>
                         	</div>
 							<div class="cols">${inv.invitationId }</div>
 							<div class="cols">
@@ -616,19 +552,28 @@ float: left;
 							<div class="cols">
 							<fmt:formatDate value="${inv.arrivedDate}" type="date" pattern="yyyy-MM-dd"/>
 							</div>
+							<!-- 
 							<div style="width: 100%;text-align: center;" class="edit">
-                            edit
+                            show
                             <input type="hidden" value="${inv.id}">
-                        </div>
+                             
+                        </div>-->
 						</div>
 					</div>
 					</c:forEach>
 					</div>
-					<div class="row_" style="float: left;width: 20%;">
-                <button>
-                    批量删除
+<form action="<%=basePath%>invitation/invitation_usedit.html" method="post" id="foreign_here">
+			<div class="row_" style="float: left;width: 20%;">
+			<input type="hidden" id="usedit_id_list" name="usedit_id_list" />
+            <input type="hidden" name="usedit_status"/>
+                <button id="used" name="used">
+                    	启用
+                </button>
+                <button id="lapse" name="lapse">
+                    	设为失效
                 </button>
             </div>
+</form>
             <DIV style="float: right;width: 80%;text-align: right;" >
 	                 <ul id="pagination-clean" >
 						<li class="previous-off">总记录数：<i></i></li>
@@ -649,8 +594,9 @@ float: left;
 				</div>
 			</div>
         </div>
-        <div class="form" style="display:none;" title="邀请函信息修改">
-		<form:form id="form1" name="form1" action="invitation/invitation_updata.html" method="post" enctype="multipart/form-data">
+        <!-- 
+        <div class="form" style="display:none;" title="邀请函信息修改" >
+		<form:form id="form1" name="form1" action="#" method="post" enctype="multipart/form-data">
 		<div class="table">
 			<br />
 			<div class="row">
@@ -706,6 +652,7 @@ float: left;
 		<input type="hidden" name="numb" id="numb" value="0"/>
 		</form:form>
 		</div>
+		 -->
 	</div>
 	<jsp:include page="/index/bottom.jsp" />
 	
