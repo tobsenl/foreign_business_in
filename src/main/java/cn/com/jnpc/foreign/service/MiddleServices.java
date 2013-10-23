@@ -62,6 +62,11 @@ public class MiddleServices {
 	example.createCriteria().andFkInvitationIdEqualTo(invitation.getId()+"");
 	return middleDao.SelectByExample("selectByExample",example);
     }
+    public List<FiMiddle> QueryByInvitation(String invitation_id){
+	FiMiddleExample example=new FiMiddleExample();
+	example.createCriteria().andFkInvitationIdEqualTo(invitation_id);
+	return middleDao.SelectByExample("selectByExample",example);
+    }
     public List<FiMiddle> QueryByForeign(String foreign_id){
 	List<String> list=new ArrayList<String>();
 	if(Untils.NotNull(foreign_id)){

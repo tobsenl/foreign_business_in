@@ -43,6 +43,7 @@
 	<bean id="InvitationServices" class="cn.com.jnpc.foreign.service.InvitationServices"></bean>
 	<bean id="MiddleServices" class="cn.com.jnpc.foreign.service.MiddleServices"></bean>
 	<bean id="InOutServices" class="cn.com.jnpc.foreign.service.InOutServices"></bean>
+	<bean id="QueryServices" class="cn.com.jnpc.foreign.service.QueryServices"></bean>
 	
 	<!-- 将对应的dao装载入系统 -->
 	<bean id="foreignDao" class="cn.com.jnpc.foreign.daoImpl.foreignImpl">

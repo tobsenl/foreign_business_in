@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import cn.com.jnpc.ems.dto.User;
 import cn.com.jnpc.foreign.dao.foreignDao;
 import cn.com.jnpc.foreign.model.FiForeignerExample;
+import cn.com.jnpc.foreign.model.FiInvitationExample;
 import cn.com.jnpc.foreign.po.FiAttachment;
 import cn.com.jnpc.foreign.po.FiForeigner;
 import cn.com.jnpc.foreign.po.FiInout;
@@ -167,6 +168,7 @@ public class ForeignServices {
 	    foreigner.setName(foreign.getName());
 	    foreigner.setSex(Integer.parseInt(foreign.getSex()));
 	    foreigner.setStatus(0);
+	    foreigner.setIsHere(0);
 	    // 选填部分
 	    if (Untils.NotNull(foreign.getPost())) {
 		foreigner.setPost(foreign.getPost());
@@ -538,5 +540,14 @@ public class ForeignServices {
 	     inout = inoutservices.QueryByid_fi(foreign_id);
 	}
 	return inout;
+    }
+    
+    public List<FiForeigner> QueryByIdlist(List id) {
+	FiForeignerExample example = new FiForeignerExample();
+	example.createCriteria().andIdIn(id);
+	example.setOrderByClause(" id desc ");
+	List<FiForeigner> foreign = foreignDao.SelectByExample(
+		"selectByExample", example);
+	return foreign;
     }
 }

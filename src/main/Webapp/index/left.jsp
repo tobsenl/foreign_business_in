@@ -116,13 +116,13 @@
                 <h3><span ></span>信息查询</h3>
                 <ul style="list-style: none;">
                     <li>
-                        <a href="/Demon/foreign_Q.html" target="main">专家信息查询</a>
+                        <a href="<%=basePath%>foreign/foreign_query.html" target="main">专家信息查询</a>
                     </li>
                     <li>
-                        <a href="/Demon/invitation_Q.html" target="main">邀请函信息查询</a>
+                        <a href="<%=basePath%>invitation/invitation_toquery.html" target="main">邀请函信息查询</a>
                     </li>
 					<li>
-                        <a href="/Demon/inout_Q.html" target="main">专家出入境信息查询</a>
+                        <a href="<%=basePath%>foreign/foreign_foreigninoutquery.html" target="main">专家出入境信息查询</a>
                     </li>
                 </ul>
 				

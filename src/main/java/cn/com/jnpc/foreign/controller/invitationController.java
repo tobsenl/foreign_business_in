@@ -66,6 +66,8 @@ public class invitationController{
 	    return "/invitation/invitation_edit";
 	}else if(kind.equals("beuse")){
 	    return "/invitation/invitation_beuse";
+	}else if(kind.equals("toquery")){
+	    return "/query/queryinvitation";
 	}else{
 	    return "";
 	}

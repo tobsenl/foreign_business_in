@@ -196,27 +196,6 @@
                     }
                 });
                 function clearform(){
-                	/*
-                	$("#name").val("");
-        			$("#id").val("");
-        			$("input[name='sex']").removeAttr("checked");
-        			$("input[name='birthday']").val("");
-        			$("#country").val("");
-        			$("#company_department").val("");
-        			$("#passport_id").val("");
-        			$("input[name='passport_exp_date']").val("");
-        			$("#post").val("");
-        			$("#role").val("");
-        			$("#fk_pp_attachment_id").val("");
-        			$("input[name='expert_evidence'][value='0']").attr("checked","checked");
-        			$("#fk_ee_attachment_id").val("");
-        			$("#residence_permit_kind").val("");
-        			$("#fk_rp_permit_id").val("");
-        			$("input[name='rp_exp_endDate']").val("");
-        			$("#_Address[value='']").attr("selected","selected");
-        			$("#address").val("");
-        			$("#rp_Address").val("");
-        			*/
         			$("#form1").clearForm();
         			$("#rp_div").css("display","none");
                 	$("#upload_ee").css("display","none");
@@ -267,8 +246,12 @@
 	                			$("input[name='rp_exp_endDate']").val(a.rp_exp_enddate);
 	                			if(a.rp_address){
 	                				var address=a.rp_address.split(',');
+	                				if(address.length > 1){
 	                				$("#_Address").find("option:contains('"+address[0]+"')").prop("selected",true);
 	                				$("#address").val(address[1]);
+	                				}else if(address.length > 0){
+	                				$("#_Address").find("option:contains('"+address[0]+"')").prop("selected",true);
+	                				}
 	                				$("#rp_Address").val(a.rp_address);
 	                			}
                 			}

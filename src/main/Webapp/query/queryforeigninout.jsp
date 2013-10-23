@@ -166,11 +166,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           				 $.each(data,function(x,obj){
 	            			   inner_html=inner_html+"<div class='row'>";
           					   inner_html=inner_html+"<div class='content'>";
-          					   inner_html=inner_html+"<div class='cols' style='width: 5%;'>";
-          					   inner_html=inner_html+"<input type='checkbox' value='"+obj.id+"'>";
-          					   inner_html=inner_html+"</div>";
           					   inner_html=inner_html+"<div class='cols' style='width: 20%;'>";
-          					   inner_html=inner_html+ obj.name;
+          					   inner_html=inner_html+ obj.name+"<input type='hidden' id='id' value='"+obj.id+"'>";
           					   inner_html=inner_html+"</div>";
           					   inner_html=inner_html+"<div class='cols' style='width: 5%;'>";
           					   if(obj.sex == 1){
@@ -226,15 +223,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           		   }
              	}
              };
-			var options={
-					dataType:  'json',
-	          		success : function(datas){
-						if(datas){
-							alert(datas);
-						}
-					},
-					beforeSubmit:checklist//这里验证之后还是会提交
-				};
+			
  			$("#rpExpEnddate_,#rpAddress_,#upload_ee").css("display","none");
          	$("#queryform").ajaxForm(queryoptions);
          	
@@ -266,12 +255,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                      }
                  }
              });
-             
+             var show_list_detail=function(data){
+            	 if(data){
+            		 //添加详细行
+            	 }
+             }
+             $("#row_list").on("dblclick",".content",function(e){
+            	 var e=$(e.target).parent(".content");
+            	 var id=$(e).find("input[type='hidden']#id").val();
+              	 alert(id);
+              	$.getJSON("<%=basePath%>query/query_invitation_list.html?foreign_id="+id,show_list_detail);
+             });
              $("#row_list").on("click",".show",function(e){
              	var e=$(e.target);
              	var id=$(e).find("input[type='hidden']").val();
              	
-             	$.getJSON("<%=basePath%>foreign/AjaxQuery_inout.html?foreign_id="+id,function(data){
+             	$.getJSON("<%=basePath%>foreign/AjaxQuery_detail.html?foreign_id="+id,function(data){
              		if(data){
              			var a=data[0].foreign;
              			clearform();
@@ -281,29 +280,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              			}else{
              				$("#sex_").html("女");
              			}
-             			//$("input[name='sex'][value='"+a.sex+"']").prop("checked",true);
              			$("#birthDay_").html(a.birthday);
              			$("#country_").html(a.country);
              			$("#companyDepartment_").html(a.company_department);
              			$("#passportId_").html(a.passport_id);
              			$("#passportExpDate_").html(a.passport_exp_date);
              			$("#post_").html(a.post);
-             			//$("#role").val(a.role);
-             			$("#fkPpAttachmentId_").html(a.fk_pp_attachment_id);
+             			$("#fkPpAttachmentId_").html(a.fk_pp);
              			if(a.expert_evidence){
              				$("#expertEvidence_").html("有");
 	                			$("#upload_ee").css("display","");
-	                			$("#fkEeAttachmentId_").html(a.fk_ee_attachment_id);
+	                			$("#fkEeAttachmentId_").html(a.fk_ee);
              			}else{
              				$("#expertEvidence_").html("无");
              			}
-             			if(a.residence_permit_kind){
-	                			$("#fkRpPermitKind_").html(a.residence_permit_kind);
+             			if(a.rp_kind){
+	                			$("#fkRpPermitKind_").html(a.rp_kind);
 	                			$("#rpExpEnddate_,#rpAddress_").css("display","");
-	                			$("#rpExpEnddate_").html(a.rp_exp_endDate);
-	                			alert(a.rp_Address);
-	                			if(a.rp_Address != ""){
-	                				var address=a.rp_Address.split(',');
+	                			$("#rpExpEnddate_").html(a.rp_exp_enddate);
+	                			alert(a.rp_address);
+	                			if(a.rp_address != ""){
+	                				var address=a.rp_address.split(',');
 	                				if(address.length > 1){
 	                					$("#rpAddress_").html(address[0]+address[1]);
 	                				}else if(address.length > 0){
@@ -313,33 +310,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              			}else{
              				$("#fkRpPermitKind_").html("无对应签证！");
              			}
-             			
-             			$.each(data[0].inout_list,function(_dex,_value){
-             				/*
-             				+","+
-             				_value.begintime//出入境时间
-             				_value.type//出境入境
-             				_value.content//来华任务。只有入境有
-             				_value.fk_invitation_id//关联的邀请函
-             				*/
-             				$("#inout_detail").after("<div>"+_value.begintime+","+_value.type+","+_value.content+","+_value.fk_invitation_id+"</div>");
-             				//$("#inout_detail").after("");
-             				alert(_value.begintime);
-             			});
              		}
              	});
              	$(".form").dialog("open");
              });
-             
-             
-            $("#allcheckbox").click(function(e){
-         	   if($(this).attr("checked") == "checked"){
-         		   $("input[type='checkbox']").removeAttr("checked");
-         	   }else{
-         		   $("input[type='checkbox']").attr("checked",'true');
-         	   }
-            });
-            
             $("#clear").click(function(){
          	   $("#queryform").clearForm();
             });
@@ -366,51 +340,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					}
 				}
 			});
-			var checklist =function(formData, jqForm, options){
-				var temp=$("input[type='checkbox']:checked");
-   				var id="";
-   				var value="";
-   				if(temp){
-   					if(temp.length > 0){
-   						if(temp.length > 1){
-	   						$.each(temp,function(x,v){
-	   							var te=$(v).parent(".cols").next().html();
-	   							te=trim(te);
-	   							if($(v).val() != "0"){
-	   		   						id=id+$(v).val()+",";
-	   							}if(te != "姓名"){
-	   		   						value=value+te+",";
-	   							}
-	   		   				});
-   						}else if (temp.length == 1){
-   							var te=$(v).parent(".cols").next().html();
-   							te=trim(te);
-   							if($(v).val() != "0"){
-   		   						id=id+$(v).val()+",";
-   							}if(te != "姓名"){
-   		   						value=value+te+",";
-   							}
-   						}
-   					}
-   				}
-   				if(id != ""){
-   					$("#inhere_id_list").val(id);
-   					return true;
-   				}else{   					
-   					alert("请勾选要修改的人员后再点击尝试！");
-   					return false;
-   				}
-			};
 			$("#query").click(function(){
 				$("#queryform").submit();
-			});
-			$("#ishere").click(function(){
-				$("input[name='is_here_status']").val("1");
-				$(this).ajaxSubmit(options);
-			});
-			$("#ishere_no").click(function(){
-				$("input[name='is_here_status']").val("0");
-				$(this).ajaxSubmit(options);
 			});
          });
 	</script>
@@ -422,11 +353,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="main">
 		<form action="<%=basePath%>foreign/AjaxQuery_list.html" id="queryform" method="post">
             <center>
-                专家在连维护
+               专家出入境信息查询
             </center>
             <br/>
             <div class="top">
                 <div class="query_row">
+                    <div class="cols1">
+                        
+                    </div>
                     <div class="cols1">
                         姓名
                     </div>
@@ -498,14 +432,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </div>
 		<div class="body">
             <center>
-                 专家在连维护列表
+                 专家出入境信息查询列表
             </center>
             <br/>
             <div class="row">
                 <div class="title ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all">
-                    <div class="cols" style="width: 5%;">
-                        <input type="checkbox" id="allcheckbox" value="0">
-                    </div>
                     <div class="cols" style="width: 20%;">
                         姓名
                     </div>
@@ -536,11 +467,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <c:forEach items="${foreign_list}" var="foreign" >
             <div class="row">
                 <div class="content">
-                    <div class="cols" style="width: 5%;">
-                        <input type="checkbox" value="${foreign.id}">
-                    </div>
+                    
                     <div class="cols" style="width: 20%;">
-                        ${foreign.name}
+                        ${foreign.name}<input type='hidden' id="id" value="${foreign.id}">
                     </div>
                     <div class="cols" style="width: 5%;">
                         <c:if test="${foreign.sex == 1}">男</c:if>
@@ -574,17 +503,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
             </c:forEach>
             </div>
-            <form action="<%=basePath%>foreign/foreign_hereis.html" method="post" id="foreign_here">
-            <div class="row" style="float: left;width: 20%;">
-            <input type="hidden" id="inhere_id_list" name="inhere_id_list" />
-            <input type="hidden" name="is_here_status"/>
-                <button id="ishere">
-                    在连
-                </button>
-                <button id="ishere_no">
-                    不在连
-                </button>
-            </div>
+            <form action="<%=basePath%>foreign/foreign_hereis.html" method="post" id="page">
             <DIV style="float: right;width: 80%;text-align: right;" >
 	                 <ul id="pagination-clean" >
 						<li class="previous-off">总记录数：<i></i></li>
@@ -607,7 +526,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div id="message" style="display:none;">
         </div>
         <div class="form" id="formshow" style="display:none;" title="外籍人员信息">
-        <form id="form1" name="form1" method="post"
+        <form id="form1" method="post"
 			action="#">
                 <div class="row1">
 					<div class="cols1_">
@@ -705,7 +624,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</div>
 					</div>
 				</form>
-				<div style="text-align: center;" id="inout_detail">出入境信息</div>
         </div>
 	</div>
 	<jsp:include page="/index/bottom.jsp" />

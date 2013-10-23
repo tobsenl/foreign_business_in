@@ -291,6 +291,14 @@ public class InvitationServices {
 		"selectByExample", example);
 	return invitation.get(0);
     }
+    public List<FiInvitation> QueryByIdlist(List id) {
+	FiInvitationExample example = new FiInvitationExample();
+	example.createCriteria().andIdIn(id);
+	example.setOrderByClause(" createtime desc ");
+	List<FiInvitation> invitation = invitationDao.SelectByExample(
+		"selectByExample", example);
+	return invitation;
+    }
 
     public List QueryLinkForeign(List<FiInvitation> invitation_id) {
 	List<FiMiddle> middle_list = middleservice
