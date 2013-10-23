@@ -31,4 +31,9 @@ public class fiMiddleImpl extends SqlSessionDaoSupport implements fiMiddleDao {
 		"cn.com.jnpc.foreign.mapper.FiMiddleMapper." + example, middle);
     }
 
+    public FiMiddle SelectByOne(String example, FiMiddleExample middle) {
+	return getSqlSession().selectOne(
+		"cn.com.jnpc.foreign.mapper.FiMiddleMapper." + example, middle);
+    }
+
 }

@@ -419,7 +419,7 @@
 		<jsp:include page="/index/top.jsp" />
 		<div class="main">
             <center>
-                人员信息维护查询
+                专家信息维护修改
             </center>
             <br/>
             <div class="top">
@@ -482,7 +482,7 @@
         </div>
 		<div class="body">
             <center>
-                人员信息维护列表
+                专家信息维护列表
             </center>
             <br/>
             <div class="row">

@@ -371,7 +371,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    				var id="";
    				var value="";
    				if(temp){
-   					if(temp != ""){
+   					if(temp.length > 0){
    						if(temp.length > 1){
 	   						$.each(temp,function(x,v){
 	   							var te=$(v).parent(".cols").next().html();
@@ -422,7 +422,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<div class="main">
 		<form action="<%=basePath%>foreign/AjaxQuery_list.html" id="queryform" method="post">
             <center>
-                人员信息维护查询
+                专家在连维护
             </center>
             <br/>
             <div class="top">
@@ -498,7 +498,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </div>
 		<div class="body">
             <center>
-                人员信息维护列表
+                 专家在连维护列表
             </center>
             <br/>
             <div class="row">

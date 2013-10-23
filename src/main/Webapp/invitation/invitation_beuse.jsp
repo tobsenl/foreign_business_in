@@ -409,8 +409,7 @@ float: left;
    				var id="";
    				var value="";
    				if(temp){
-   					if(temp != ""){
-   						alert($(temp).val());
+   					if(temp.length > 0){
    						if($(temp).val() != "0"){
    							var te=$(temp).parent(".cols").next().html();
    							te=trim(te);
@@ -488,7 +487,7 @@ float: left;
 		<jsp:include page="/index/top.jsp" />
 		<div class="body">
         	<form id="queryform" name="queryform" method="get" action="invitation/invitation_query.html">
-        	<center>邀请函维护查询</center>
+        	<center>邀请函启用维护</center>
             <div class="rows">
 			<div class="colsx1">邀请函ID</div><div class="colsx2"><input type="text" id="invitation_id_q" name="invitation_id_q"></div>
 			<div class="colsx1">是否使用</div><div class="colsx2"><input type="radio" name="is_use_q">是<input type="radio" name="is_use_q">否</div>
@@ -504,7 +503,7 @@ float: left;
 			</form>
 			
 			<div class="table_">
-				<center>邀请函维护列表</center>
+				<center>邀请函启用维护列表</center>
 				<div class="list">
 					<div class="row_">
 						<div class="title ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all">

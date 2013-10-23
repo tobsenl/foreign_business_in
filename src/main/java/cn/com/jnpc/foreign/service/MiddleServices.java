@@ -9,6 +9,8 @@ import javax.annotation.Resource;
 import cn.com.jnpc.ems.dto.User;
 import cn.com.jnpc.foreign.dao.fiMiddleDao;
 import cn.com.jnpc.foreign.model.FiMiddleExample;
+import cn.com.jnpc.foreign.model.FiMiddleExample.Criteria;
+import cn.com.jnpc.foreign.po.FiForeigner;
 import cn.com.jnpc.foreign.po.FiInvitation;
 import cn.com.jnpc.foreign.po.FiMiddle;
 import cn.com.jnpc.foreign.utils.Untils;
@@ -74,6 +76,13 @@ public class MiddleServices {
 	FiMiddleExample example=new FiMiddleExample();
 	example.createCriteria().andFkPersonIdIn(list);
 	return middleDao.SelectByExample("selectByExample",example);
+    }
+    public FiMiddle QueryByForeign(FiForeigner foreign){
+	FiMiddleExample example=new FiMiddleExample();
+	Criteria criteria=example.createCriteria();
+	criteria.andFkPersonIdEqualTo(foreign.getId()+"");
+	criteria.andFkInvitationIdEqualTo(foreign.getFkInvitationId());
+	return middleDao.SelectByOne("selectByExample",example);
     }
 }
  

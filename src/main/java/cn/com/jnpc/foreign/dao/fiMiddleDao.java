@@ -9,5 +9,6 @@ public interface fiMiddleDao {
     public String InsertReturnID(String example,FiMiddle middle);
     public void Updata(String example,FiMiddle middle);
     public void DeleteByPrimaryKey(String example,int middle);
+    public FiMiddle SelectByOne(String example,FiMiddleExample middle);
     public List<FiMiddle> SelectByExample(String example,FiMiddleExample middle);
 }

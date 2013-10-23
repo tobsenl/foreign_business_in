@@ -203,7 +203,7 @@
  	            				   
              					   inner_html=inner_html+"<div class='cols' style='width: 5%;' >";
              					   inner_html=inner_html+"<div style='width: 100%;text-align: center;' class='show'>";
-             					   inner_html=inner_html+"edit";
+             					   inner_html=inner_html+"show";
              					   inner_html=inner_html+"<input type='hidden' value='"+obj.id+"'>";
              					   inner_html=inner_html+"</div>";
              					   inner_html=inner_html+"</div>";
@@ -367,24 +367,40 @@
 	   				var temp=$("input[type='checkbox']:checked");
 	   				var id="";
 	   				var value="";
-	   				$.each(temp,function(x,v){
-	   					var te=$(v).parent(".cols").next().html();
-	   					te=trim(te);
-						if($(v).val() != "0"){
-		   					id=id+$(v).val()+",";
-						}if(te != "姓名"){
-							//alert(te);
-		   					value=value+te+",";
-						}
-	   				});
-	   				if(id != ""){
-	   					$("#inout_pp_id").val(id);
-	   				alert(id);
+	   				if(temp){
+	   					if(temp.length > 0){
+	   						if($(temp).val() != "0"){
+	   							var te=$(temp).parent(".cols").next().html();
+	   							te=trim(te);
+	   							if($(temp).val() != "0"){
+	   		   						id=id+$(temp).val()+",";
+	   							}if(te != "姓名"){
+	   		   						value=value+te+",";
+	   							}
+	   						}else if(temp.length > 1){
+		   						$.each(temp,function(x,v){
+		   							var te=$(v).parent(".cols").next().html();
+		   							te=trim(te);
+		   							if($(v).val() != "0"){
+		   		   						id=id+$(v).val()+",";
+		   							}if(te != "姓名"){
+		   		   						value=value+te+",";
+		   							}
+		   		   				});
+	   						}
+	   						if(id != ""){
+	   		   					$("#inout_pp_id").val(id);
+	   		   				alert(id);
+	   		   				}
+	   		   				if(value !=""){
+	   		   					$("#inout_pp").html(value);
+	   		   				}
+	   		   				$("#inout").dialog("open");
+	   					}else{
+	   						alert("请勾选要修改的人员后再点击尝试！");
+	   					}
 	   				}
-	   				if(value !=""){
-	   					$("#inout_pp").html(value);
-	   				}
-	   				$("#inout").dialog("open");
+	   				
 	   			});
             });
         </script>
@@ -396,7 +412,7 @@
 		<div class="main">
 		<form action="<%=basePath%>foreign/AjaxQuery_list.html" id="queryform" method="post">
             <center>
-                人员信息维护查询
+                专家出入境信息维护
             </center>
             <br/>
             <div class="top">
@@ -460,7 +476,7 @@
         </div>
 		<div class="body">
             <center>
-                人员信息维护列表
+                专家出入境信息维护列表
             </center>
             <br/>
             <div class="row">
@@ -662,7 +678,7 @@
                 </div>
                 <div class="cols22">
                     <label id="inout_pp"></label>
-                    <input  id="inout_pp_id" name="inout_pp_id"/>
+                    <input type="hidden" id="inout_pp_id" name="inout_pp_id"/>
                 </div>
             </div>
             <div class="row">

@@ -30,7 +30,13 @@ public class InOutServices {
     public void setForeignServices(ForeignServices foreignServices) {
 	this.foreignServices = foreignServices;
     }
-
+    public void store(FiInout inout,User user){
+	inout.setCreateDate(new Date());
+	if(user!=null){
+	    inout.setCreateUser(user.getAccount());
+	}
+	inoutDao.InsertReturObject("insert",inout);
+    }
     public String store(FiInout inout, List list_id, User user) {
 	try {
 	    for (int i = 0; i < list_id.size(); i++) {

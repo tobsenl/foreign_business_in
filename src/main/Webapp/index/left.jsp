@@ -101,16 +101,16 @@
                         <a href="<%=basePath%>invitation/invitation_edit.html" target="main">邀请函信息维护修改</a>
                     </li>
                     <li>
-                        <a href="<%=basePath%>foreign/foreign_inout.html" target="main">专家出入境信息填写</a>
+                        <a href="<%=basePath%>foreign/foreign_inout.html" target="main">专家出入境信息维护</a>
                     </li>
                     <li>
-                        <a href="<%=basePath%>foreign/foreign_ishere.html" target="main">是否在连维护</a>
+                        <a href="<%=basePath%>foreign/foreign_ishere.html" target="main">专家在连维护</a>
                     </li>
                     <li>
-                        <a href="<%=basePath%>invitation/invitation_beuse.html" target="main">邀请函启用操作</a>
+                        <a href="<%=basePath%>invitation/invitation_beuse.html" target="main">邀请函启用维护</a>
                     </li>
                     <li>
-                        <a href="<%=basePath%>foreign/foreign_extension.html" target="main">签证延期</a>
+                        <a href="<%=basePath%>foreign/foreign_extension.html" target="main">签证延期维护</a>
                     </li>
                 </ul>
                 <h3><span ></span>信息查询</h3>
