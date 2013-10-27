@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import cn.com.jnpc.foreign.po.FiForeigner;
 import cn.com.jnpc.foreign.po.FiInvitation;
 import cn.com.jnpc.foreign.po.FiMiddle;
@@ -13,6 +15,22 @@ public class QueryServices {
     MiddleServices middleservices;
     InvitationServices invitationservices;
     ForeignServices foreignservices;
+    
+    @Resource(name="MiddleServices")
+    public void setMiddleservices(MiddleServices middleservices) {
+        this.middleservices = middleservices;
+    }
+    
+    @Resource(name="InvitationServices")
+    public void setInvitationservices(InvitationServices invitationservices) {
+        this.invitationservices = invitationservices;
+    }
+    
+    @Resource(name="ForeignServices")
+    public void setForeignservices(ForeignServices foreignservices) {
+        this.foreignservices = foreignservices;
+    }
+    
     public List<FiInvitation> getInvitationByforeign(String id){
 	List<FiInvitation> invitation_list=null;
 	if(Untils.NotNull(id)){

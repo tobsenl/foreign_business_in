@@ -18,7 +18,7 @@
 
 	<!-- tomcat 连接池的 jnpc01 连接 -->
 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName" value="java:comp/env/jdbc/${oracle_table}">
+		<property name="jndiName" value="java:comp/env/jdbc/${senlchen}">
 		</property>
 	</bean>
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

@@ -167,6 +167,19 @@ float: left;
 	text-align: left;
 	
 }
+.info_row {
+                line-height: 25px;
+                 margin-left: 10%;
+            }
+            .info_title,.info_content {
+                width: 90%;
+                float: left;
+            }
+            .info_cols {
+                position: relative;
+                float: left;
+                width: 14%;
+            }
 			.form{
 				text-align:center;
 			}
@@ -257,16 +270,91 @@ float: left;
     			$("#invitationDetail").clearForm();
     			$("#showlist").html("");
 			}
+        	function addnext(this_,value){
+           	 var content="";
+           	 content=content+"";
+           	content=content+"<div class='info_content'>";
+           	content=content+"<div class='info_cols'>";
+           	content=content+"jason.chen";
+           	content=content+"</div>";
+           	content=content+"<div class='info_cols'>";
+           	content=content+"130025002141";
+           	content=content+"</div>";
+           	content=content+"<div class='info_cols'>";
+           	content=content+"Russian（俄国）";
+           	content=content+"</div>";
+           	content=content+"<div class='info_cols'>";
+           	content=content+"A单位";
+           	content=content+"</div>";
+           	content=content+"<div class='info_cols'>";
+           	content=content+"专家";
+           	content=content+"</div>";
+           	content=content+"<div class='info_cols'>";
+           	content=content+"是";
+           	content=content+"</div>";
+           	content=content+"<div class='info_cols' id='detail'>";
+           	content=content+"show";
+           	content=content+"</div>";
+           	content=content+"</div>";
+           	 $(this_).next().append(content);
+            }
+            function addtitle(this_,value){
+           	 var content="";
+           	content=content+"<div class='info_row'>";
+           	content=content+"<div class='info_title ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all'>";
+       	 	content=content+"<div class='info_cols'>";
+           	content=content+"姓名";
+           	content=content+"</div>";
+           	content=content+"<div class='info_cols'>";
+           	content=content+"护照号码";
+           	content=content+"</div>";
+           	content=content+"<div class='info_cols'>";
+           	content=content+"国籍";
+           	content=content+"</div>";
+           	content=content+"<div class='info_cols'>";
+           	content=content+"单位";
+           	content=content+"</div>";
+           	content=content+"<div class='info_cols'>";
+           	content=content+"身份";
+           	content=content+"</div>";
+           	content=content+"<div class='info_cols'>";
+           	content=content+"是否在连";
+           	content=content+"</div>";
+           	content=content+"<div class='info_cols'>";
+           	content=content+"查看";
+           	content=content+"</div>";
+           	content=content+"</div>";
+           	content=content+"</div>";
+           	 $(this_).after(content);
+           	 addnext(this_,value);
+            }
         	var show_list_detail=function(data){
            	 if(data){
            		 //添加详细行
+           		var date=data.foreignlist;
+	       		 if(date.length > 0){
+	       			$.each(date,function(k,b){
+	       				if(k==0){
+	       					addtitle(e_temp,b);
+	       				}else{
+	       					addnext(e_temp,b);
+	       				}
+	       			}); 
+	       		 }
            	 }
             }
+        	var e_temp=null;
             $("#row_list").on("dblclick",".content",function(e){
-           	 var e=$(e.target).parent(".content");
-           	 var id=$(e).find("input[type='hidden']#id").val();
-             	 alert(id);
+             e_temp=null;
+             e_temp=$(e.target).parent(".content");
+             var x=$(e_temp).next().find(".info_title");
+             //alert(x);
+             if(x.html()){
+            	$(e_temp).next().remove();
+             }else{
+           	 	var id=$(e_temp).find("input[type='hidden']#id").val();
              	$.getJSON("<%=basePath%>query/query_foreign_list.html?invitation_id="+id,show_list_detail);
+             }
             });
         	$("#row_list").on("click",".edit",function(e){
         		var e=$(e.target);

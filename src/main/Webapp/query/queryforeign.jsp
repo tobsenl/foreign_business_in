@@ -150,12 +150,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    float: left;
 		    text-align: left;
 		}
+		.info_row {
+                line-height: 25px;
+                 margin-left: 10%;
+            }
+            .info_title,.info_content {
+                width: 90%;
+                float: left;
+            }
+            .info_cols {
+                position: relative;
+                float: left;
+                width: 16.5%;
+            }
     </style>
 	<script type="text/javascript">
 		$(document).ready(function(){
 			function trim(str){ //删除左右两端的空格
        	     return str.replace(/(^\s*)|(\s*$)/g, "");
        		}
+			$("#rpExpEnddate_,#rpAddress_,#upload_ee").css("display","none");
 			var queryoptions={
           		   dataType:  'json',
           		   success : function(data){
@@ -224,7 +238,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              	}
              };
 			
- 			$("#rpExpEnddate_,#rpAddress_,#upload_ee").css("display","none");
          	$("#queryform").ajaxForm(queryoptions);
          	
              $("#message").dialog({
@@ -255,16 +268,86 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                      }
                  }
              });
+             function addnext(this_,value){
+            	 var content="";
+            	 content=content+"";
+            	 content=content+"<div class='info_content'>";
+            	 content=content+"<div class='info_cols'>";
+            	 content=content+"E201306180034";
+            	 content=content+"</div>";
+            	 content=content+"<div class='info_cols'>";
+            	 content=content+"是";
+            	 content=content+"</div>";
+            	 content=content+"<div class='info_cols'>";
+            	 content=content+"6月20天";
+            	 content=content+"</div>";
+            	 content=content+"<div class='info_cols'>";
+            	 content=content+"多次往返";
+            	 content=content+"</div>";
+            	 content=content+"<div class='info_cols'>";
+            	 content=content+"2013-07-06";
+            	 content=content+"</div>";
+            	 content=content+"<div class='info_cols' id='detail'>";
+            	 content=content+"detail";
+            	 content=content+"</div>";
+            	 content=content+"</div>";
+            	 $(this_).next().append(content);
+             }
+             function addtitle(this_,value){
+            	 var content="";
+            	 content=content+"<div class='info_row'>";
+            	 content=content+"<div class='info_title ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all'>";
+            	 content=content+"<div class='info_cols'>";
+            	 content=content+"邀请函号码";
+            	 content=content+"</div>";
+            	 content=content+"<div class='info_cols'>";
+            	 content=content+"是否使用";
+            	 content=content+"</div>";
+            	 content=content+"<div class='info_cols'>";
+            	 content=content+"停留期限";
+            	 content=content+"</div>";
+            	 content=content+"<div class='info_cols'>";
+            	 content=content+"往返次数";
+            	 content=content+"</div>";
+            	 content=content+"<div class='info_cols'>";
+            	 content=content+"拟入境日期";
+            	 content=content+"</div>";
+            	 content=content+"<div class='info_cols'>";
+            	 content=content+"显示出入境详细";
+            	 content=content+"</div>";
+            	 content=content+"</div>";
+            	 content=content+"</div>";
+            	 $(this_).after(content);
+            	 addnext(this_,value);
+             }
+             
              var show_list_detail=function(data){
             	 if(data){
             		 //添加详细行
+            		 var date=data.invitationlist;
+            		 if(date.length > 0){
+            			$.each(date,function(k,b){
+            				if(k==0){
+            					addtitle(e_temp,b);
+            				}else{
+            					addnext(e_temp,b);
+            				}
+            			}); 
+            		 }
             	 }
              }
+             var e_temp=null;
              $("#row_list").on("dblclick",".content",function(e){
-            	 var e=$(e.target).parent(".content");
-            	 var id=$(e).find("input[type='hidden']#id").val();
-              	 alert(id);
-              	$.getJSON("<%=basePath%>query/query_invitation_list.html?foreign_id="+id,show_list_detail);
+            	 e_temp=null;
+            	 e_temp=$(e.target).parent(".content");
+            	 var x=$(e_temp).next().find(".info_title");
+                 //alert(x);
+                 if(x.html()){
+                	$(e_temp).next().remove();
+                 }else{
+            	 	var id=$(e_temp).find("input[type='hidden']#id").val();
+              		$.getJSON("<%=basePath%>query/query_invitation_list.html?foreign_id="+id,show_list_detail);
+                 }
              });
              $("#row_list").on("click",".show",function(e){
              	var e=$(e.target);

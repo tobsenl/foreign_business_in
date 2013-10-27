@@ -294,7 +294,7 @@ public class InvitationServices {
     public List<FiInvitation> QueryByIdlist(List id) {
 	FiInvitationExample example = new FiInvitationExample();
 	example.createCriteria().andIdIn(id);
-	example.setOrderByClause(" createtime desc ");
+	example.setOrderByClause(" create_date desc ");
 	List<FiInvitation> invitation = invitationDao.SelectByExample(
 		"selectByExample", example);
 	return invitation;
