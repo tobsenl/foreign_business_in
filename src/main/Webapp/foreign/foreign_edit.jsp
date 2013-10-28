@@ -135,7 +135,22 @@
         </style>
         <script>
             $(document).ready(function(){
-            	 var options = {
+            	var permit_kind=null;
+            	var company_kind=null;
+            	var country_kind=null;
+            	function getmatch(obj,val){
+            		/*$.each(obj,function(k,v){
+            			if(v.id==val){
+            				return v.name;
+            			}
+            		});*/
+            		for(var i=0;i<obj.length;i++){
+            			if(obj[i].id==val){
+            				return obj[i].name;
+            			}
+            		}
+            	}
+            	var options = {
                      	dataType:  'json', 
                      	success : function(data){
                      		alert(data);
@@ -306,7 +321,7 @@
             					   }
             					   inner_html=inner_html+"</div>";
             					   inner_html=inner_html+"<div class='cols' style='width: 15%;'>";
-            					   inner_html=inner_html+obj.country;
+            					   inner_html=inner_html+getmatch(country_kind,obj.country);
             					   inner_html=inner_html+"</div>";
             					   inner_html=inner_html+"<div class='cols' style='width: 10%;'>";
             					   inner_html=inner_html+obj.companydepartment;
@@ -345,17 +360,26 @@
             	   $("#invitation_numb").val("");
             	   $("#post_q").val("");//post_q
                });
+               
                $.get("<%=basePath%>index/country.xml",function(y){
    				var contrylist=$(y).find("country");
    				if(contrylist.length > 0){
+   					var j_value="[";
    					for(var i=0;i<contrylist.length;i++){
    						var o=contrylist[i];
    						var id=$(o).find("id").text();
    						var name=$(o).find("name").text();
    						var relname=$(o).find("relname").text();
+   						if(i==contrylist.length-1){
+   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+   						}else{
+   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+   						}
    						$("#country").children().last().after("<option value='"+id+"'>"+relname+"("+name+")</option>")
    						$("#contry_q").children().last().after("<option value='"+id+"'>"+relname+"("+name+")</option>")
    					}
+   					j_value=j_value+"]";
+   					country_kind=eval("("+j_value+")");
    				}
    			});
    			$.get("<%=basePath%>index/place.xml",function(y){
@@ -373,26 +397,48 @@
    			$.get("<%=basePath%>index/permit_kind.xml",function(y){
    				var contrylist=$(y).find("kind");
    				if(contrylist.length > 0){
+   					var j_value="[";
    					for(var i=0;i<contrylist.length;i++){
    						var o=contrylist[i];
    						var id=$(o).find("id").text();
    						var name=$(o).find("name").text();
+   						if(i==contrylist.length-1){
+   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+   						}else{
+   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+   						}
    						$("#residence_permit_kind").children().last().after("<option value='"+id+"'>"+name+"</option>")
    					}
+   					j_value=j_value+"]";
+   					permit_kind=eval("("+j_value+")");
    				}
    			});
    			$.get("<%=basePath%>index/Company3th.xml",function(y){
 				var contrylist=$(y).find("company");
 				if(contrylist.length > 0){
+					var j_value="[";
 					for(var i=0;i<contrylist.length;i++){
 						var o=contrylist[i];
 						var id=$(o).find("id").text();
 						var name=$(o).find("name").text();
+						if(i==contrylist.length-1){
+   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+   						}else{
+   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+   						}
+						
 						$("#company_department").children().last().after("<option value='"+id+"'>"+name+"</option>")
 						$("#post_q").children().last().after("<option value='"+id+"'>"+name+"</option>")
 					}
+					j_value=j_value+"]";
+					company_kind=eval("("+j_value+")");
 				}
 			});
+   			var list_country=$("div[class='country']");
+            $.each(list_country,function(c,b){
+         	  var temp_v=getmatch(country_kind,b.html() );
+         	  b.html(temp_v); 
+            });
             });
         </script>
 </head>
@@ -510,7 +556,7 @@
                         <c:if test="${foreign.sex == 1}">男</c:if>
                         <c:if test="${foreign.sex == 0}">女</c:if>
                     </div>
-                    <div class="cols" style="width: 15%;">
+                    <div class="cols" style="width: 15%;" class="country">
                         ${foreign.country }
                     </div>
                     <div class="cols" style="width: 10%;">

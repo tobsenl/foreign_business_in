@@ -268,27 +268,123 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                      }
                  }
              });
+             $("#invitation_detail").dialog({
+            	 autoOpen: false,
+                 modal: true,
+                 width: 700,
+                 buttons: {
+                     	关闭: function(){
+                         $(this).dialog("close");
+                     }
+                 }
+             });
+            function clearform(){
+     			$("#invitationDetail").clearForm();
+     			$("#showlist").html("");
+     			$("#inoutlist").html("");
+     			$("#inoutlist").hide();
+ 			}
+            function addrow(n,m){
+            	
+            }
+            function title(n,m){
+            	var content="";
+            	content=content+"";
+            	addrow()
+            }
+             var showinvitation=function(data){
+            	 if(data){
+            		clearform();
+         			var v=data.invitation;
+         			$("#invitationId").html(v.invitationId);
+         			
+         			var times=v.stayTime.split(",");
+         			if(times.length > 1){
+         				$("#stayTime").html(times[0]+"月"+times[1]+"天");
+         			}else if(times.length > 0){
+         				$("#stayTime").html(times[0]+"月");
+         			}
+         			if(v.gobackTimes=="1"){
+         				$("#gobackTimes").html("一次往返");
+         			}else if(v.gobackTimes=="2"){
+         				$("#gobackTimes").html("两次往返");
+         			}else if(v.gobackTimes=="3"){
+         				$("#gobackTimes").html("多次往返");         				
+         			}
+         			var arrivedDate=getdate(v.arrivedDate);
+         			var leavingDate=getdate(v.leavingDate);
+         			$("#arrivedDate").html(arrivedDate.getFullYear()+"-"+(arrivedDate.getMonth() + 1)+"-"+(arrivedDate.getDate()));
+         			$("#leavingDate").html(leavingDate.getFullYear()+"-"+(leavingDate.getMonth() + 1)+"-"+(leavingDate.getDate()));
+         			/* 通过人查到邀请函 此邀请函只显示当前此人的出入境信息
+         			if(data.foreign_list !=null && data.foreign_list.length > 0){
+         				$.each(eval(data.foreign_list),function(i,foreign){
+         					$("#showlist").append("<div class='cols4'><input type='hidden' name='foreign_id"+(i+1)+"' value='"+foreign.id+"' /><div class='clos5'> 姓名: "+foreign.name+ " 护照号（ "+foreign.passportId+" ）</div><div class='clos6'>X</div></div>");
+         				});
+         			}*/
+         			var io=data.inout;
+         			if(io.length > 0){
+         				var position_=$("#inoutlist");
+         				$.each(io,function(k,j){
+         					if(k==0){
+         						title(position_,j);
+         					}else{
+         						addrow(position_,j);
+         					}
+         					if(j.type=="1"){
+         						
+         					}
+         				});
+         				position_.show();
+         			}
+         			$("#invitation_detail").dialog("open");
+            	 }else{
+            		 alert("查询不到匹配数据");
+            	 }
+             };
+             $("#row_list").on("click","div[name='detail']",function(e){
+            	 var e=$(e.target);
+            	 var foreign_id=$(e).find(".foreign_id").val();
+            	 var invitation_id=$(e).find(".invitation_id").val();
+            	 $.getJSON("<%=basePath%>query/query_invitation_detail.html?forei_id="+foreign_id+"&invit_id="+invitation_id,showinvitation);
+             });
+             function getdate(t){
+            	 return new Date(t.time);
+             }
              function addnext(this_,value){
             	 var content="";
             	 content=content+"";
             	 content=content+"<div class='info_content'>";
             	 content=content+"<div class='info_cols'>";
-            	 content=content+"E201306180034";
+            	 content=content+value.invitationId+"";
             	 content=content+"</div>";
             	 content=content+"<div class='info_cols'>";
-            	 content=content+"是";
+            	 content=content+(value.isUse==1?"是":"否");
             	 content=content+"</div>";
             	 content=content+"<div class='info_cols'>";
-            	 content=content+"6月20天";
+            	 var time=value.stayTime.split(",");
+            	 if(time.length > 1){
+            	 content=content+time[0]+"月"+time[1]+"天";
+            	 }else if(time.length > 0){
+            	 content=content+time[0]+"月";
+            	 }
             	 content=content+"</div>";
             	 content=content+"<div class='info_cols'>";
-            	 content=content+"多次往返";
+            	 if(value.gobackTimes == "3"){
+            	 	content=content+"多次往返";
+            	 }else if(value.gobackTimes == "1"){
+            		content=content+"一次往返";
+            	 }else if(value.gobackTimes == "2"){
+            		content=content+"两次往返";
+            	 }
             	 content=content+"</div>";
             	 content=content+"<div class='info_cols'>";
-            	 content=content+"2013-07-06";
+            	 var date=getdate(value.arrivedDate);
+            	 content=content+date.getFullYear()+"-"+(date.getMonth() + 1)+"-"+(date.getDate());
             	 content=content+"</div>";
-            	 content=content+"<div class='info_cols' id='detail'>";
+            	 content=content+"<div class='info_cols' name='detail'>";
             	 content=content+"detail";
+            	 content=content+"<input type='hidden' class='foreign_id' value='"+$(this_).find("input[type='hidden']#id").val()+"'>";
+            	 content=content+"<input type='hidden' class='invitation_id' value='"+value.id+"'>";
             	 content=content+"</div>";
             	 content=content+"</div>";
             	 $(this_).next().append(content);
@@ -313,7 +409,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	 content=content+"拟入境日期";
             	 content=content+"</div>";
             	 content=content+"<div class='info_cols'>";
-            	 content=content+"显示出入境详细";
+            	 content=content+"显示详细";
             	 content=content+"</div>";
             	 content=content+"</div>";
             	 content=content+"</div>";
@@ -724,6 +820,55 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</form>
 				<div style="text-align: center;" id="inout_detail">出入境信息</div>
         </div>
+		<div class="detail" id="invitation_detail" style="display:none;" title="邀请函信息">
+			<form id="invitation">
+			<div class="table">
+			<br />
+			<div class="row">
+				<div class="cols1">邀请函号</div>
+				<div class="cols2">
+					<label id="invitationId"></label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="cols1">邀请函上传</div>
+				<div class="cols2">
+					<label id="fkattachmentid"></label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="cols1">申请签证有效期</div>
+				<div class="cols2">
+					<label id="stayTime"></label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="cols1">来往次数</div>
+				<div class="cols2">
+					<label id="gobackTimes"></label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="cols1">拟入境日期</div>
+				<div class="cols2">
+					<label id="arrivedDate"></label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="cols1">拟离境日期</div>
+				<div class="cols2">
+					<label id="leavingDate"></label>
+				</div>
+			</div>
+			<div class="row" style="disable:true;">
+				<div class="cols3" id="showlist">所含外籍人员</div>
+			</div>
+			<div class="row">
+				<div class="cols3" id="inoutlist">当前邀请函出入境信息</div>
+			</div>
+		</div>
+			</form>
+		</div>
 	</div>
 	<jsp:include page="/index/bottom.jsp" />
   </body>

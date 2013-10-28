@@ -270,7 +270,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              	var e=$(e.target);
              	var id=$(e).find("input[type='hidden']").val();
              	
-             	$.getJSON("<%=basePath%>foreign/AjaxQuery_detail.html?foreign_id="+id,function(data){
+             	$.getJSON("<%=basePath%>foreign/AjaxQuery_inout.html?foreign_id="+id,function(data){
              		if(data){
              			var a=data[0].foreign;
              			clearform();
@@ -280,27 +280,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              			}else{
              				$("#sex_").html("女");
              			}
+             			//$("input[name='sex'][value='"+a.sex+"']").prop("checked",true);
              			$("#birthDay_").html(a.birthday);
              			$("#country_").html(a.country);
              			$("#companyDepartment_").html(a.company_department);
              			$("#passportId_").html(a.passport_id);
              			$("#passportExpDate_").html(a.passport_exp_date);
              			$("#post_").html(a.post);
-             			$("#fkPpAttachmentId_").html(a.fk_pp);
+             			//$("#role").val(a.role);
+             			$("#fkPpAttachmentId_").html(a.fk_pp_attachment_id);
              			if(a.expert_evidence){
              				$("#expertEvidence_").html("有");
 	                			$("#upload_ee").css("display","");
-	                			$("#fkEeAttachmentId_").html(a.fk_ee);
+	                			$("#fkEeAttachmentId_").html(a.fk_ee_attachment_id);
              			}else{
              				$("#expertEvidence_").html("无");
              			}
-             			if(a.rp_kind){
-	                			$("#fkRpPermitKind_").html(a.rp_kind);
+             			if(a.residence_permit_kind){
+	                			$("#fkRpPermitKind_").html(a.residence_permit_kind);
 	                			$("#rpExpEnddate_,#rpAddress_").css("display","");
-	                			$("#rpExpEnddate_").html(a.rp_exp_enddate);
-	                			alert(a.rp_address);
-	                			if(a.rp_address != ""){
-	                				var address=a.rp_address.split(',');
+	                			$("#rpExpEnddate_").html(a.rp_exp_endDate);
+	                			alert(a.rp_Address);
+	                			if(a.rp_Address != ""){
+	                				var address=a.rp_Address.split(',');
 	                				if(address.length > 1){
 	                					$("#rpAddress_").html(address[0]+address[1]);
 	                				}else if(address.length > 0){
@@ -310,6 +312,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              			}else{
              				$("#fkRpPermitKind_").html("无对应签证！");
              			}
+             			
+             			$.each(data[0].inout_list,function(_dex,_value){
+             				/*
+             				+","+
+             				_value.begintime//出入境时间
+             				_value.type//出境入境
+             				_value.content//来华任务。只有入境有
+             				_value.fk_invitation_id//关联的邀请函
+             				*/
+             				$("#inout_detail").after("<div>"+_value.begintime+","+_value.type+","+_value.content+","+_value.fk_invitation_id+"</div>");
+             				//$("#inout_detail").after("");
+             				alert(_value.begintime);
+             			});
              		}
              	});
              	$(".form").dialog("open");
@@ -624,6 +639,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</div>
 					</div>
 				</form>
+				<div style="text-align: center;" id="inout_detail">出入境信息</div>
         </div>
 	</div>
 	<jsp:include page="/index/bottom.jsp" />

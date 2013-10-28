@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import cn.com.jnpc.ems.dto.User;
 import cn.com.jnpc.foreign.dao.fiInOutDao;
 import cn.com.jnpc.foreign.model.FiInoutExample;
+import cn.com.jnpc.foreign.model.FiInoutExample.Criteria;
 import cn.com.jnpc.foreign.po.FiForeigner;
 import cn.com.jnpc.foreign.po.FiInout;
 import cn.com.jnpc.foreign.utils.Untils;
@@ -75,6 +76,18 @@ public class InOutServices {
 	if(Untils.NotNull(id)){
 	    FiInoutExample inoutexamp=new FiInoutExample();
 	    inoutexamp.createCriteria().andFkForeignerIdEqualTo(id);
+	    inoutexamp.setOrderByClause(" CREATE_DATE desc");
+	    out=inoutDao.selectByExample("selectByExample", inoutexamp);
+	}
+	return out;
+    }
+    public List<FiInout> QueryByinvitforeign(String invit,String foreign){
+	List<FiInout> out=null;
+	if(Untils.NotNull(invit) && Untils.NotNull(foreign)){
+	    FiInoutExample inoutexamp=new FiInoutExample();
+	    Criteria c=inoutexamp.createCriteria();
+	    c.andFkForeignerIdEqualTo(foreign);
+	    c.andFkInvitationIdEqualTo(invit);
 	    inoutexamp.setOrderByClause(" CREATE_DATE desc");
 	    out=inoutDao.selectByExample("selectByExample", inoutexamp);
 	}

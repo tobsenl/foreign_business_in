@@ -183,10 +183,33 @@ float: left;
 			.form{
 				text-align:center;
 			}
+			.row1 {
+		    float: left;
+		    position: relative;
+		    width: 50%;
+		    line-height: 35px;
+		    overflow: hidden;
+		}
+		
+		.cols1_ {
+		    position: relative;
+		    width: 40%;
+		    float: left;
+		    text-align: left;
+		}
+		
+		.cols2_ {
+		    position: relative;
+		    width: 60%;
+		    float: left;
+		    text-align: left;
+		}
         </style>
         <script>
         $(document).ready(function(){
-        	
+        	function getdate(t){
+           	 return new Date(t.time);
+            }
         	//查询列表的option
         	var queryformoptions={
         			dataType:  'json', 
@@ -270,31 +293,99 @@ float: left;
     			$("#invitationDetail").clearForm();
     			$("#showlist").html("");
 			}
+        	var showforeign=function(data){
+        		if(data){
+        			clearform();
+        			var a=data.foreign;
+         			$("#name_").html(a.name);
+         			if(a.sex == 1){
+         				$("#sex_").html("男");
+         			}else{
+         				$("#sex_").html("女");
+         			}
+         			//$("input[name='sex'][value='"+a.sex+"']").prop("checked",true);
+         			$("#birthDay_").html(a.birthday);
+         			$("#country_").html(a.country);
+         			$("#companyDepartment_").html(a.company_department);
+         			$("#passportId_").html(a.passport_id);
+         			$("#passportExpDate_").html(a.passport_exp_date);
+         			$("#post_").html(a.post);
+         			//$("#role").val(a.role);
+         			$("#fkPpAttachmentId_").html(a.fk_pp_attachment_id);
+         			if(a.expert_evidence){
+         				$("#expertEvidence_").html("有");
+                			$("#upload_ee").css("display","");
+                			$("#fkEeAttachmentId_").html(a.fk_ee_attachment_id);
+         			}else{
+         				$("#expertEvidence_").html("无");
+         			}
+         			if(a.residence_permit_kind){
+                			$("#fkRpPermitKind_").html(a.residence_permit_kind);
+                			$("#rpExpEnddate_,#rpAddress_").css("display","");
+                			$("#rpExpEnddate_").html(a.rp_exp_endDate);
+                			alert(a.rp_Address);
+                			if(a.rp_Address != ""){
+                				var address=a.rp_Address.split(',');
+                				if(address.length > 1){
+                					$("#rpAddress_").html(address[0]+address[1]);
+                				}else if(address.length > 0){
+                					$("#rpAddress_").html(address[0]);
+                				}
+                			}
+         			}else{
+         				$("#fkRpPermitKind_").html("无对应签证！");
+         			}
+         			
+         			$.each(data.inout_list,function(_dex,_value){
+         				/*
+         				+","+
+         				_value.begintime//出入境时间
+         				_value.type//出境入境
+         				_value.content//来华任务。只有入境有
+         				_value.fk_invitation_id//关联的邀请函
+         				*/
+         				$("#inout_detail").after("<div>"+_value.begintime+","+_value.type+","+_value.content+","+_value.fk_invitation_id+"</div>");
+         				//$("#inout_detail").after("");
+         				alert(_value.begintime);
+         			});
+         			$("#foreign_detail").dialog("open");
+        		}else{
+        			alert("查询不到匹配数据");
+        		}
+        	}
+        	$("#row_list").on("click","div[name='detail']",function(e){
+           	 var e=$(e.target);
+           	 var foreign_id=$(e).find(".foreign_id").val();
+           	 var invitation_id=$(e).find(".invitation_id").val();
+           	 $.getJSON("<%=basePath%>query/query_foreign_detail.html?forei_id="+foreign_id+"&invit_id="+invitation_id,showforeign);
+            });
         	function addnext(this_,value){
            	 var content="";
            	 content=content+"";
            	content=content+"<div class='info_content'>";
            	content=content+"<div class='info_cols'>";
-           	content=content+"jason.chen";
+           	content=content+value.name+"";
            	content=content+"</div>";
            	content=content+"<div class='info_cols'>";
-           	content=content+"130025002141";
+           	content=content+value.passportId+"";
            	content=content+"</div>";
            	content=content+"<div class='info_cols'>";
-           	content=content+"Russian（俄国）";
+           	content=content+value.country+"";
            	content=content+"</div>";
            	content=content+"<div class='info_cols'>";
-           	content=content+"A单位";
+           	content=content+value.companyDepartment+"";
            	content=content+"</div>";
            	content=content+"<div class='info_cols'>";
-           	content=content+"专家";
+           	content=content+(value.role==""?"(无对应信息)":value.role);
            	content=content+"</div>";
            	content=content+"<div class='info_cols'>";
-           	content=content+"是";
+           	content=content+(value.isHere=="1"?"是":"否");
            	content=content+"</div>";
-           	content=content+"<div class='info_cols' id='detail'>";
+           	content=content+"<div class='info_cols' name='detail'>";
            	content=content+"show";
-           	content=content+"</div>";
+           	content=content+"<input type='hidden' class='invitation_id' value='"+$(this_).find("input[type='hidden']#id").val()+"'>";
+       	 	content=content+"<input type='hidden' class='foreign_id' value='"+value.id+"'>";
+       	 	content=content+"</div>";
            	content=content+"</div>";
            	 $(this_).next().append(content);
             }
@@ -363,28 +454,25 @@ float: left;
             		if(data){
             			clearform();
             			var v=data[0];
-            			$("#invitationId").val(v.invitationId);
-            			$("#id").val(v.id);
-            			$("#fkAttachmentId").val(v.fkAttachmentId);
-            			
-            			var staytime=v.stayTime;
-            			var times=staytime.split(",");
-            			var month="";
-            			var day="";
-            			if(times.length > 0){
-            				month=times[0];
-            			}if(times.length > 1){
-            				day=times[1];
-            			}
-            			$("#month").val(month);
-            			$("#day").val(day);
-            			$("input[name='gobackTimes'][value='"+v.gobackTimes+"']").prop("checked",true);
-            			//alert($("input[name=gobackTimes][value="+v.gobackTimes+"]").attr("checked"));
-            			
-            			$("#arrivedDate").val(v.arrivedDate);
-            			$("#leavingDate").val(v.leavingDate);
-            			
-            			$("#stayTime").val(v.stayTime);
+            			$("#invitationId").html(v.invitationId);
+             			
+             			var times=v.stayTime.split(",");
+             			if(times.length > 1){
+             				$("#stayTime").html(times[0]+"月"+times[1]+"天");
+             			}else if(times.length > 0){
+             				$("#stayTime").html(times[0]+"月");
+             			}
+             			if(v.gobackTimes=="1"){
+             				$("#gobackTimes").html("一次往返");
+             			}else if(v.gobackTimes=="2"){
+             				$("#gobackTimes").html("两次往返");
+             			}else if(v.gobackTimes=="3"){
+             				$("#gobackTimes").html("多次往返");         				
+             			}
+             			var arrivedDate=getdate(v.arrivedDate);
+             			var leavingDate=getdate(v.leavingDate);
+             			$("#arrivedDate").html(v.arrivedDate);
+             			$("#leavingDate").html(v.leavingDate);
             			if(v.foreign_list !=null && v.foreign_list.length > 0){
             				$.each(eval(v.foreign_list),function(i,foreign){
             					$("#showlist").append("<div class='cols4'><input type='hidden' name='foreign_id"+(i+1)+"' value='"+foreign.id+"' /><div class='clos5'> 姓名: "+foreign.name+ " 护照号（ "+foreign.passportId+" ）</div><div class='clos6'>X</div></div>");
@@ -398,6 +486,16 @@ float: left;
 			});
         	
 			$(".form").dialog({
+				autoOpen: false,
+                modal: true,
+                width: 700,
+                buttons: {
+					关闭: function(){
+                        $(this).dialog("close");
+                    }
+                }
+			});
+			$("#foreign_detail").dialog({
 				autoOpen: false,
                 modal: true,
                 width: 700,
@@ -638,9 +736,109 @@ float: left;
 				<div class="cols3" id="showlist">所含外籍人员</div>
 			</div>
 		</div>
-		<input type="hidden" name="numb" id="numb" value="0"/>
 		</form>
 		</div>
+		<div id="foreign_detail" style="display:none;" title="对应外籍人员信息">
+        <form id="foreign_form" 
+			action="#">
+                <div class="row1">
+					<div class="cols1_">
+						姓 名(英文)
+					</div>
+					<div class="cols2_">
+						<label id="name_"></label>
+					</div>
+				</div>
+				<div class="row1">
+					<div class="cols1_">性 别</div>
+					<div class="cols2_">
+						<label id="sex_"></label>
+					</div>
+				</div>
+				<div class="row1">
+					<div class="cols1_">
+						出生日期
+					</div>
+					<div class="cols2_">
+						<label id="birthDay_"></label>
+					</div>
+				</div>
+				<div class="row1">
+					<div class="cols1_">
+						国 籍
+					</div>
+					<div class="cols2_">
+						<label id="country_"></label>
+					</div>
+				</div>
+				<div class="row1" style="width: 100%">
+					<div class="cols1_">单 位</div>
+					<div class="cols2_">
+						<label id="companyDepartment_"></label>
+					</div>
+				</div>
+				<div class="row1">
+					<div class="cols1_">
+						护 照
+					</div>
+					<div class="cols2_">
+						<label id="passportId_"></label>
+					</div>
+				</div>
+				<div class="row1">
+					<div class="cols1_">护照有效期至</div>
+					<div class="cols2_">
+						<label id="passportExpDate_"></label>
+					</div>
+				</div>
+				<div class="row1">
+					<label id=""></label>
+				</div>
+				<div class="row1" style="width: 100%">
+					<div class="cols1_">护照扫描件</div>
+					<div class="cols2_">
+						<label id="fkPpAttachmentId_"></label>
+					</div>
+				</div>
+				<div class="row1">
+					<div class="cols1_">身 份</div>
+					<div class="cols2_">
+						<label id="post_"></label>
+					</div>
+				</div>
+				<div class="row1">
+					<div class="cols1_">外国专家证</div>
+					<div class="cols2_">
+						<label id="expertEvidence_"></label>
+					</div>
+				</div>
+				<div class="row1" id="upload_ee" style="width: 100%">
+					<div class="cols1_">专家证扫描件</div>
+					<div class="cols2_">
+						<label id="fkEeAttachmentId_"></label>
+					</div>
+				</div>
+				<div class="row1">
+					<div class="cols1_">签证类型</div>
+					<div class="cols2_">
+						<label id="fkRpPermitKind_"></label>
+					</div>
+				</div>
+					<div class="row1">
+								<div class="cols1_">签证有限期至</div>
+								<div class="cols2_">
+									<label id="rpExpEnddate_"></label>
+								</div>
+					</div>
+					<div class="row1">
+						<div class="cols1_">居留地址</div>
+						<div class="cols2_">
+							<label id="rpAddress_"></label>
+						</div>
+					</div>
+				</form>
+				<div style="text-align: center;" id="inout_detail">出入境信息</div>
+        	</div>
 	</div>
 	<jsp:include page="/index/bottom.jsp" />
 	

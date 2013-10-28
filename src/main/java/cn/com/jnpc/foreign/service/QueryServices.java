@@ -7,9 +7,11 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import cn.com.jnpc.foreign.po.FiForeigner;
+import cn.com.jnpc.foreign.po.FiInout;
 import cn.com.jnpc.foreign.po.FiInvitation;
 import cn.com.jnpc.foreign.po.FiMiddle;
 import cn.com.jnpc.foreign.utils.Untils;
+import cn.com.jnpc.foreign.vo.foreigner;
 
 public class QueryServices {
     MiddleServices middleservices;
@@ -30,7 +32,13 @@ public class QueryServices {
     public void setForeignservices(ForeignServices foreignservices) {
         this.foreignservices = foreignservices;
     }
+    InOutServices inoutservices;
     
+    @Resource(name="InOutServices")
+    public void setInoutservices(InOutServices inoutservices) {
+        this.inoutservices = inoutservices;
+    }
+
     public List<FiInvitation> getInvitationByforeign(String id){
 	List<FiInvitation> invitation_list=null;
 	if(Untils.NotNull(id)){
@@ -61,6 +69,36 @@ public class QueryServices {
 		}
 	    }
 	    return foreignservices.QueryByIdlist(list_id);
+	}else{
+	    return null;
+	}
+    }
+    public foreigner getforeignQueryByid(String id){
+	if(Untils.NotNull(id)){
+	    return foreignservices.QueryByid(id);
+	}else{
+	    return null;
+	}
+    }
+    public FiInvitation getinvitation(String id){
+	if(Untils.NotNull(id)){
+	    return invitationservices.QueryById(id);
+	}else{
+	    return null;
+	}
+    }
+    public List<FiInout> getinout(String invit,String foreign){
+	if(Untils.NotNull(invit) && Untils.NotNull(foreign)){
+	    return inoutservices.QueryByinvitforeign(invit,foreign);
+	}else{
+	    return null;
+	}
+    }
+    public List<FiForeigner> getforeignbymiddle(FiInvitation invit){
+	if(Untils.NotNull(invit)){
+	    List<FiInvitation> invitation_list=new ArrayList<FiInvitation>();
+	    invitation_list.add(invit);
+	    return invitationservices.QueryLinkForeign(invitation_list);
 	}else{
 	    return null;
 	}
