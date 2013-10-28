@@ -32,18 +32,20 @@ public final class Untils {
     public final static int BY_CLASS = 4;
     public final static int BY_CLASSLOADER = 5;
     public final static int BY_SYSTEM_CLASSLOADER = 6;
+    public final static int BY_WEBINF = 7;
 
     protected static Map<String, String> parameters = new HashMap<String, String>();
 
     @SuppressWarnings("unchecked")
-    public static boolean verifyUser(String userId, String password) {
+    public static boolean verifyUser(String userId, String password) throws IOException {
+	Properties prop=loadProperties("/ad_load.properties", 7);
 	boolean flag = true;
 	/*
 	 * String userName = "20021274"; // 用户名称 password = "123456"; // 密码
 	 */
-	String host = "10.10.14.46"; // AD服务器
-	String port = "389"; // 端口
-	String domain = "@ecmuat.jnpc.com"; // 邮箱的后缀名
+	String host = prop.getProperty("host"); // AD服务器
+	String port = prop.getProperty("port"); // 端口
+	String domain = prop.getProperty("domain"); // 邮箱的后缀名
 	String url = new String("ldap://" + host + ":" + port);
 	String user = userId.indexOf(domain) > 0 ? userId : userId + domain;
 	Hashtable env = new Hashtable();
@@ -52,12 +54,12 @@ public final class Untils {
 	env.put(Context.SECURITY_PRINCIPAL, user); // 不带邮箱后缀名的话，会报错，具体原因还未探究。高手可以解释分享。
 	env.put(Context.SECURITY_CREDENTIALS, password);
 	env.put(Context.INITIAL_CONTEXT_FACTORY,
-		"com.sun.jndi.ldap.LdapCtxFactory");
+		prop.getProperty("Factory"));
 	env.put(Context.PROVIDER_URL, url);
 	try {
 	    ctx = new InitialDirContext(env);
 	    // 域节点
-	    String searchBase = "OU=USERS,OU=JNPC,DC=ecmuat,DC=jnpc,DC=com";// OU=USERS,OU=JNPC,DC=jnpc,DC=net
+	    String searchBase = prop.getProperty("searchBase");// OU=USERS,OU=JNPC,DC=jnpc,DC=net
 	    // LDAP搜索过滤器类
 	    String searchFilter = "(&(objectClass=User)(sAMAccountName="
 		    + userId + "))";
@@ -136,6 +138,11 @@ public final class Untils {
 	} else if (type == BY_CLASS) {
 	    assert (Untils.class.equals(new Untils().getClass()));
 	    in = Untils.class.getResourceAsStream(name);
+	    assert (in != null);
+	    p.load(in);
+	    // return new JProperties().getClass().getResourceAsStream(name);
+	} else if (type == BY_WEBINF) {
+	    in = new BufferedInputStream(new FileInputStream(GetPath("JavaBean").replace("/classes", "")+name));
 	    assert (in != null);
 	    p.load(in);
 	    // return new JProperties().getClass().getResourceAsStream(name);

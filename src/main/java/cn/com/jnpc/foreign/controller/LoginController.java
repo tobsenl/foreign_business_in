@@ -14,17 +14,17 @@ import cn.com.jnpc.foreign.utils.Untils;
 
 @Controller
 public class LoginController{
-    @RequestMapping(value = "/login.do")
+    @RequestMapping(value = "/login.html")
     public String login(Users user,HttpServletRequest request,Model model){
 	User use=null;
 	boolean flag=false;
-	user=new Users();
 	try {
-		 //user=EMSUtils.findUserByAccount(userId);
+		//user=EMSUtils.findUserByAccount(userId);
+	    if(user!=null && Untils.NotNull(user.getUserid()) && Untils.NotNull(user.getPasswd())){
 		flag= Untils.verifyUser( user.getUserid(),user.getPasswd());
 		if (flag) {
 			use=(User)EMSUtils.findUserByAccount(user.getUserid());
-			boolean check=Untils.setSessionP(request, "user", (Object)user);
+			boolean check=Untils.setSessionP(request, "user", (Object)use);
 			if(check){
 			    model.addAttribute("user",use);
 			}else{
@@ -33,8 +33,11 @@ public class LoginController{
 		}else{
 		    model.addAttribute("error","用户名或者密码错误");
 		}
+	    }else{
+		model.addAttribute("error","请填写用户名密码!");
+	    }
 	} catch (Exception e) {
-		e.printStackTrace();
+	    System.out.println(e.getCause()); 
 	}
 	if(flag){
 	    return "index/index";	    
@@ -42,7 +45,7 @@ public class LoginController{
 	    return "login";//返回路径的问题.
 	}
     }
-    @RequestMapping(value = "/login.html")
+    @RequestMapping(value = "/login.do")
     public String login(HttpServletRequest request,Model model){
 	return "index/index";
     }

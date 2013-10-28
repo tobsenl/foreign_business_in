@@ -41,4 +41,16 @@
 			</props>
 		</property>
 	</bean>
+
+	<!-- 拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/query/*" /> 
+			<mvc:mapping path="/foreign/*" /> 
+			<mvc:mapping path="/invitation/*" /> 
+			<mvc:mapping path="/inout/*" /> 
+			<mvc:mapping path="/query/*" /> 
+			<bean class="cn.com.jnpc.foreign.utils.SessionInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
 </beans>
