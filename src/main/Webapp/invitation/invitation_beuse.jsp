@@ -65,12 +65,11 @@ body{
 				text-align:center;
 			}
 			.body form{
-				margin-left:10%;
 				width:900px;
 			}
 			.button{
-				width:60%;
-				text-align:right;
+				width:100%;
+				text-align:center;
 			}
 			.title {
                 width: 100%;
@@ -486,7 +485,7 @@ float: left;
 	<div class="container">
 		<jsp:include page="/index/top.jsp" />
 		<div class="body">
-        	<form id="queryform" name="queryform" method="get" action="invitation/invitation_query.html">
+        	<form id="queryform" name="queryform" method="get" action="invitation/invitation_query.html" style="margin-left:10%;">
         	<center>邀请函启用维护</center>
             <div class="rows">
 			<div class="colsx1">邀请函ID</div><div class="colsx2"><input type="text" id="invitation_id_q" name="invitation_id_q"></div>
@@ -495,11 +494,11 @@ float: left;
 			</div>
 			<div class="rows" style="float: left;">
 			<div class="colsx1" style="width: 13%;">所含外籍人员</div>
-			<div class="colsx2" style="width: 85%;">
+			<div class="colsx2" style="width: 75%;">
 			<input type="text" id="foreign_name_q" name="foreign_name_q" size="100"/>
 			<input type="hidden" id="foreign_id_q" name="foreign_id_q"></div>
 			</div>
-			<div class="button" style="float: right;position: relative;"><input type="button" id="query" name="query" value="查询"><input id="clear" name="clear" type="button" value="清空"></div>
+			<div class="button" style="float: left;position: relative;"><input type="button" id="query" name="query" value="查询">&nbsp; &nbsp; &nbsp;<input id="clear" name="clear" type="button" value="清空"></div>
 			</form>
 			
 			<div class="table_">
@@ -573,7 +572,7 @@ float: left;
                 </button>
             </div>
 </form>
-            <DIV style="float: right;width: 80%;text-align: right;" >
+            <DIV style="float: right;width: 80%;text-align: right; padding-right:5%"" >
 	                 <ul id="pagination-clean" >
 						<li class="previous-off">总记录数：<i></i></li>
 						<li class="previous-off">总页数：<i></i></li>

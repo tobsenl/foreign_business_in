@@ -91,7 +91,12 @@
                 overflow: hidden;
                 margin-left: 15%;
             }
-            
+             .row_button {
+                width: 75%;
+                position: relative;
+                line-height: 15px;
+                overflow: hidden;
+            }
             .Crow {
                 width: 100%;
                 position: relative;
@@ -157,6 +162,17 @@
         </style>
         <script type="text/javascript">
             $(document).ready(function(){
+            	var permit_kind=null;
+            	var company_kind=null;
+            	var country_kind=null;
+            	function getmatch(obj,val){
+            		for(var i=0;i<obj.length;i++){
+            			val=trim(val);
+            			if(obj[i].id==val){
+            				return obj[i].name;
+            			}
+            		}
+            	}
             	function trim(str){ //删除左右两端的空格
             	     return str.replace(/(^\s*)|(\s*$)/g, "");
             	}
@@ -184,20 +200,26 @@
              					   }
              					   inner_html=inner_html+"</div>";
              					   inner_html=inner_html+"<div class='cols' style='width: 15%;'>";
-             					   inner_html=inner_html+obj.country;
+             					   inner_html=inner_html+getmatch(country_kind,obj.country);
              					   inner_html=inner_html+"</div>";
              					   inner_html=inner_html+"<div class='cols' style='width: 10%;'>";
-             					   inner_html=inner_html+obj.companydepartment;
+             					  var v=getmatch(company_kind,obj.companydepartment);
+	           					   if(v.length>9){
+	           						   inner_html=inner_html+v.substring(0,9)+"……";
+	           					   }else{
+	           						   inner_html=inner_html+getmatch(company_kind,obj.companydepartment);
+	           					   }
              					   inner_html=inner_html+"</div>";
              					   inner_html=inner_html+"<div class='cols' style='width: 20%;'>";
              					   inner_html=inner_html+obj.passportid ;
              					   inner_html=inner_html+"</div>";
              					   inner_html=inner_html+"<div class='cols' style='width: 10%;'>";
-             					   if(obj.role == null){
-             					   inner_html=inner_html+"（无对应信息）";
-             					   }
-             					   if(obj.role != null){
-             					   inner_html=inner_html+obj.role;
+             					  if(obj.role == 1 ){
+                					   inner_html=inner_html+"专家";
+                					}else if(obj.role == 2){
+              					   	   inner_html=inner_html+"配偶";
+              					   }else if(obj.role == null){
+             					   	   inner_html=inner_html+"（无对应信息）";
              					   }
              					   inner_html=inner_html+"</div>";
  	            				   
@@ -295,12 +317,18 @@
                 			}
                 			//$("input[name='sex'][value='"+a.sex+"']").prop("checked",true);
                 			$("#birthDay_").html(a.birthday);
-                			$("#country_").html(a.country);
-                			$("#companyDepartment_").html(a.company_department);
+                			$("#country_").html(getmatch(country_kind,a.country));
+                			$("#companyDepartment_").html(getmatch(company_kind,a.company_department));
                 			$("#passportId_").html(a.passport_id);
                 			$("#passportExpDate_").html(a.passport_exp_date);
                 			$("#post_").html(a.post);
-                			//$("#role").val(a.role);
+                			if(a.role == 1){
+                				$("#role").html("专家");
+                			}else if(a.role == 2){
+                				$("#role").html("配偶");
+                			}else{
+                				$("#role").html("无");
+                			}
                 			$("#fkPpAttachmentId_").html(a.fk_pp);
                 			if(a.expert_evidence){
                 				$("#expertEvidence_").html("有");
@@ -310,7 +338,7 @@
                 				$("#expertEvidence_").html("无");
                 			}
                 			if(a.rp_kind){
-	                			$("#fkRpPermitKind_").html(a.rp_kind);
+	                			$("#fkRpPermitKind_").html(getmatch(permit_kind,a.rp_kind));
 	                			$("#rpExpEnddate_,#rpAddress_").css("display","");
 	                			$("#rpExpEnddate_").html(a.rp_exp_enddate);
 	                			if(a.rp_address){
@@ -340,13 +368,22 @@
                $.get("<%=basePath%>index/country.xml",function(y){
    				var contrylist=$(y).find("country");
    				if(contrylist.length > 0){
+   					var j_value="[";
    					for(var i=0;i<contrylist.length;i++){
    						var o=contrylist[i];
    						var id=$(o).find("id").text();
    						var name=$(o).find("name").text();
    						var relname=$(o).find("relname").text();
+   						if(i==contrylist.length-1){
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+						}else{
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+						}
    						$("#contry").children().last().after("<option value='"+id+"'>"+relname+"("+name+")</option>")
    					}
+   					j_value=j_value+"]";
+					country_kind=eval("("+j_value+")");
+					setCountry(country_kind);
    				}
    			});
                $.get("<%=basePath%>index/place.xml",function(y){
@@ -364,23 +401,40 @@
    			$.get("<%=basePath%>index/permit_kind.xml",function(y){
    				var contrylist=$(y).find("kind");
    				if(contrylist.length > 0){
+   					var j_value="[";
    					for(var i=0;i<contrylist.length;i++){
    						var o=contrylist[i];
    						var id=$(o).find("id").text();
    						var name=$(o).find("name").text();
+   						if(i==contrylist.length-1){
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+						}else{
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+						}
    						$("#residencePermitKind").children().last().after("<option value='"+id+"'>"+name+"</option>")
    					}
+   					j_value=j_value+"]";
+   					permit_kind=eval("("+j_value+")");
    				}
    			});
    			$.get("<%=basePath%>index/Company3th.xml",function(y){
 				var contrylist=$(y).find("company");
 				if(contrylist.length > 0){
+					var j_value="[";
 					for(var i=0;i<contrylist.length;i++){
 						var o=contrylist[i];
 						var id=$(o).find("id").text();
 						var name=$(o).find("name").text();
+						if(i==contrylist.length-1){
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+						}else{
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+						}
 						$("#post").children().last().after("<option value='"+id+"'>"+name+"</option>")
 					}
+					j_value=j_value+"]";
+					company_kind=eval("("+j_value+")");
+					setCompanyDepartment(company_kind);
 				}
 			});
    			$("#query").click(function(){
@@ -434,6 +488,21 @@
 	   				//alert(temp_address);
 	   				$("#rpAddress").val(temp_address);
 	   			});
+	   			function setCountry(_kind){
+	   	            $.each($("#row_list").find("[title='country']"),function(c,b){
+	   	         	  $(b).html(getmatch(_kind,$(b).html())); 
+	   	            });
+	   			}
+				function setCompanyDepartment(_kind){
+	   	            $.each($("#row_list").find("[title='companyDepartment']"),function(c,b){
+	   	            	var p=getmatch(_kind,$(b).html());
+	   	            	if(p.length>9){
+	   	            		$(b).html(p.substring(0,9)+"……");
+	   	            	}else{
+	   	            		$(b).html(getmatch(_kind,$(b).html())); 
+	   	            	}
+	   	            });
+	   			}
             });
         </script>
 </head>
@@ -493,11 +562,12 @@
                         </select>
                     </div>
                     </div>
-                <div class="row_">
+                <div class="row_button">
                     <center>
 		                <button id="query" >
 		                    查询
 		                </button>
+		                &nbsp; &nbsp; &nbsp;
 		                <button id="clear">
 		                    清空
 		                </button>
@@ -505,7 +575,7 @@
                 </div>
             </div>
             </form>
-        </div>
+        </div><br />
 		<div class="body">
             <center>
                签证延期维护列表
@@ -553,10 +623,10 @@
                         <c:if test="${foreign.sex == 1}">男</c:if>
                         <c:if test="${foreign.sex == 0}">女</c:if>
                     </div>
-                    <div class="cols" style="width: 15%;">
+                    <div class="cols" style="width: 15%;" title="country">
                         ${foreign.country }
                     </div>
-                    <div class="cols" style="width: 10%;">
+                    <div class="cols" style="width: 10%;" title="companyDepartment">
                         ${foreign.companyDepartment }
                     </div>
                     <div class="cols" style="width: 20%;">
@@ -564,7 +634,8 @@
                     </div>
                     <div class="cols" style="width: 10%;">
                     <c:if test='${foreign.role == null}'>（无对应信息）</c:if>
-                        <c:if test='${foreign.role != null}'>${foreign.role }</c:if>
+                       <c:if test='${foreign.role ==1}'>专家</c:if>
+                    	<c:if test='${foreign.role == 2}'>配偶</c:if>
                     </div>
                     <div class="cols" style="width: 5%;" >
                         <div style="width: 100%;text-align: center;" class='show'>
@@ -576,12 +647,12 @@
             </div>
             </c:forEach>
             </div>
-            <div class="row" style="float: left;width: 20%;">
+            <div class="row" style="float:left;margin-left:2%;">
                 <button id="extension_write">
                    签证延期资料填写
                 </button>
             </div>
-            <DIV style="float: right;width: 80%;text-align: right;" >
+            <DIV style="float: right;width: 80%;text-align: right;padding-right:5%;" >
 	                 <ul id="pagination-clean" >
 						<li class="previous-off">总记录数：<i></i></li>
 						<li class="previous-off">总页数：<i></i></li>
@@ -635,8 +706,8 @@
 					</div>
 				</div>
 				<div class="row1" style="width: 100%">
-					<div class="cols1_">单 位</div>
-					<div class="cols2_">
+					<div class="cols1_" style="width: 15%;">单 位</div>
+					<div class="cols2_" style="width: 85%;text-align: center;">
 						<label id="companyDepartment_"></label>
 					</div>
 				</div>
@@ -654,9 +725,6 @@
 						<label id="passportExpDate_"></label>
 					</div>
 				</div>
-				<div class="row1">
-					<label id=""></label>
-				</div>
 				<div class="row1" style="width: 100%">
 					<div class="cols1_">护照扫描件</div>
 					<div class="cols2_">
@@ -666,19 +734,25 @@
 				<div class="row1">
 					<div class="cols1_">身 份</div>
 					<div class="cols2_">
-						<label id="post_"></label>
+						<label id="role"></label>
 					</div>
 				</div>
 				<div class="row1">
-					<div class="cols1_">外国专家证</div>
+					<div class="cols1_">职  位</div>
 					<div class="cols2_">
-						<label id="expertEvidence_"></label>
+						<label id="post_"></label>
 					</div>
 				</div>
 				<div class="row1" id="upload_ee" style="width: 100%">
 					<div class="cols1_">专家证扫描件</div>
 					<div class="cols2_">
 						<label id="fkEeAttachmentId_"></label>
+					</div>
+				</div>
+				<div class="row1">
+					<div class="cols1_">外国专家证</div>
+					<div class="cols2_">
+						<label id="expertEvidence_"></label>
 					</div>
 				</div>
 				<div class="row1">

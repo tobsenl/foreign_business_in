@@ -270,11 +270,13 @@ float: left;
                  					content=content+inv.arrivedDate;
                  				}
                  				content=content+"		</div>";
+                 				content=content+"		<div class='cols' style='width: 12.5%;'>";
                  				content=content+"	<div style='width: 100%;text-align: center;' class='edit'>";
                  				content=content+"                    show";
                  				content=content+"		<input type='hidden' value='";
                  				content=content+inv.id;
                  				content=content+"'>";
+                 				content=content+"</div>";
                  				content=content+"</div>";
                  				content=content+"</div>";
                  				content=content+"</div>";
@@ -622,7 +624,7 @@ float: left;
 			<input type="text" id="foreign_name_q" name="foreign_name_q" size="100"/>
 			<input type="hidden" id="foreign_id_q" name="foreign_id_q"></div>
 			</div>
-			<div class="button" style="float: right;position: relative;"><input type="button" id="query" name="query" value="查询"><input id="clear" name="clear" type="button" value="清空"></div>
+			<div class="button" style="float: left;position: relative;"><input type="button" id="query" name="query" value="查询">&nbsp; &nbsp; &nbsp;<input id="clear" name="clear" type="button" value="清空"></div>
 			</form>
 			
 			<div class="table_">
@@ -664,15 +666,17 @@ float: left;
 							<div class="cols">
 							<fmt:formatDate value="${inv.arrivedDate}" type="date" pattern="yyyy-MM-dd"/>
 							</div>
+							<div class="cols" style="width: 12.5%;">
 							<div style="width: 100%;text-align: center;" class="edit">
                             show
                             <input type="hidden" value="${inv.id}">
+                        </div>
                         </div>
 						</div>
 					</div>
 					</c:forEach>
 					</div>
-            <DIV style="float: right;width: 80%;text-align: right;" >
+            <DIV style="float: right;width: 80%;text-align: right;  padding-right:5%;" >
 	                 <ul id="pagination-clean" >
 						<li class="previous-off">总记录数：<i></i></li>
 						<li class="previous-off">总页数：<i></i></li>

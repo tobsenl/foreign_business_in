@@ -28,6 +28,7 @@
 <script src="<%=basePath%>script/ui/jquery.ui.position.js" type="text/javascript"></script>
 <script src="<%=basePath%>script/ui/jquery.ui.menu.js" type="text/javascript"></script>
 <script src="<%=basePath%>script/ui/jquery.ui.autocomplete.js" type="text/javascript"></script>
+<script language="JavaScript" src="<%=basePath%>script/myscript.js"></script>
 
 <style type="text/css">
 body {
@@ -240,7 +241,7 @@ float: left;
 <body>
 	<div class="container">
 		<jsp:include page="/index/top.jsp" />
-		<form action="invitation/invitation_add.html" method="post" enctype="multipart/form-data">
+		<form action="invitation/invitation_add.html" id="form1" method="post" enctype="multipart/form-data">
 		<div class="table">
 			<div class="rowh1">邀请函信息录入</div>
 			<br />
@@ -296,7 +297,7 @@ float: left;
 				<div class="cols3" id="showlist">所含外籍人员</div>
 			</div>
 			<div class="button">
-				<input type="submit" value="提	交"><input type="button"
+				<input type="button" value="提	交" onclick="f_subinv();">&nbsp &nbsp &nbsp<input type="button"
 					value="重	置">
 			</div>
 		</div>

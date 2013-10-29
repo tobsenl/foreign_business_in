@@ -28,6 +28,7 @@
 <script src="<%=basePath%>script/ui/jquery.ui.position.js" type="text/javascript"></script>
 <script src="<%=basePath%>script/ui/jquery.ui.resizable.js" type="text/javascript"></script>
 <script src="<%=basePath%>script/ui/jquery.ui.dialog.js" type="text/javascript"></script>
+<script language="JavaScript" src="<%=basePath%>script/edit.js"></script>
 
 <link href="<%=basePath%>style/new.css" Rel="stylesheet" Type="text/css">
 <link rel="stylesheet" href="<%=basePath%>style/jquery-ui/base/jquery-ui.css" />
@@ -89,7 +90,12 @@
                 overflow: hidden;
                 margin-left: 15%;
             }
-            
+             .row_button {
+                width: 75%;
+                position: relative;
+                line-height: 15px;
+                overflow: hidden;
+            }
             .Crow {
                 width: 100%;
                 position: relative;
@@ -120,6 +126,10 @@
                 width: 100%;
                 text-align: center;
             }
+            .buttons{
+            	float: center;
+            	text-align: center;
+            }
             
             .Crow > .cols1 {
                 width: 43%;
@@ -134,287 +144,282 @@
             }
         </style>
         <script>
-            $(document).ready(function(){
-            	var permit_kind=null;
-            	var company_kind=null;
-            	var country_kind=null;
-            	function getmatch(obj,val){
-            		/*$.each(obj,function(k,v){
-            			if(v.id==val){
-            				return v.name;
+        $(document).ready(function(){
+        	function trim(str){ //删除左右两端的空格
+         	     return str.replace(/(^\s*)|(\s*$)/g, "");
+         	}
+        	var permit_kind=null;
+        	var company_kind=null;
+        	var country_kind=null;
+        	function getmatch(obj,val){
+        		for(var i=0;i<obj.length;i++){
+        			val=trim(val);
+        			if(obj[i].id==val){
+        				return obj[i].name;
+        			}
+        		}
+        	}
+        	var options = {
+                 	dataType:  'json', 
+                 	success : function(data){
+                 		//alert(data);
+                 	},
+                 	beforeSubmit:checksubmit
+                 };
+        	$("#form1").ajaxForm(options);
+        	
+        	$("#upload_ee").css("display","none");
+    		$("input[name=expert_evidence][value=0]").attr("checked",'checked');
+    		$("input[name=expert_evidence]").change(function(){
+    			var temp_radio=$("input[name=expert_evidence]:checked").val();
+    			if(temp_radio == "1"){
+    				$("#upload_ee").css("display","");
+    			}else{
+    				$("#upload_ee").css("display","none");
+    			}
+    		});
+    		
+    		$("#rp_div").css("display","none");
+    		$("#residence_permit_kind").change(function(){
+    			var kind_id=$("#residence_permit_kind  option:selected").val();
+    			//alert(kind_id);
+    			if(kind_id>0){
+    				$("#rp_div").css("display","");
+    			}else{
+    				$("#rp_div").css("display","none");
+    				$("[name='rp_exp_endDate']").val("");
+    				$("#_Address").val("0");
+    				$("#address").val("");
+    				$("#rp_Address").val("");
+    			}
+    		});
+    		
+    		$("#address").blur(function(){
+    			var temp_address=$("#_Address  option:selected").text()+","+$("#address").val();
+    			//alert(temp_address);
+    			$("#rp_Address").val(temp_address);
+    		});
+    		$("#_Address").change(function (){
+   				var temp_address=$("#_Address  option:selected").text()+","+$("#address").val();
+   				//alert(temp_address);
+   				$("#rp_Address").val(temp_address);
+   			});
+    		
+        	
+            $("#message").dialog({
+                autoOpen: false,
+                modal: true,
+                height: 200,
+                width: 300,
+                buttons: {
+                    确定: function(){
+                        $(this).dialog("close");
+                    },
+                    取消: function(){
+                        $(this).dialog("close");
+                    }
+                }
+            });
+            function clearform(){
+    			$("#form1").clearForm();
+    			$("#rp_div").css("display","none");
+            	$("#upload_ee").css("display","none");
+            }
+            $(".form").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 700,
+                buttons: {
+                    确定: function(){
+                    	$("#form1").submit();
+                        $(this).dialog("close");
+                    },
+                    取消: function(){
+                        $(this).dialog("close");
+                    }
+                }
+            });
+            
+            $("#row_list").on("click",".edit",function(e){
+            	var e=$(e.target);
+            	var id=$(e).find("input[type='hidden']").val();
+            	
+            	$.getJSON("<%=basePath%>foreign/AjaxQuery_detail.html?foreign_id="+id,function(data){
+            		if(data){
+            			var a=data[0];
+            			clearform();
+            			$("#name").val(a.name);
+            			$("#id").val(a.id);
+            			$("input[name='sex'][value='"+a.sex+"']").prop("checked",true);
+            			$("input[name='birthday']").val(a.birthday);
+            			$("#country").val(a.country);
+            			$("#company_department").val(a.company_department);
+            			$("#passport_id").val(a.passport_id);
+            			$("input[name='passport_exp_date']").val(a.passport_exp_date);
+            			$("#post").val(a.post);
+            			$("#role").val(a.role);
+            			$("#fk_pp_attachment_id").val(a.fk_pp);
+            			if(a.expert_evidence){
+                			$("input[name='expert_evidence'][value="+a.expert_evidence+"]").prop("checked",true);
+                			$("#upload_ee").css("display","");
+                			$("#fk_ee_attachment_id").val(a.fk_ee);
             			}
-            		});*/
-            		for(var i=0;i<obj.length;i++){
-            			if(obj[i].id==val){
-            				return obj[i].name;
+            			if(a.rp_kind){
+                			$("#residence_permit_kind").val(a.rp_kind);
+                			$("#fk_rp_permit_id").val(a.fk_permit);
+                			$("#rp_div").css("display","");
+                			$("input[name='rp_exp_endDate']").val(a.rp_exp_enddate);
+                			if(a.rp_address){
+                				var address=a.rp_address.split(',');
+                				if(address.length > 1){
+                				$("#_Address").find("option:contains('"+address[0]+"')").prop("selected",true);
+                				$("#address").val(address[1]);
+                				}else if(address.length > 0){
+                				$("#_Address").find("option:contains('"+address[0]+"')").prop("selected",true);
+                				}
+                				$("#rp_Address").val(a.rp_address);
+                			}
             			}
             		}
+            	});
+            	$(".form").dialog("open");
+            });
+            
+            
+            $(".row").has("button").click(function(){
+            	var temp=$("input[type='checkbox']:checked");
+            	if(temp){
+            		if(temp.length > 0){
+            			 $("#message").dialog("open");
+                         $("#message").html("以上勾选的外籍人员你确定要删除么?");
+            		}else{
+   						alert("请勾选要修改的人员后再点击尝试！");
+   					}
             	}
-            	var options = {
-                     	dataType:  'json', 
-                     	success : function(data){
-                     		alert(data);
-                     	}
-                     };
-            	$("#form1").ajaxForm(options);
-            	
-            	$("#upload_ee").css("display","none");
-        		$("input[name=expert_evidence][value=0]").attr("checked",'checked');
-        		$("input[name=expert_evidence]").change(function(){
-        			var temp_radio=$("input[name=expert_evidence]:checked").val();
-        			if(temp_radio == "1"){
-        				$("#upload_ee").css("display","");
-        			}else{
-        				$("#upload_ee").css("display","none");
-        			}
-        		});
-        		
-        		$("#rp_div").css("display","none");
-        		$("#residence_permit_kind").change(function(){
-        			var kind_id=$("#residence_permit_kind  option:selected").val();
-        			//alert(kind_id);
-        			if(kind_id>0){
-        				$("#rp_div").css("display","");
-        			}else{
-        				$("#rp_div").css("display","none");
-        				$("[name='rp_exp_endDate']").val("");
-        				$("#_Address").val("0");
-        				$("#address").val("");
-        				$("#rp_Address").val("");
-        			}
-        		});
-        		
-        		$("#address").blur(function(){
-        			var temp_address=$("#_Address  option:selected").text()+","+$("#address").val();
-        			//alert(temp_address);
-        			$("#rp_Address").val(temp_address);
-        		});
-        		$("#_Address").change(function (){
-	   				var temp_address=$("#_Address  option:selected").text()+","+$("#address").val();
-	   				//alert(temp_address);
-	   				$("#rp_Address").val(temp_address);
-	   			});
-        		
-            	
-                $("#message").dialog({
-                    autoOpen: false,
-                    modal: true,
-                    height: 200,
-                    width: 300,
-                    buttons: {
-                        确定: function(){
-                            $(this).dialog("close");
-                        },
-                        取消: function(){
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-                function clearform(){
-        			$("#form1").clearForm();
-        			$("#rp_div").css("display","none");
-                	$("#upload_ee").css("display","none");
-                }
-                $(".form").dialog({
-                    autoOpen: false,
-                    modal: true,
-                    width: 700,
-                    buttons: {
-                        确定: function(){
-                        	$("#form1").submit();
-                            $(this).dialog("close");
-                        },
-                        取消: function(){
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-                
-                $("#row_list").on("click",".edit",function(e){
-                	var e=$(e.target);
-                	var id=$(e).find("input[type='hidden']").val();
-                	
-                	$.getJSON("<%=basePath%>foreign/AjaxQuery_detail.html?foreign_id="+id,function(data){
-                		if(data){
-                			var a=data[0];
-                			clearform();
-                			$("#name").val(a.name);
-                			$("#id").val(a.id);
-                			$("input[name='sex'][value='"+a.sex+"']").prop("checked",true);
-                			$("input[name='birthday']").val(a.birthday);
-                			$("#country").val(a.country);
-                			$("#company_department").val(a.company_department);
-                			$("#passport_id").val(a.passport_id);
-                			$("input[name='passport_exp_date']").val(a.passport_exp_date);
-                			$("#post").val(a.post);
-                			$("#role").val(a.role);
-                			$("#fk_pp_attachment_id").val(a.fk_pp);
-                			if(a.expert_evidence){
-	                			$("input[name='expert_evidence'][value="+a.expert_evidence+"]").prop("checked",true);
-	                			$("#upload_ee").css("display","");
-	                			$("#fk_ee_attachment_id").val(a.fk_ee);
-                			}
-                			if(a.rp_kind){
-	                			$("#residence_permit_kind").val(a.rp_kind);
-	                			$("#fk_rp_permit_id").val(a.fk_permit);
-	                			$("#rp_div").css("display","");
-	                			$("input[name='rp_exp_endDate']").val(a.rp_exp_enddate);
-	                			if(a.rp_address){
-	                				var address=a.rp_address.split(',');
-	                				if(address.length > 1){
-	                				$("#_Address").find("option:contains('"+address[0]+"')").prop("selected",true);
-	                				$("#address").val(address[1]);
-	                				}else if(address.length > 0){
-	                				$("#_Address").find("option:contains('"+address[0]+"')").prop("selected",true);
-	                				}
-	                				$("#rp_Address").val(a.rp_address);
-	                			}
-                			}
-                		}
-                	});
-                	$(".form").dialog("open");
-                });
-                
-                
-                $(".row").has("button").click(function(){
-                    $("#message").dialog("open");
-                    $("#message").html("以上勾选的外籍人员你确定要删除么?");
-                });
-                
-               $("#allcheckbox").click(function(e){
-            	   if($(this).attr("checked") == "checked"){
-            		   $("input[type='checkbox']").removeAttr("checked");
-            	   }else{
-            		   $("input[type='checkbox']").attr("checked",'true');
-            	   }
-               });
-               
-               $("#query").click(function(){
-            	   var name=$("#foreign_name").val();
-            	   var id=$("#passport_id_q").val();
-            	   var contry=$("#contry_q  option:selected").val();//select $("#contry_q  option:selected").val()
-            	   var numb=$("#invitation_numb").val();
-            	   var post=$("#post_q  option:selected").val();//post_q
-            	   var url="name="+name+"&id="+id+"&contry="+contry+"&numb="+numb+"&post="+post;
-            	   var relurl="<%=basePath%>foreign/AjaxQuery_list.html?"+url;
-            	   $.getJSON(relurl,function(data){
-            		   if(data){
-            			   if(data.length>0){
-            				   $("#row_list").html("");
-            				   var inner_html="";
-	            			   for(var i=0;i<data.length;i++){
-	            				   var obj=data[i];
-	            				   //alert(obj.id);
-	            				   inner_html=inner_html+"<div class='row'>";
-            					   inner_html=inner_html+"<div class='content'>";
-            					   inner_html=inner_html+"<div class='cols' style='width: 5%;'>";
-            					   inner_html=inner_html+"<input type='checkbox' value='"+obj.id+"'>";
-            					   inner_html=inner_html+"</div>";
-            					   inner_html=inner_html+"<div class='cols' style='width: 20%;'>";
-            					   inner_html=inner_html+ obj.name;
-            					   inner_html=inner_html+"</div>";
-            					   inner_html=inner_html+"<div class='cols' style='width: 5%;'>";
-            					   if(obj.sex == 1){
-            					   inner_html=inner_html+"男";
-            					   }else{
-            					   inner_html=inner_html+"女";
-            					   }
-            					   inner_html=inner_html+"</div>";
-            					   inner_html=inner_html+"<div class='cols' style='width: 15%;'>";
-            					   inner_html=inner_html+getmatch(country_kind,obj.country);
-            					   inner_html=inner_html+"</div>";
-            					   inner_html=inner_html+"<div class='cols' style='width: 10%;'>";
-            					   inner_html=inner_html+obj.companydepartment;
-            					   inner_html=inner_html+"</div>";
-            					   inner_html=inner_html+"<div class='cols' style='width: 20%;'>";
-            					   inner_html=inner_html+obj.passportid ;
-            					   inner_html=inner_html+"</div>";
-            					   inner_html=inner_html+"<div class='cols' style='width: 10%;'>";
-            					   if(obj.role == null){
-            					   inner_html=inner_html+"（无对应信息）";
-            					   }
-            					   if(obj.role != null){
-            					   inner_html=inner_html+obj.role;
-            					   }
-            					   inner_html=inner_html+"</div>";
-	            				   
-            					   inner_html=inner_html+"<div class='cols' style='width: 5%;' >";
-            					   inner_html=inner_html+"<div style='width: 100%;text-align: center;' class='edit'>";
-            					   inner_html=inner_html+"edit";
-            					   inner_html=inner_html+"<input type='hidden' value='"+obj.id+"'>";
-            					   inner_html=inner_html+"</div>";
-            					   inner_html=inner_html+"</div>";
-            					  
-            					   inner_html=inner_html+"</div>";
-            					   inner_html=inner_html+"</div>";
-	            			   }
-	            			   $("#row_list").html(inner_html);
+            });
+            
+           $("#allcheckbox").click(function(e){
+        	   if($(this).attr("checked") == "checked"){
+        		   $("input[type='checkbox']").removeAttr("checked");
+        	   }else{
+        		   $("input[type='checkbox']").attr("checked",'true');
+        	   }
+           });
+           
+           $("#query").click(function(){
+        	   var name=$("#foreign_name").val();
+        	   var id=$("#passport_id_q").val();
+        	   var contry=$("#contry_q  option:selected").val();//select $("#contry_q  option:selected").val()
+        	   var numb=$("#invitation_numb").val();
+        	   var post=$("#post_q  option:selected").val();//post_q
+        	   var url="name="+name+"&id="+id+"&contry="+contry+"&numb="+numb+"&post="+post;
+        	   var relurl="<%=basePath%>foreign/AjaxQuery_list.html?"+url;
+        	   $.getJSON(relurl,function(data){
+        		   if(data){
+        			   if(data.length>0){
+        				   $("#row_list").html("");
+        				   var inner_html="";
+            			   for(var i=0;i<data.length;i++){
+            				   var obj=data[i];
+            				   //alert(obj.id);
+            				   inner_html=inner_html+"<div class='row'>";
+        					   inner_html=inner_html+"<div class='content'>";
+        					   inner_html=inner_html+"<div class='cols' style='width: 5%;'>";
+        					   inner_html=inner_html+"<input type='checkbox' value='"+obj.id+"'>";
+        					   inner_html=inner_html+"</div>";
+        					   inner_html=inner_html+"<div class='cols' style='width: 20%;'>";
+        					   inner_html=inner_html+ obj.name;
+        					   inner_html=inner_html+"</div>";
+        					   inner_html=inner_html+"<div class='cols' style='width: 5%;'>";
+        					   if(obj.sex == 1){
+        					   inner_html=inner_html+"男";
+        					   }else{
+        					   inner_html=inner_html+"女";
+        					   }
+        					   inner_html=inner_html+"</div>";
+        					   inner_html=inner_html+"<div class='cols' style='width: 15%;'>";
+        					   inner_html=inner_html+getmatch(country_kind,obj.country);
+        					   inner_html=inner_html+"</div>";
+        					   inner_html=inner_html+"<div class='cols' style='width: 10%;'>";
+        					   var v=getmatch(company_kind,obj.companydepartment);
+        					   if(v.length>9){
+        						   inner_html=inner_html+v.substring(0,9)+"……";
+        					   }else{
+        						   inner_html=inner_html+getmatch(company_kind,obj.companydepartment);
+        					   }
+        					   inner_html=inner_html+"</div>";
+        					   inner_html=inner_html+"<div class='cols' style='width: 20%;'>";
+        					   inner_html=inner_html+obj.passportid ;
+        					   inner_html=inner_html+"</div>";
+        					   inner_html=inner_html+"<div class='cols' style='width: 10%;'>";
+        					   if(obj.role == 1 ){
+            					   inner_html=inner_html+"专家";
+            					}else if(obj.role == 2){
+          					   	   inner_html=inner_html+"配偶";
+          					   }else if(obj.role == null){
+         					   	   inner_html=inner_html+"（无对应信息）";
+         					   }
+        					   inner_html=inner_html+"</div>";
+            				   
+        					   inner_html=inner_html+"<div class='cols' style='width: 5%;' >";
+        					   inner_html=inner_html+"<div style='width: 100%;text-align: center;' class='edit'>";
+        					   inner_html=inner_html+"edit";
+        					   inner_html=inner_html+"<input type='hidden' value='"+obj.id+"'>";
+        					   inner_html=inner_html+"</div>";
+        					   inner_html=inner_html+"</div>";
+        					  
+        					   inner_html=inner_html+"</div>";
+        					   inner_html=inner_html+"</div>";
             			   }
-            		   }
-            	   });
-               });
-               $("#clear").click(function(){
-            	   $("#foreign_name").val("");
-            	   $("#passport_id_q").val("");
-            	   $("#contry_q").val("");//select $("#contry_q  option:selected").val()
-            	   $("#invitation_numb").val("");
-            	   $("#post_q").val("");//post_q
-               });
-               
-               $.get("<%=basePath%>index/country.xml",function(y){
-   				var contrylist=$(y).find("country");
-   				if(contrylist.length > 0){
-   					var j_value="[";
-   					for(var i=0;i<contrylist.length;i++){
-   						var o=contrylist[i];
-   						var id=$(o).find("id").text();
-   						var name=$(o).find("name").text();
-   						var relname=$(o).find("relname").text();
-   						if(i==contrylist.length-1){
-   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
-   						}else{
-   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
-   						}
-   						$("#country").children().last().after("<option value='"+id+"'>"+relname+"("+name+")</option>")
-   						$("#contry_q").children().last().after("<option value='"+id+"'>"+relname+"("+name+")</option>")
-   					}
-   					j_value=j_value+"]";
-   					country_kind=eval("("+j_value+")");
-   				}
-   			});
-   			$.get("<%=basePath%>index/place.xml",function(y){
-   				var contrylist=$(y).find("address");
-   				if(contrylist.length > 0){
-   					for(var i=0;i<contrylist.length;i++){
-   						var o=contrylist[i];
-   						var id=$(o).find("id").text();
-   						var name=$(o).find("name").text();
-   						var detail=$(o).find("detail").text();
-   						$("#_Address").children().last().after("<option value='"+id+"'>"+name+"</option>")
-   					}
-   				}
-   			});
-   			$.get("<%=basePath%>index/permit_kind.xml",function(y){
-   				var contrylist=$(y).find("kind");
-   				if(contrylist.length > 0){
-   					var j_value="[";
-   					for(var i=0;i<contrylist.length;i++){
-   						var o=contrylist[i];
-   						var id=$(o).find("id").text();
-   						var name=$(o).find("name").text();
-   						if(i==contrylist.length-1){
-   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
-   						}else{
-   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
-   						}
-   						$("#residence_permit_kind").children().last().after("<option value='"+id+"'>"+name+"</option>")
-   					}
-   					j_value=j_value+"]";
-   					permit_kind=eval("("+j_value+")");
-   				}
-   			});
-   			$.get("<%=basePath%>index/Company3th.xml",function(y){
-				var contrylist=$(y).find("company");
+            			   $("#row_list").html(inner_html);
+        			   }
+        		   }
+        	   });
+           });
+           $("#clear").click(function(){
+        	   $("#foreign_name").val("");
+        	   $("#passport_id_q").val("");
+        	   $("#contry_q").val("");//select $("#contry_q  option:selected").val()
+        	   $("#invitation_numb").val("");
+        	   $("#post_q").val("");//post_q
+           });
+           
+           $.get("<%=basePath%>index/country.xml",function(y){
+				var contrylist=$(y).find("country");
+				if(contrylist.length > 0){
+					var j_value="[";
+					for(var i=0;i<contrylist.length;i++){
+						var o=contrylist[i];
+						var id=$(o).find("id").text();
+						var name=$(o).find("name").text();
+						var relname=$(o).find("relname").text();
+						if(i==contrylist.length-1){
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+						}else{
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+						}
+						$("#country").children().last().after("<option value='"+id+"'>"+relname+"("+name+")</option>")
+						$("#contry_q").children().last().after("<option value='"+id+"'>"+relname+"("+name+")</option>")
+					}
+					j_value=j_value+"]";
+					country_kind=eval("("+j_value+")");
+					setCountry(country_kind);
+				}
+			});
+			$.get("<%=basePath%>index/place.xml",function(y){
+				var contrylist=$(y).find("address");
+				if(contrylist.length > 0){
+					for(var i=0;i<contrylist.length;i++){
+						var o=contrylist[i];
+						var id=$(o).find("id").text();
+						var name=$(o).find("name").text();
+						var detail=$(o).find("detail").text();
+						$("#_Address").children().last().after("<option value='"+id+"'>"+name+"</option>")
+					}
+				}
+			});
+			$.get("<%=basePath%>index/permit_kind.xml",function(y){
+				var contrylist=$(y).find("kind");
 				if(contrylist.length > 0){
 					var j_value="[";
 					for(var i=0;i<contrylist.length;i++){
@@ -422,24 +427,54 @@
 						var id=$(o).find("id").text();
 						var name=$(o).find("name").text();
 						if(i==contrylist.length-1){
-   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
-   						}else{
-   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
-   						}
-						
-						$("#company_department").children().last().after("<option value='"+id+"'>"+name+"</option>")
-						$("#post_q").children().last().after("<option value='"+id+"'>"+name+"</option>")
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+						}else{
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+						}
+						$("#residence_permit_kind").children().last().after("<option value='"+id+"'>"+name+"</option>")
 					}
 					j_value=j_value+"]";
-					company_kind=eval("("+j_value+")");
+					permit_kind=eval("("+j_value+")");
 				}
 			});
-   			var list_country=$("div[class='country']");
-            $.each(list_country,function(c,b){
-         	  var temp_v=getmatch(country_kind,b.html() );
-         	  b.html(temp_v); 
-            });
-            });
+			$.get("<%=basePath%>index/Company3th.xml",function(y){
+			var contrylist=$(y).find("company");
+			if(contrylist.length > 0){
+				var j_value="[";
+				for(var i=0;i<contrylist.length;i++){
+					var o=contrylist[i];
+					var id=$(o).find("id").text();
+					var name=$(o).find("name").text();
+					if(i==contrylist.length-1){
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+						}else{
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+						}
+					
+					$("#company_department").children().last().after("<option value='"+id+"'>"+name+"</option>");
+					$("#post_q").children().last().after("<option value='"+id+"'>"+name+"</option>");
+				}
+				j_value=j_value+"]";
+				company_kind=eval("("+j_value+")");
+				setCompanyDepartment(company_kind);
+			}
+		});
+			function setCountry(_kind){
+   	            $.each($("#row_list").find("[title='country']"),function(c,b){
+   	         	  $(b).html(getmatch(_kind,$(b).html())); 
+   	            });
+   			}
+			function setCompanyDepartment(_kind){
+   	            $.each($("#row_list").find("[title='companyDepartment']"),function(c,b){
+   	            	var p=getmatch(_kind,$(b).html());
+   	            	if(p.length>9){
+   	            		$(b).html(p.substring(0,9)+"……");
+   	            	}else{
+   	            		$(b).html(getmatch(_kind,$(b).html())); 
+   	            	}
+   	            });
+   			}
+        });
         </script>
 </head>
 
@@ -497,18 +532,19 @@
                         </select>
                     </div>
                     </div>
-                <div class="row_">
+                <div class="row_button">
                     <center>
 		                <button id="query" >
 		                    查询
 		                </button>
+		                &nbsp; &nbsp; &nbsp;
 		                <button id="clear">
 		                    清空
 		                </button>
 		            </center>
                 </div>
             </div>
-        </div>
+        </div><br/>
 		<div class="body">
             <center>
                 专家信息维护列表
@@ -556,10 +592,10 @@
                         <c:if test="${foreign.sex == 1}">男</c:if>
                         <c:if test="${foreign.sex == 0}">女</c:if>
                     </div>
-                    <div class="cols" style="width: 15%;" class="country">
+                    <div class="cols" style="width: 15%;" title="country">
                         ${foreign.country }
                     </div>
-                    <div class="cols" style="width: 10%;">
+                    <div class="cols" style="width: 10%;" title="companyDepartment">
                         ${foreign.companyDepartment }
                     </div>
                     <div class="cols" style="width: 20%;">
@@ -567,7 +603,8 @@
                     </div>
                     <div class="cols" style="width: 10%;">
                     <c:if test='${foreign.role == null}'>（无对应信息）</c:if>
-                        <c:if test='${foreign.role != null}'>${foreign.role }</c:if>
+                    	<c:if test='${foreign.role ==1}'>专家</c:if>
+                    	<c:if test='${foreign.role == 2}'>配偶</c:if>
                     </div>
                     <div class="cols" style="width: 5%;">
                         <div style="width: 100%;text-align: center;" class="edit">
@@ -579,12 +616,12 @@
             </div>
             </c:forEach>
             </div>
-            <div class="row" style="float: left;width: 20%;">
+            <div class="row" style="float: left;width: 10%; height:15px">
                 <button>
                     批量删除
                 </button>
             </div>
-            <DIV style="float: right;width: 80%;text-align: right;" >
+            <DIV style="float: right;width: 80%;text-align: right; padding-right:5%" >
 	                 <ul id="pagination-clean" >
 						<li class="previous-off">总记录数：<i></i></li>
 						<li class="previous-off">总页数：<i></i></li>

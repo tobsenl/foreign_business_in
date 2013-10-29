@@ -31,6 +31,7 @@
 <script src="<%=basePath%>script/ui/jquery.ui.dialog.js" type="text/javascript"></script>
 <script src="<%=basePath%>script/ui/jquery.ui.menu.js" type="text/javascript"></script>
 <script src="<%=basePath%>script/ui/jquery.ui.autocomplete.js" type="text/javascript"></script>
+<script language="JavaScript" src="<%=basePath%>script/edit.js"></script>
 
 <link href="<%=basePath%>style/new.css" Rel="stylesheet" Type="text/css">
 <link href="<%=basePath%>style/page.css" Rel="stylesheet" Type="text/css">
@@ -69,8 +70,8 @@ body{
 				width:900px;
 			}
 			.button{
-				width:60%;
-				text-align:right;
+				width:100%;
+				text-align:center;
 			}
 			.title {
                 width: 100%;
@@ -173,7 +174,16 @@ float: left;
         </style>
         <script>
         $(document).ready(function(){
-        	
+        	  $(".row_").has("button").click(function(){
+        		  var temp=$("input[type='checkbox']:checked");
+              	if(temp){
+              		if(temp.length > 0){
+              				alert("以上勾选的外籍人员你确定要删除么?");
+              		}else{
+     						alert("请勾选要修改的人员后再点击尝试！");
+     					}
+              	}
+        	  });
         	//查询列表的option
         	var queryformoptions={
         			dataType:  'json', 
@@ -236,11 +246,13 @@ float: left;
                  					content=content+inv.arrivedDate;
                  				}
                  				content=content+"		</div>";
+                 				content=content+"		<div class='cols' style='width: 12.5%;'>";
                  				content=content+"	<div style='width: 100%;text-align: center;' class='edit'>";
                  				content=content+"                    edit";
                  				content=content+"		<input type='hidden' value='";
                  				content=content+inv.id;
                  				content=content+"'>";
+                 				content=content+"</div>";
                  				content=content+"</div>";
                  				content=content+"</div>";
                  				content=content+"</div>";
@@ -255,7 +267,8 @@ float: left;
         			dataType:  'json', 
                  	success : function(data){
                  		alert(data);
-                 	}
+                 	},
+                 	beforeSubmit:checkedit
         	};
         	//初始化ajaxform
         	$("#queryform").ajaxForm(queryformoptions);
@@ -564,11 +577,11 @@ float: left;
 			</div>
 			<div class="rows" style="float: left;">
 			<div class="colsx1" style="width: 13%;">所含外籍人员</div>
-			<div class="colsx2" style="width: 85%;">
+			<div class="colsx2" style="width: 75%;">
 			<input type="text" id="foreign_name_q" name="foreign_name_q" size="100"/>
 			<input type="hidden" id="foreign_id_q" name="foreign_id_q"></div>
 			</div>
-			<div class="button" style="float: right;position: relative;"><input type="button" id="query" name="query" value="查询"><input id="clear" name="clear" type="button" value="清空"></div>
+			<div class="button" style="float: left;position: relative;"><input type="button" id="query" name="query" value="查询">&nbsp; &nbsp; &nbsp;<input id="clear" name="clear" type="button" value="清空"></div>
 			</form>
 			
 			<div class="table_">
@@ -616,20 +629,22 @@ float: left;
 							<div class="cols">
 							<fmt:formatDate value="${inv.arrivedDate}" type="date" pattern="yyyy-MM-dd"/>
 							</div>
+							<div class="cols" style="width: 12.5%;">
 							<div style="width: 100%;text-align: center;" class="edit">
                             edit
                             <input type="hidden" value="${inv.id}">
+                        </div>
                         </div>
 						</div>
 					</div>
 					</c:forEach>
 					</div>
-					<div class="row_" style="float: left;width: 20%;">
+					<div class="row_" style="float: left;width: 10%;">
                 <button>
                     批量删除
                 </button>
             </div>
-            <DIV style="float: right;width: 80%;text-align: right;" >
+            <DIV style="float: right;width: 80%;text-align: right; padding-right:5%"" >
 	                 <ul id="pagination-clean" >
 						<li class="previous-off">总记录数：<i></i></li>
 						<li class="previous-off">总页数：<i></i></li>

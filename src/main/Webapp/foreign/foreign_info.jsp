@@ -21,6 +21,7 @@
 <link href="<%=basePath%>style/new.css" Rel="stylesheet" Type="text/css">
 
 <script src="<%=basePath%>script/jquery-1.9.1.min.js"></script>
+<script language="JavaScript" src="<%=basePath%>script/myscript.js"></script>
 <script src="<%=basePath%>/script/My97DatePicker/WdatePicker.js"></script>
 <style type="text/css">
 body {
@@ -347,7 +348,7 @@ body {
 					</div>
 				</div>
 				<div class="button">
-					<input type="submit" value="提	交"><input type="button"
+					<input type="button" onclick="f_submit();" value="提	交">&nbsp; &nbsp; &nbsp;<input type="button"
 						value="重	置">
 				</div>
 				<div class="button"></div>

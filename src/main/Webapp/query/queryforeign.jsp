@@ -84,7 +84,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    overflow: hidden;
 		    margin-left: 15%;
 		}
-		
+		.row_button {
+                width: 75%;
+                position: relative;
+                line-height: 15px;
+                overflow: hidden;
+            }
 		.Crow {
 		    width: 100%;
 		    position: relative;
@@ -136,6 +141,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    line-height: 35px;
 		    overflow: hidden;
 		}
+		.row2 {
+		    float: left;
+		    position: relative;
+		    width: 50%;
+		    line-height: 35px;
+		    overflow: hidden;
+		}
 		
 		.cols1_ {
 		    position: relative;
@@ -166,9 +178,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </style>
 	<script type="text/javascript">
 		$(document).ready(function(){
+			var permit_kind=null;
+        	var company_kind=null;
+        	var country_kind=null;
+        	function getmatch(obj,val){
+        		for(var i=0;i<obj.length;i++){
+        			val=trim(val);
+        			if(obj[i].id==val){
+        				return obj[i].name;
+        			}
+        		}
+        	}
 			function trim(str){ //删除左右两端的空格
        	     return str.replace(/(^\s*)|(\s*$)/g, "");
        		}
+			
 			$("#rpExpEnddate_,#rpAddress_,#upload_ee").css("display","none");
 			var queryoptions={
           		   dataType:  'json',
@@ -191,21 +215,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           					   }
           					   inner_html=inner_html+"</div>";
           					   inner_html=inner_html+"<div class='cols' style='width: 15%;'>";
-          					   inner_html=inner_html+obj.country;
+          					   inner_html=inner_html+getmatch(country_kind,obj.country);
           					   inner_html=inner_html+"</div>";
           					   inner_html=inner_html+"<div class='cols' style='width: 10%;'>";
-          					   inner_html=inner_html+obj.companydepartment;
+          					 var v=getmatch(company_kind,obj.companydepartment);
+	       					   if(v.length>9){
+	       						   inner_html=inner_html+v.substring(0,9)+"……";
+	       					   }else{
+	       						   inner_html=inner_html+getmatch(company_kind,obj.companydepartment);
+	       					   }
           					   inner_html=inner_html+"</div>";
           					   inner_html=inner_html+"<div class='cols' style='width: 20%;'>";
           					   inner_html=inner_html+obj.passportid ;
           					   inner_html=inner_html+"</div>";
           					   inner_html=inner_html+"<div class='cols' style='width: 10%;'>";
-          					   if(obj.role == null){
-          					   inner_html=inner_html+"（无对应信息）";
-          					   }
-          					   if(obj.role != null){
-          					   inner_html=inner_html+obj.role;
-          					   }
+          					 if(obj.role == 1 ){
+	          					   inner_html=inner_html+"专家";
+	          					}else if(obj.role == 2){
+	        					   	   inner_html=inner_html+"配偶";
+	        					   }else if(obj.role == null){
+	       					   	   inner_html=inner_html+"（无对应信息）";
+	       					   }
           					   inner_html=inner_html+"</div>";
 	            				   
           					   inner_html=inner_html+"<div class='cols' style='width: 10%;'>";
@@ -461,12 +491,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              			}
              			//$("input[name='sex'][value='"+a.sex+"']").prop("checked",true);
              			$("#birthDay_").html(a.birthday);
-             			$("#country_").html(a.country);
-             			$("#companyDepartment_").html(a.company_department);
+             			$("#country_").html(getmatch(country_kind,a.country));
+             			$("#companyDepartment_").html(getmatch(company_kind,a.company_department));
              			$("#passportId_").html(a.passport_id);
              			$("#passportExpDate_").html(a.passport_exp_date);
              			$("#post_").html(a.post);
-             			//$("#role").val(a.role);
+             			if(a.role == 1){
+            				$("#role").html("专家");
+            			}else if(a.role == 2){
+            				$("#role").html("配偶");
+            			}else{
+            				$("#role").html("无");
+            			}
              			$("#fkPpAttachmentId_").html(a.fk_pp_attachment_id);
              			if(a.expert_evidence){
              				$("#expertEvidence_").html("有");
@@ -476,10 +512,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              				$("#expertEvidence_").html("无");
              			}
              			if(a.residence_permit_kind){
-	                			$("#fkRpPermitKind_").html(a.residence_permit_kind);
+             				$("#fkRpPermitKind_").html(getmatch(permit_kind,a.residence_permit_kind));
 	                			$("#rpExpEnddate_,#rpAddress_").css("display","");
 	                			$("#rpExpEnddate_").html(a.rp_exp_endDate);
-	                			alert(a.rp_Address);
 	                			if(a.rp_Address != ""){
 	                				var address=a.rp_Address.split(',');
 	                				if(address.length > 1){
@@ -502,7 +537,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              				*/
              				$("#inout_detail").after("<div>"+_value.begintime+","+_value.type+","+_value.content+","+_value.fk_invitation_id+"</div>");
              				//$("#inout_detail").after("");
-             				alert(_value.begintime);
              			});
              		}
              	});
@@ -511,32 +545,84 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             $("#clear").click(function(){
          	   $("#queryform").clearForm();
             });
+            $.get("<%=basePath%>index/permit_kind.xml",function(y){
+   				var contrylist=$(y).find("kind");
+   				if(contrylist.length > 0){
+   					var j_value="[";
+   					for(var i=0;i<contrylist.length;i++){
+   						var o=contrylist[i];
+   						var id=$(o).find("id").text();
+   						var name=$(o).find("name").text();
+   						if(i==contrylist.length-1){
+   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+   						}else{
+   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+   						}
+   						$("#residence_permit_kind").children().last().after("<option value='"+id+"'>"+name+"</option>")
+   					}
+   					j_value=j_value+"]";
+   					permit_kind=eval("("+j_value+")");
+   				}
+   			});
             $.get("<%=basePath%>index/country.xml",function(y){
 				var contrylist=$(y).find("country");
 				if(contrylist.length > 0){
+					var j_value="[";
 					for(var i=0;i<contrylist.length;i++){
 						var o=contrylist[i];
 						var id=$(o).find("id").text();
 						var name=$(o).find("name").text();
 						var relname=$(o).find("relname").text();
+						if(i==contrylist.length-1){
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+						}else{
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+						}
 						$("#contry").children().last().after("<option value='"+id+"'>"+relname+"("+name+")</option>")
 					}
+					j_value=j_value+"]";
+					country_kind=eval("("+j_value+")");
+					setCountry(country_kind);
 				}
 			});
-			$.get("<%=basePath%>index/Company3th.xml",function(y){
+            $.get("<%=basePath%>index/Company3th.xml",function(y){
 				var contrylist=$(y).find("company");
 				if(contrylist.length > 0){
+					var j_value="[";
 					for(var i=0;i<contrylist.length;i++){
 						var o=contrylist[i];
 						var id=$(o).find("id").text();
 						var name=$(o).find("name").text();
+						if(i==contrylist.length-1){
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+						}else{
+							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+						}
 						$("#post").children().last().after("<option value='"+id+"'>"+name+"</option>")
 					}
+					j_value=j_value+"]";
+					company_kind=eval("("+j_value+")");
+					setCompanyDepartment(company_kind);
 				}
 			});
 			$("#query").click(function(){
 				$("#queryform").submit();
 			});
+			function setCountry(_kind){
+   	            $.each($("#row_list").find("[title='country']"),function(c,b){
+   	         	  $(b).html(getmatch(_kind,$(b).html())); 
+   	            });
+   			}
+			function setCompanyDepartment(_kind){
+   	            $.each($("#row_list").find("[title='companyDepartment']"),function(c,b){
+   	            	var p=getmatch(_kind,$(b).html());
+   	            	if(p.length>9){
+   	            		$(b).html(p.substring(0,9)+"……");
+   	            	}else{
+   	            		$(b).html(getmatch(_kind,$(b).html())); 
+   	            	}
+   	            });
+   			}
          });
 	</script>
   </head>
@@ -599,6 +685,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </select>
                     </div>
                     </div>
+                <div class="row_button">
                 <div class="query_row">
                    <div class="cols1" >
                         是否在连
@@ -611,11 +698,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </select>
                     </div>
                     </div>
-                <div class="row_">
                     <center>
 		                <button id="query" >
 		                    查询
 		                </button>
+		                &nbsp; &nbsp; &nbsp;
 		                <button id="clear">
 		                    清空
 		                </button>
@@ -624,6 +711,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
             </form>
         </div>
+        <br />
 		<div class="body">
             <center>
                  专家信息查询列表
@@ -669,10 +757,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         <c:if test="${foreign.sex == 1}">男</c:if>
                         <c:if test="${foreign.sex == 0}">女</c:if>
                     </div>
-                    <div class="cols" style="width: 15%;">
+                    <div class="cols" style="width: 15%;" title="country">
                         ${foreign.country }
                     </div>
-                    <div class="cols" style="width: 10%;">
+                    <div class="cols" style="width: 10%;" title="companyDepartment">
                         ${foreign.companyDepartment }
                     </div>
                     <div class="cols" style="width: 20%;">
@@ -680,7 +768,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                     <div class="cols" style="width: 10%;">
                     <c:if test='${foreign.role == null}'>（无对应信息）</c:if>
-                        <c:if test='${foreign.role != null}'>${foreign.role }</c:if>
+                        <c:if test='${foreign.role ==1}'>专家</c:if>
+                    	<c:if test='${foreign.role == 2}'>配偶</c:if>
                     </div>
                     <div class="cols" style="width: 10%;">
                     <c:if test='${foreign.isHere == null}'>（无对应信息）</c:if>
@@ -698,7 +787,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </c:forEach>
             </div>
             <form action="<%=basePath%>foreign/foreign_hereis.html" method="post" id="page">
-            <DIV style="float: right;width: 80%;text-align: right;" >
+            <DIV style="float: right;width: 80%;text-align: right;  padding-right:5%;" >
 	                 <ul id="pagination-clean" >
 						<li class="previous-off">总记录数：<i></i></li>
 						<li class="previous-off">总页数：<i></i></li>
@@ -753,8 +842,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 				</div>
 				<div class="row1" style="width: 100%">
-					<div class="cols1_">单 位</div>
-					<div class="cols2_">
+					<div class="cols1_" style="width: 15%;">单 位</div>
+					<div class="cols2_" style="width: 85%;text-align: center;">
 						<label id="companyDepartment_"></label>
 					</div>
 				</div>
@@ -783,6 +872,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 				<div class="row1">
 					<div class="cols1_">身 份</div>
+					<div class="cols2_">
+						<label id="role"></label>
+					</div>
+				</div>
+				<div class="row1">
+					<div class="cols1_">职  位</div>
 					<div class="cols2_">
 						<label id="post_"></label>
 					</div>
@@ -817,53 +912,58 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<label id="rpAddress_"></label>
 						</div>
 					</div>
+					<div class="row1">
+						<div class="cols1_">出入境信息</div>
+						<div class="cols2_">
+							<label id="inout_detail"></label>
+						</div>
+					</div>
 				</form>
-				<div style="text-align: center;" id="inout_detail">出入境信息</div>
         </div>
 		<div class="detail" id="invitation_detail" style="display:none;" title="邀请函信息">
 			<form id="invitation">
 			<div class="table">
 			<br />
-			<div class="row">
+			<div class="row2">
 				<div class="cols1">邀请函号</div>
 				<div class="cols2">
 					<label id="invitationId"></label>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row2" style="width:100%">
 				<div class="cols1">邀请函上传</div>
 				<div class="cols2">
 					<label id="fkattachmentid"></label>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row2" style="width:100%">
 				<div class="cols1">申请签证有效期</div>
 				<div class="cols2">
 					<label id="stayTime"></label>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row2">
 				<div class="cols1">来往次数</div>
 				<div class="cols2">
 					<label id="gobackTimes"></label>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row2">
 				<div class="cols1">拟入境日期</div>
 				<div class="cols2">
 					<label id="arrivedDate"></label>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row2">
 				<div class="cols1">拟离境日期</div>
 				<div class="cols2">
 					<label id="leavingDate"></label>
 				</div>
 			</div>
-			<div class="row" style="disable:true;">
+			<div class="row2" style="disable:true;">
 				<div class="cols3" id="showlist">所含外籍人员</div>
 			</div>
-			<div class="row">
+			<div class="row2">
 				<div class="cols3" id="inoutlist">当前邀请函出入境信息</div>
 			</div>
 		</div>
