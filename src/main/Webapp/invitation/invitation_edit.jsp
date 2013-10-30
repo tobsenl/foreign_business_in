@@ -644,7 +644,7 @@ float: left;
                     批量删除
                 </button>
             </div>
-            <DIV style="float: right;width: 80%;text-align: right; padding-right:5%"" >
+            <DIV style="float: right;width: 80%;text-align: right; padding-right:5%;" >
 	                 <ul id="pagination-clean" >
 						<li class="previous-off">总记录数：<i></i></li>
 						<li class="previous-off">总页数：<i></i></li>

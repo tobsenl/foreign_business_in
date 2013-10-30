@@ -203,7 +203,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           				   var inner_html="";
           				 $.each(data,function(x,obj){
 	            			   inner_html=inner_html+"<div class='row'>";
-          					   inner_html=inner_html+"<div class='content'>";
+          					   inner_html=inner_html+"<div class='content' style='cursor:pointer;background-color:#BCD2EE;'>";
           					   inner_html=inner_html+"<div class='cols' style='width: 20%;'>";
           					   inner_html=inner_html+ obj.name+"<input type='hidden' id='id' value='"+obj.id+"'>";
           					   inner_html=inner_html+"</div>";
@@ -748,7 +748,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div id="row_list">
             <c:forEach items="${foreign_list}" var="foreign" >
             <div class="row">
-                <div class="content">
+                <div class="content" style="cursor:pointer;background-color:#BCD2EE;">
                     
                     <div class="cols" style="width: 20%;">
                         ${foreign.name}<input type='hidden' id="id" value="${foreign.id}">
@@ -882,16 +882,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label id="post_"></label>
 					</div>
 				</div>
-				<div class="row1">
-					<div class="cols1_">外国专家证</div>
-					<div class="cols2_">
-						<label id="expertEvidence_"></label>
-					</div>
-				</div>
 				<div class="row1" id="upload_ee" style="width: 100%">
 					<div class="cols1_">专家证扫描件</div>
 					<div class="cols2_">
 						<label id="fkEeAttachmentId_"></label>
+					</div>
+				</div>
+				<div class="row1">
+					<div class="cols1_">外国专家证</div>
+					<div class="cols2_">
+						<label id="expertEvidence_"></label>
 					</div>
 				</div>
 				<div class="row1">
@@ -912,8 +912,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<label id="rpAddress_"></label>
 						</div>
 					</div>
-					<div class="row1">
-						<div class="cols1_">出入境信息</div>
+					<div class="row1" style="width: 100%">
+						<div class="cols1_" style="background-color:#BCD2EE;width: 100%;text-align: center;">出入境信息</div>
 						<div class="cols2_">
 							<label id="inout_detail"></label>
 						</div>

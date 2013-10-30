@@ -667,7 +667,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     不在连
                 </button>
             </div>
-            <DIV style="float: right;width: 80%;text-align: right; padding-right:5%"" >
+            <DIV style="float: right;width: 80%;text-align: right; padding-right:5%;" >
 	                 <ul id="pagination-clean" >
 						<li class="previous-off">总记录数：<i></i></li>
 						<li class="previous-off">总页数：<i></i></li>
@@ -789,8 +789,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<label id="rpAddress_"></label>
 						</div>
 					</div>
-					<div class="row1">
-						<div class="cols1_">出入境信息</div>
+					<div class="row1" style="width: 100%">
+						<div class="cols1_" style="background-color:#BCD2EE;width: 100%;text-align: center;">出入境信息</div>
 						<div class="cols2_">
 							<label id="inout_detail"></label>
 						</div>

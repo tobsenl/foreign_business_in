@@ -210,6 +210,20 @@ float: left;
         	function getdate(t){
            	 return new Date(t.time);
             }
+        	var permit_kind=null;
+        	var company_kind=null;
+        	var country_kind=null;
+        	function getmatch(obj,val){
+        		for(var i=0;i<obj.length;i++){
+        			val=trim(val);
+        			if(obj[i].id==val){
+        				return obj[i].name;
+        			}
+        		}
+        	}
+			function trim(str){ //删除左右两端的空格
+       	     return str.replace(/(^\s*)|(\s*$)/g, "");
+       		}
         	//查询列表的option
         	var queryformoptions={
         			dataType:  'json', 
@@ -307,12 +321,18 @@ float: left;
          			}
          			//$("input[name='sex'][value='"+a.sex+"']").prop("checked",true);
          			$("#birthDay_").html(a.birthday);
-         			$("#country_").html(a.country);
-         			$("#companyDepartment_").html(a.company_department);
+         			$("#country_").html(getmatch(country_kind,a.country));
+         			$("#companyDepartment_").html(getmatch(company_kind,a.company_department));
          			$("#passportId_").html(a.passport_id);
          			$("#passportExpDate_").html(a.passport_exp_date);
          			$("#post_").html(a.post);
-         			//$("#role").val(a.role);
+         			if(a.role == 1){
+        				$("#role").html("专家");
+        			}else if(a.role == 2){
+        				$("#role").html("配偶");
+        			}else{
+        				$("#role").html("无");
+        			}
          			$("#fkPpAttachmentId_").html(a.fk_pp_attachment_id);
          			if(a.expert_evidence){
          				$("#expertEvidence_").html("有");
@@ -322,10 +342,9 @@ float: left;
          				$("#expertEvidence_").html("无");
          			}
          			if(a.residence_permit_kind){
-                			$("#fkRpPermitKind_").html(a.residence_permit_kind);
+                			$("#fkRpPermitKind_").html(getmatch(permit_kind,a.residence_permit_kind));
                 			$("#rpExpEnddate_,#rpAddress_").css("display","");
                 			$("#rpExpEnddate_").html(a.rp_exp_endDate);
-                			alert(a.rp_Address);
                 			if(a.rp_Address != ""){
                 				var address=a.rp_Address.split(',');
                 				if(address.length > 1){
@@ -372,13 +391,26 @@ float: left;
            	content=content+value.passportId+"";
            	content=content+"</div>";
            	content=content+"<div class='info_cols'>";
-           	content=content+value.country+"";
+           	content=content+getmatch(country_kind,value.country)+"";
            	content=content+"</div>";
            	content=content+"<div class='info_cols'>";
-           	content=content+value.companyDepartment+"";
+           	
+           	var v=getmatch(company_kind,value.companyDepartment+"");
+			   if(v.length>9){
+				   content=content+v.substring(0,9)+"……";
+			   }else{
+				   content=content+getmatch(company_kind,value.companydepartment);
+			   }
            	content=content+"</div>";
            	content=content+"<div class='info_cols'>";
-           	content=content+(value.role==""?"(无对应信息)":value.role);
+            if(value.role == 1 ){
+            	content=content+"专家";
+				}else if(value.role == 2){
+					content=content+"配偶";
+				   }else if(value.role == ""){
+					   content=content+"（无对应信息）";
+			   }
+           	//content=content+(value.role==""?"(无对应信息)":value.role);
            	content=content+"</div>";
            	content=content+"<div class='info_cols'>";
            	content=content+(value.isHere=="1"?"是":"否");
@@ -603,6 +635,64 @@ float: left;
 				});
 				$("#foreign_id_q").val(temp);
 			});
+			 $.get("<%=basePath%>index/permit_kind.xml",function(y){
+	   				var contrylist=$(y).find("kind");
+	   				if(contrylist.length > 0){
+	   					var j_value="[";
+	   					for(var i=0;i<contrylist.length;i++){
+	   						var o=contrylist[i];
+	   						var id=$(o).find("id").text();
+	   						var name=$(o).find("name").text();
+	   						if(i==contrylist.length-1){
+	   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+	   						}else{
+	   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+	   						}
+	   						$("#residence_permit_kind").children().last().after("<option value='"+id+"'>"+name+"</option>")
+	   					}
+	   					j_value=j_value+"]";
+	   					permit_kind=eval("("+j_value+")");
+	   				}
+	   			});
+	            $.get("<%=basePath%>index/country.xml",function(y){
+					var contrylist=$(y).find("country");
+					if(contrylist.length > 0){
+						var j_value="[";
+						for(var i=0;i<contrylist.length;i++){
+							var o=contrylist[i];
+							var id=$(o).find("id").text();
+							var name=$(o).find("name").text();
+							var relname=$(o).find("relname").text();
+							if(i==contrylist.length-1){
+								j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+							}else{
+								j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+							}
+							$("#contry").children().last().after("<option value='"+id+"'>"+relname+"("+name+")</option>")
+						}
+						j_value=j_value+"]";
+						country_kind=eval("("+j_value+")");
+					}
+				});
+	            $.get("<%=basePath%>index/Company3th.xml",function(y){
+					var contrylist=$(y).find("company");
+					if(contrylist.length > 0){
+						var j_value="[";
+						for(var i=0;i<contrylist.length;i++){
+							var o=contrylist[i];
+							var id=$(o).find("id").text();
+							var name=$(o).find("name").text();
+							if(i==contrylist.length-1){
+								j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+							}else{
+								j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+							}
+							$("#post").children().last().after("<option value='"+id+"'>"+name+"</option>")
+						}
+						j_value=j_value+"]";
+						company_kind=eval("("+j_value+")");
+					}
+				});
 		});
         </script>
 </head>
@@ -776,8 +866,8 @@ float: left;
 					</div>
 				</div>
 				<div class="row1" style="width: 100%">
-					<div class="cols1_">单 位</div>
-					<div class="cols2_">
+					<div class="cols1_" style="width: 15%;">单 位</div>
+					<div class="cols2_" style="width: 85%;text-align: center;">
 						<label id="companyDepartment_"></label>
 					</div>
 				</div>
@@ -807,19 +897,25 @@ float: left;
 				<div class="row1">
 					<div class="cols1_">身 份</div>
 					<div class="cols2_">
-						<label id="post_"></label>
+						<label id="role"></label>
 					</div>
 				</div>
 				<div class="row1">
-					<div class="cols1_">外国专家证</div>
+					<div class="cols1_">职  位</div>
 					<div class="cols2_">
-						<label id="expertEvidence_"></label>
+						<label id="post_"></label>
 					</div>
 				</div>
 				<div class="row1" id="upload_ee" style="width: 100%">
 					<div class="cols1_">专家证扫描件</div>
 					<div class="cols2_">
 						<label id="fkEeAttachmentId_"></label>
+					</div>
+				</div>
+				<div class="row1">
+					<div class="cols1_">外国专家证</div>
+					<div class="cols2_">
+						<label id="expertEvidence_"></label>
 					</div>
 				</div>
 				<div class="row1">
@@ -840,8 +936,13 @@ float: left;
 							<label id="rpAddress_"></label>
 						</div>
 					</div>
+					<div class="row1" style="width: 100%">
+						<div class="cols1_" style="background-color:#BCD2EE;width: 100%;text-align: center;">出入境信息</div>
+						<div class="cols2_">
+							<label id="inout_detail"></label>
+						</div>
+					</div>
 				</form>
-				<div style="text-align: center;" id="inout_detail">出入境信息</div>
         	</div>
 	</div>
 	<jsp:include page="/index/bottom.jsp" />

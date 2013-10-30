@@ -303,7 +303,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              			}
              			//$("input[name='sex'][value='"+a.sex+"']").prop("checked",true);
              			$("#birthDay_").html(a.birthday);
-             			$("#country_").html(a.country);
+             			$("#country_").html(getmatch(country_kind,a.country));
              			$("#companyDepartment_").html(getmatch(company_kind,a.company_department));
              			$("#passportId_").html(a.passport_id);
              			$("#passportExpDate_").html(a.passport_exp_date);
@@ -349,7 +349,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              				*/
              				$("#inout_detail").after("<div>"+_value.begintime+","+_value.type+","+_value.content+","+_value.fk_invitation_id+"</div>");
              				//$("#inout_detail").after("");
-             				alert(_value.begintime);
              			});
              		}
              	});
@@ -694,16 +693,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label id="post_"></label>
 					</div>
 				</div>
-				<div class="row1">
-					<div class="cols1_">外国专家证</div>
-					<div class="cols2_">
-						<label id="expertEvidence_"></label>
-					</div>
-				</div>
 				<div class="row1" id="upload_ee" style="width: 100%">
 					<div class="cols1_">专家证扫描件</div>
 					<div class="cols2_">
 						<label id="fkEeAttachmentId_"></label>
+					</div>
+				</div>
+				<div class="row1">
+					<div class="cols1_">外国专家证</div>
+					<div class="cols2_">
+						<label id="expertEvidence_"></label>
 					</div>
 				</div>
 				<div class="row1">
@@ -724,8 +723,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<label id="rpAddress_"></label>
 						</div>
 					</div>
-					<div class="row1">
-						<div class="cols1_">出入境信息</div>
+					<div class="row1" style="width: 100%">
+						<div class="cols1_" style="background-color:#BCD2EE;width: 100%;text-align: center;">出入境信息</div>
 						<div class="cols2_">
 							<label id="inout_detail"></label>
 						</div>

@@ -93,6 +93,7 @@
             }
              .row_button {
                 width: 75%;
+                float: left;
                 position: relative;
                 line-height: 15px;
                 overflow: hidden;
