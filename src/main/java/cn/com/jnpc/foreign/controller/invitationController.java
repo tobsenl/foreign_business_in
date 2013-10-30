@@ -57,7 +57,7 @@ public class invitationController{
 		.getBean("InvitationServices");
 	PageMybatis page=new PageMybatis();
 	page.setQuerysql(" t1.* from fi_invitation t1 where 1=1 ");
-	page.setNowpage("1");
+	page.setNowpage(Long.parseLong("1"));
 	List<FiInvitation> list= invitationServices.QueryList("All",page);
 	model.addAttribute("invitation_list", list);
 	page.setPageurl(Untils.requestPath(request));
@@ -82,7 +82,7 @@ public class invitationController{
 	invitationServices = (InvitationServices) springContextUtil
 		.getBean("InvitationServices");
 	PageMybatis page=new PageMybatis();
-	page.setNowpage("1");
+	page.setNowpage(Long.parseLong("1"));
 	List<FiInvitation> list=null;
 	page.setQuerysql(" t1.* from fi_invitation t1 where 1=1 ");
 	if(Untils.NotNull(foreign_id_q) || Untils.NotNull(indate_q) || Untils.NotNull(is_use_q) || Untils.NotNull(invitation_id_q)){

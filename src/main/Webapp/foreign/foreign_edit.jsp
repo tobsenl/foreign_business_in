@@ -307,81 +307,12 @@
            });
            
            $("#query").click(function(){
-        	   var name=$("#foreign_name").val();
-        	   var id=$("#passport_id_q").val();
-        	   var contry=$("#contry_q  option:selected").val();//select $("#contry_q  option:selected").val()
-        	   var numb=$("#invitation_numb").val();
-        	   var post=$("#post_q  option:selected").val();//post_q
-        	   var url="name="+name+"&id="+id+"&contry="+contry+"&numb="+numb+"&post="+post;
-        	   var relurl="<%=basePath%>foreign/AjaxQuery_list.html?"+url;
-        	   $.getJSON(relurl,function(data){
-        		   if(data){
-        			   if(data.length>0){
-        				   $("#row_list").html("");
-        				   var inner_html="";
-            			   for(var i=0;i<data.length;i++){
-            				   var obj=data[i];
-            				   //alert(obj.id);
-            				   inner_html=inner_html+"<div class='row'>";
-        					   inner_html=inner_html+"<div class='content'>";
-        					   inner_html=inner_html+"<div class='cols' style='width: 5%;'>";
-        					   inner_html=inner_html+"<input type='checkbox' value='"+obj.id+"'>";
-        					   inner_html=inner_html+"</div>";
-        					   inner_html=inner_html+"<div class='cols' style='width: 20%;'>";
-        					   inner_html=inner_html+ obj.name;
-        					   inner_html=inner_html+"</div>";
-        					   inner_html=inner_html+"<div class='cols' style='width: 5%;'>";
-        					   if(obj.sex == 1){
-        					   inner_html=inner_html+"男";
-        					   }else{
-        					   inner_html=inner_html+"女";
-        					   }
-        					   inner_html=inner_html+"</div>";
-        					   inner_html=inner_html+"<div class='cols' style='width: 15%;'>";
-        					   inner_html=inner_html+getmatch(country_kind,obj.country);
-        					   inner_html=inner_html+"</div>";
-        					   inner_html=inner_html+"<div class='cols' style='width: 10%;'>";
-        					   var v=getmatch(company_kind,obj.companydepartment);
-        					   if(v.length>9){
-        						   inner_html=inner_html+v.substring(0,9)+"……";
-        					   }else{
-        						   inner_html=inner_html+getmatch(company_kind,obj.companydepartment);
-        					   }
-        					   inner_html=inner_html+"</div>";
-        					   inner_html=inner_html+"<div class='cols' style='width: 20%;'>";
-        					   inner_html=inner_html+obj.passportid ;
-        					   inner_html=inner_html+"</div>";
-        					   inner_html=inner_html+"<div class='cols' style='width: 10%;'>";
-        					   if(obj.role == 1 ){
-            					   inner_html=inner_html+"专家";
-            					}else if(obj.role == 2){
-          					   	   inner_html=inner_html+"配偶";
-          					   }else if(obj.role == null){
-         					   	   inner_html=inner_html+"（无对应信息）";
-         					   }
-        					   inner_html=inner_html+"</div>";
-            				   
-        					   inner_html=inner_html+"<div class='cols' style='width: 5%;' >";
-        					   inner_html=inner_html+"<div style='width: 100%;text-align: center;' class='edit'>";
-        					   inner_html=inner_html+"edit";
-        					   inner_html=inner_html+"<input type='hidden' value='"+obj.id+"'>";
-        					   inner_html=inner_html+"</div>";
-        					   inner_html=inner_html+"</div>";
-        					  
-        					   inner_html=inner_html+"</div>";
-        					   inner_html=inner_html+"</div>";
-            			   }
-            			   $("#row_list").html(inner_html);
-        			   }
-        		   }
-        	   });
+        	   var relurl= getUrl("query");
+        	   $("#query_form").attr("action",relurl);
+        	   $("#query_form").submit();
            });
            $("#clear").click(function(){
-        	   $("#foreign_name").val("");
-        	   $("#passport_id_q").val("");
-        	   $("#contry_q").val("");//select $("#contry_q  option:selected").val()
-        	   $("#invitation_numb").val("");
-        	   $("#post_q").val("");//post_q
+        	   $("#query_form").clearForm();
            });
            
            $.get("<%=basePath%>index/country.xml",function(y){
@@ -474,43 +405,70 @@
    	            	}
    	            });
    			}
-			
-			$("#pagination-clean").on("click","a",function(e){
-				var e=$(e.target);
-				var now_index=$(e).attr("name");
-				var page_size=$("#pagesize").val();
-				var allcount=$("#allcount").val();
+			function getUrl(v){
 				var page_url=$("#pageurl").val();
 				var attr=page_url.split("&");
 				var pageurl="";
 				for(var i=0;i<attr.length;i++){
-					alert(attr[i].match("pagesize"));
-					if(attr[i].match("pagesize") != null){
-						continue;
-					}else if(attr[i].match("nowpage") != null){
-						continue;
-					}else{
-						if(i==0){
-							pageurl=pageurl+attr[i].replace("foreign_edit","AjaxQuery_list");
-							
+					if(v=="page"){
+						if(attr[i].match("pagesize") != null){
+							continue;
+						}else if(attr[i].match("nowpage") != null){
+							continue;
 						}else{
-							pageurl=pageurl+"&"+attr[i];
+							if(i==0){
+								pageurl=pageurl+attr[i].replace("foreign_edit","search_list");
+								
+							}else{
+								pageurl=pageurl+"&"+attr[i];
+							}
+						}
+					}else if(v=="query"){
+						if(attr[i].match("foreign_name") != null){
+							continue;
+						}else if(attr[i].match("passport_id_q") != null){
+							continue;
+						}else if(attr[i].match("contry_q") != null){
+							continue;
+						}else if(attr[i].match("post_q") != null){
+							continue;
+						}else{
+							if(i==0){
+								pageurl=pageurl+attr[i].replace("foreign_edit","search_list");
+								
+							}else{
+								pageurl=pageurl+"&"+attr[i];
+							}
 						}
 					}
 				}
+				return pageurl;
+			}
+			function check_submit(e){
+				var e=e.target;
+				var name=e.nodeName;
+				var now_index="";
+				if(name == "A"){
+					now_index=$(e).attr("name");
+				}
+				var page_size=$("#pagesize").val();
+				var allcount=$("#allcount").val();
+				var page_url=$("#pageurl").val();
+				var attr=page_url.split("&");
+				var pageurl= getUrl("page");
 				$("#nowpage").val(now_index);
-				var option_page={
-						dataType:  'json', 
-						url:pageurl,
-	                 	success : function(data){
-	                 		$("#page").clearForm();
-	                 	}
-				};
 				if(parseInt(page_size) > parseInt(allcount)){
 					alert("每页显示数不能超出总数据量！请重新填写每页显示数");
 				}else{
-					$("#page").ajaxSubmit(option_page);
+					$("#page").attr("action",pageurl);
+					$("#page").submit();
 				}
+			}
+			$("#pagination-clean").on("click","a",function(e){
+				check_submit(e);
+			});
+			$("#pagination-clean").on("blur","input",function(e){
+				check_submit(e);
 			});
         });
         </script>
@@ -525,6 +483,7 @@
             </center>
             <br/>
             <div class="top">
+            <form id="query_form" method="post">
                 <div class="query_row">
                     <div class="cols1">
                         姓名
@@ -581,6 +540,7 @@
 		                </button>
 		            </center>
                 </div>
+                </form>
             </div>
         </div><br/>
 		<div class="body">
@@ -660,7 +620,7 @@
                 </button>
             </div>
             <DIV style="float: right;width: 80%;text-align: right; padding-right:5%" >
-            	<form id="page" method="post" >
+            	<form id="page" method="post">
 	                 <ul id="pagination-clean" >
 						<li class="previous-off">总记录数：<i>${page.allcount }</i></li>
 						<li class="previous-off">总页数：<i>${page.allpagesize }</i></li>
@@ -683,7 +643,7 @@
 							</c:forEach>
 						</c:if>
 						<c:if test="${page.nowpage <= 3 }">
-							<c:forEach begin="${page.nowpage}" end="${page.allpagesize }" var="i">
+							<c:forEach begin="1" end="${page.allpagesize }" var="i">
 								<c:if test="${i == page.nowpage}">
 									<li class="active" title="当前页">${i}</li>  
 								</c:if>

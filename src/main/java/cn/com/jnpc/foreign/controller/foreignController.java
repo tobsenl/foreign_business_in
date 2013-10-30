@@ -133,7 +133,7 @@ public class foreignController {
     }
 
     @RequestMapping(value = "/search_list.html")
-    public String QueryList(HttpServletRequest request,
+    public String QueryList(@RequestParam("kind") String kind ,HttpServletRequest request,
 	    HttpServletResponse response, Model model) {
 //	@RequestMapping(value = "/AjaxQuery_list.html")
 //	public String AjaxQueryList(HttpServletRequest request,
@@ -141,16 +141,16 @@ public class foreignController {
 	List<FiForeigner> foreignlist = null;
 	// var
 	// url="name:"+name+" id:"+id+" contry:"+contry+" numb:"+numb+" post:"+post;
-	String foreignname = Untils.NotNull(request.getParameter("name")) ? request
-		.getParameter("name") : "";
-	String passport_id = Untils.NotNull(request.getParameter("id")) ? request
-		.getParameter("id") : "";
-	String contry_from = Untils.NotNull(request.getParameter("contry")) ? request
-		.getParameter("contry") : "";
-	String numb_invitation = Untils.NotNull(request.getParameter("numb")) ? request
-		.getParameter("numb") : "";
-	String post = Untils.NotNull(request.getParameter("post")) ? request
-		.getParameter("post") : "";
+	String foreignname = Untils.NotNull(request.getParameter("foreign_name")) ? request
+		.getParameter("foreign_name") : "";
+	String passport_id = Untils.NotNull(request.getParameter("passport_id_q")) ? request
+		.getParameter("passport_id_q") : "";
+	String contry_from = Untils.NotNull(request.getParameter("contry_q")) ? request
+		.getParameter("contry_q") : "";
+	String numb_invitation = Untils.NotNull(request.getParameter("invitation_numb")) ? request
+		.getParameter("invitation_numb") : "";
+	String post = Untils.NotNull(request.getParameter("post_q")) ? request
+		.getParameter("post_q") : "";
 	String is_here_ = Untils.NotNull(request.getParameter("is_here_")) ? request
 		.getParameter("is_here_") : "";
 
@@ -158,39 +158,39 @@ public class foreignController {
 		.getParameter("nowpage") : "";
 	String page_size=Untils.NotNull(request.getParameter("pagesize")) ? request
 		.getParameter("pagesize") : "";
-	String kind=Untils.NotNull(request.getParameter("kind")) ? request
-		.getParameter("kind") : "";
-	
+	String kinds=Untils.NotNull(kind) ? kind : "";
 	String query_sql=foreignServices.getsql(foreignname,passport_id, contry_from, numb_invitation, post, is_here_);
 	PageMybatis page = foreignServices.QueryCount(query_sql);
 	if(Untils.NotNull(now_page) && now_page != "1"){
-	    page.setNowpage(now_page);
+	    page.setNowpage(Long.parseLong(now_page));
 	}else{
-	    page.setNowpage("1");
+	    page.setNowpage(Long.parseLong("1"));
 	}
 	if(Untils.NotNull(page_size) && now_page != "1"){
-	    page.setPagesize(page_size);
+	    page.setPagesize(Long.parseLong(page_size));
 	}
 	foreignServices = (ForeignServices) springContextUtil
 		.getBean("ForeignServices");
-	
+	if(Untils.NotNull(query_sql)){
+	    page.setQuerysql(query_sql);
+	}
 	foreignlist = foreignServices.QueryList(page);
 	
 	model.addAttribute("foreign_list", foreignlist);
 	page.setPageurl(Untils.requestPath(request));
 	model.addAttribute("page", page);
 	
-	if (kind.equals("edit")) {
+	if (kinds.equals("edit")) {
 	    return "/foreign/foreign_edit";
-	} else if (kind.equals("inout")) {
+	} else if (kinds.equals("inout")) {
 	    return "/foreign/foreign_inout";
-	} else if (kind.equals("ishere")) {
+	} else if (kinds.equals("ishere")) {
 	    return "/foreign/foreign_ishere";
-	} else if (kind.equals("extension")) {
+	} else if (kinds.equals("extension")) {
 	    return "/foreign/foreign_extension";
-	} else if (kind.equals("query")) {
+	} else if (kinds.equals("query")) {
 	    return "/query/queryforeign";
-	} else if (kind.equals("foreigninoutquery")) {
+	} else if (kinds.equals("foreigninoutquery")) {
 	    return "/query/queryforeigninout";
 	} else {
 	    return "";
@@ -379,8 +379,7 @@ public class foreignController {
 	foreignServices = (ForeignServices) springContextUtil
 		.getBean("ForeignServices");
 	PageMybatis page = foreignServices.QueryCount("");
-	page.setQuerysql(" t1.* from fi_foreigner t1 where 1=1 ");
-	page.setNowpage("1");
+	page.setNowpage(Long.parseLong("1"));
 	List<FiForeigner> list = foreignServices.QueryList(page);
 	page.setPageurl(Untils.requestPath(request)+"kind="+kind);
 	model.addAttribute("foreign_list", list);

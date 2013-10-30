@@ -3,49 +3,51 @@ package cn.com.jnpc.foreign.vo;
 import cn.com.jnpc.foreign.utils.Untils;
 
 public class PageMybatis {
-    String pagesize="5";// 每页大小
-    String nowpage;// 当前页
-    String allcount;// 总条数
-    String allpagesize;//总页数
+    long pagesize=5;// 每页大小
+    long nowpage;// 当前页
+    long allcount;// 总条数
+    long allpagesize;//总页数
     long nowsize;// 现在数量
     long nextsize;// 下一页数量
     String pageurl;// 页面链接
     String querysql;// 查询的主体sql
 
-    public String getPagesize() {
+    public Long getPagesize() {
 	return pagesize;
     }
 
-    public void setPagesize(String pagesize) {
-	if(Untils.NotNull(allcount)){
-	    allpagesize=(Long.parseLong(allcount)/Long.parseLong(pagesize))+"";
+    public void setPagesize(Long pagesize) {
+	if(Untils.NotNull(allcount+"")){
+	    Double value=Math.ceil((double)allcount/(double)pagesize);
+	    allpagesize=value.longValue();
 	}
 	this.pagesize = pagesize;
     }
 
-    public String getNowpage() {
+    public Long getNowpage() {
 	return nowpage;
     }
 
-    public void setNowpage(String nowpage) {
+    public void setNowpage(Long nowpage) {
 	this.nowpage = nowpage;
     }
 
-    public String getAllcount() {
+    public Long getAllcount() {
 	return allcount;
     }
 
-    public void setAllcount(String allcount) {
-	if(Untils.NotNull(pagesize)){
-	    allpagesize=(Long.parseLong(allcount)/Long.parseLong(pagesize))+"";
+    public void setAllcount(Long allcount) {
+	if(Untils.NotNull(pagesize+"")){
+	    Double value=Math.ceil((double)allcount/(double)pagesize);
+	    allpagesize=value.longValue();
 	}
 	this.allcount = allcount;
     }
 
     public long getNowsize() {
-	if (Untils.NotNull(nowpage) && Untils.NotNull(pagesize)) {
-		nowsize = (Integer.parseInt(nowpage) - 1)
-			* Integer.parseInt(pagesize);
+	if (Untils.NotNull(nowpage+"") && Untils.NotNull(pagesize+"")) {
+		nowsize = (nowpage - 1)
+			* pagesize;
 	    } else {
 		nowsize = 0;
 	    }
@@ -53,9 +55,9 @@ public class PageMybatis {
     }
 
     public long getNextsize() {
-	if (Untils.NotNull(nowpage) && Untils.NotNull(pagesize)) {
-		nextsize = (Integer.parseInt(nowpage))
-			* Integer.parseInt(pagesize)+1;
+	if (Untils.NotNull(nowpage+"") && Untils.NotNull(pagesize+"")) {
+		nextsize = nowpage
+			* pagesize + 1;
 	    } else {
 		nextsize = 0;
 	}
@@ -78,11 +80,11 @@ public class PageMybatis {
 	this.querysql = querysql;
     }
 
-    public String getAllpagesize() {
+    public Long getAllpagesize() {
         return allpagesize;
     }
 
-    public void setAllpagesize(String allpagesize) {
+    public void setAllpagesize(Long allpagesize) {
         this.allpagesize = allpagesize;
     }
 }

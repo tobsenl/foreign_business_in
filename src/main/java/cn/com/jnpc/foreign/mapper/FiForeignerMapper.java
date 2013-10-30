@@ -197,7 +197,7 @@ public interface FiForeignerMapper {
     
     @SelectProvider(type=FiForeignerSqlProvider.class, method="selectAllcount")
     @Results({
-	@Result(column="ALLCOUNT", property="allcount", jdbcType=JdbcType.VARCHAR),
+	@Result(column="ALLCOUNT", property="allcount", jdbcType=JdbcType.DECIMAL),
     })
     PageMybatis selectAllCount(String where);
 
