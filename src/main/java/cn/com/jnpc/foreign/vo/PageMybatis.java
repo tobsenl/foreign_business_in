@@ -54,8 +54,8 @@ public class PageMybatis {
 
     public long getNextsize() {
 	if (Untils.NotNull(nowpage) && Untils.NotNull(pagesize)) {
-		nextsize = (Integer.parseInt(nowpage) + 1)
-			* Integer.parseInt(pagesize) + 1;
+		nextsize = (Integer.parseInt(nowpage))
+			* Integer.parseInt(pagesize)+1;
 	    } else {
 		nextsize = 0;
 	}

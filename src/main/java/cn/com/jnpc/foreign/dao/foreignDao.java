@@ -11,6 +11,6 @@ public interface foreignDao {
     public List<FiForeigner> SelectByExample(String example,FiForeignerExample foreigner);
     public List<FiForeigner> SelectByPage(String example,PageMybatis foreigner);
     public FiForeigner SelectById(String example,int id);
-    public List<FiForeigner> SelectAll(String example,PageMybatis page);
     public FiForeigner UpdataReturnObject(String example,FiForeigner foreigner);
+    public PageMybatis SelectCount(String example,String where);
 }

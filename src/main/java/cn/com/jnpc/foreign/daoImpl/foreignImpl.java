@@ -33,14 +33,14 @@ public class foreignImpl extends SqlSessionDaoSupport implements foreignDao{
 	
     }
 
-    public List<FiForeigner> SelectAll(String example, PageMybatis page) {
-	return getSqlSession().selectList(
-		"cn.com.jnpc.foreign.mapper.FiForeignerMapper." + example, page);
-    }
-
     public FiForeigner UpdataReturnObject(String example, FiForeigner foreigner) {
 	getSqlSession().update(
 		"cn.com.jnpc.foreign.mapper.FiForeignerMapper." + example,foreigner);
 	return foreigner;
+    }
+
+    public PageMybatis SelectCount(String example,String where) {
+	return getSqlSession().selectOne(
+		"cn.com.jnpc.foreign.mapper.FiForeignerMapper." + example,where);
     }
 }

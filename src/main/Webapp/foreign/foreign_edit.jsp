@@ -91,10 +91,10 @@
                 margin-left: 15%;
             }
              .row_button {
-                width: 75%;
-                position: relative;
-                line-height: 15px;
-                overflow: hidden;
+                width: 60%;
+				position: relative;
+				line-height: 30px;
+				float: left;
             }
             .Crow {
                 width: 100%;
@@ -474,6 +474,44 @@
    	            	}
    	            });
    			}
+			
+			$("#pagination-clean").on("click","a",function(e){
+				var e=$(e.target);
+				var now_index=$(e).attr("name");
+				var page_size=$("#pagesize").val();
+				var allcount=$("#allcount").val();
+				var page_url=$("#pageurl").val();
+				var attr=page_url.split("&");
+				var pageurl="";
+				for(var i=0;i<attr.length;i++){
+					alert(attr[i].match("pagesize"));
+					if(attr[i].match("pagesize") != null){
+						continue;
+					}else if(attr[i].match("nowpage") != null){
+						continue;
+					}else{
+						if(i==0){
+							pageurl=pageurl+attr[i].replace("foreign_edit","AjaxQuery_list");
+							
+						}else{
+							pageurl=pageurl+"&"+attr[i];
+						}
+					}
+				}
+				$("#nowpage").val(now_index);
+				var option_page={
+						dataType:  'json', 
+						url:pageurl,
+	                 	success : function(data){
+	                 		$("#page").clearForm();
+	                 	}
+				};
+				if(parseInt(page_size) > parseInt(allcount)){
+					alert("每页显示数不能超出总数据量！请重新填写每页显示数");
+				}else{
+					$("#page").ajaxSubmit(option_page);
+				}
+			});
         });
         </script>
 </head>
@@ -622,21 +660,44 @@
                 </button>
             </div>
             <DIV style="float: right;width: 80%;text-align: right; padding-right:5%" >
+            	<form id="page" method="post" >
 	                 <ul id="pagination-clean" >
-						<li class="previous-off">总记录数：<i></i></li>
-						<li class="previous-off">总页数：<i></i></li>
-						<li class="previous-off" style="padding:0 0 5px 6px;">每页显示数：<b><input type="text" id="countpage" value="" size="1" style="margin:0; padding:0;border:solid 1px #DEDEDE;"></b></li>
-						<li class="previous-off">«Previous</li>
-						<li><a title="转到第1页" href="javascript:;">1</a></li>
-						<li class="active" title="当前页"><a href="javascript:;">2</a></li>
-						<li><a title="转到第3页" href="javascript:;">3</a></li>
-						<li><a title="转到第4页" href="javascript:;">4</a></li>
-						<li><a title="转到第5页" href="javascript:;">5</a></li>
-						<li><a title="转到第6页" href="javascript:;">6</a></li>
-						<li><a title="转到第7页" href="javascript:;">7</a></li>
-						<li><a title="转到第8页" href="javascript:;">8</a></li>
-						<li class="next"><a href="?page=2">Next »</a></li>
+						<li class="previous-off">总记录数：<i>${page.allcount }</i></li>
+						<li class="previous-off">总页数：<i>${page.allpagesize }</i></li>
+						<li class="previous-off" style="padding:0 0 5px 6px;">每页显示数：<b><input type="text" id="pagesize" name="pagesize" value="${page.pagesize }" size="1" style="margin:0; padding:0;border:solid 1px #DEDEDE;"></b></li>
+						<c:if test="${page.nowpage == 1 }">
+						<li class="previous-off">Previous</li>
+						</c:if>
+						<c:if test="${page.nowpage != 1 }">
+						<li class="previous-off"><a href ="javascript: ;" name="1" title="首页">&lt;&lt; Previous</a></li>
+						</c:if>
+						
+						<c:if test="${page.nowpage > 3 }">
+							<c:forEach begin="${page.nowpage-2}" end="${page.allpagesize }" var="i">
+							<c:if test="${i == page.nowpage}">
+								<li class="active" title="当前页">${i}</li>  
+							</c:if>
+							<c:if test="${i != page.nowpage}">
+								<li><a href ="javascript: ;" title="转到第${i}页" name="${i}">${i}</a></li> 
+							</c:if>
+							</c:forEach>
+						</c:if>
+						<c:if test="${page.nowpage <= 3 }">
+							<c:forEach begin="${page.nowpage}" end="${page.allpagesize }" var="i">
+								<c:if test="${i == page.nowpage}">
+									<li class="active" title="当前页">${i}</li>  
+								</c:if>
+								<c:if test="${i != page.nowpage}">
+									<li><a href ="javascript: ;" title="转到第${i}页" name="${i}">${i}</a></li> 
+								</c:if>
+							</c:forEach>
+						</c:if>
+						<li class="next"><a href ="javascript: ;" title="第${page.nowpage+1}页" name="${page.nowpage+1}">Next >></a></li>
+						<input type="hidden" id="nowpage" name="nowpage" value="${page.nowpage}"/>
 					</ul>
+				</form>
+				<input type="hidden" id="pageurl" name="pageurl" value="${page.pageurl}"/>
+				<input type="hidden" id="allcount" name="allcount" value="${page.allcount}"/>
             </DIV>
         </div>
         <div id="message" style="display:none;">

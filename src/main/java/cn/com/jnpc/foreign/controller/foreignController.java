@@ -132,9 +132,12 @@ public class foreignController {
 	return null;
     }
 
-    @RequestMapping(value = "/AjaxQuery_list.html")
-    public String AjaxQueryList(HttpServletRequest request,
-	    HttpServletResponse response) {
+    @RequestMapping(value = "/search_list.html")
+    public String QueryList(HttpServletRequest request,
+	    HttpServletResponse response, Model model) {
+//	@RequestMapping(value = "/AjaxQuery_list.html")
+//	public String AjaxQueryList(HttpServletRequest request,
+//		HttpServletResponse response) {
 	List<FiForeigner> foreignlist = null;
 	// var
 	// url="name:"+name+" id:"+id+" contry:"+contry+" numb:"+numb+" post:"+post;
@@ -151,53 +154,78 @@ public class foreignController {
 	String is_here_ = Untils.NotNull(request.getParameter("is_here_")) ? request
 		.getParameter("is_here_") : "";
 
-	PageMybatis page = new PageMybatis();
-	page.setNowpage("1");
-	page.setPageurl(Untils.requestPath(request));
-
+	String now_page=Untils.NotNull(request.getParameter("nowpage")) ? request
+		.getParameter("nowpage") : "";
+	String page_size=Untils.NotNull(request.getParameter("pagesize")) ? request
+		.getParameter("pagesize") : "";
+	String kind=Untils.NotNull(request.getParameter("kind")) ? request
+		.getParameter("kind") : "";
+	
+	String query_sql=foreignServices.getsql(foreignname,passport_id, contry_from, numb_invitation, post, is_here_);
+	PageMybatis page = foreignServices.QueryCount(query_sql);
+	if(Untils.NotNull(now_page) && now_page != "1"){
+	    page.setNowpage(now_page);
+	}else{
+	    page.setNowpage("1");
+	}
+	if(Untils.NotNull(page_size) && now_page != "1"){
+	    page.setPagesize(page_size);
+	}
 	foreignServices = (ForeignServices) springContextUtil
 		.getBean("ForeignServices");
-	if (Untils.NotNull(numb_invitation) || Untils.NotNull(foreignname)
-		|| Untils.NotNull(passport_id) || Untils.NotNull(contry_from)
-		|| Untils.NotNull(post) || Untils.NotNull(is_here_)) {
-	    page.setQuerysql(" t1.* from fi_foreigner t1 where 1=1");
-	    foreignlist = foreignServices.QueryandInvitation(foreignname,
-		    passport_id, contry_from, numb_invitation, post, is_here_,
-		    page);
+	
+	foreignlist = foreignServices.QueryList(page);
+	
+	model.addAttribute("foreign_list", foreignlist);
+	page.setPageurl(Untils.requestPath(request));
+	model.addAttribute("page", page);
+	
+	if (kind.equals("edit")) {
+	    return "/foreign/foreign_edit";
+	} else if (kind.equals("inout")) {
+	    return "/foreign/foreign_inout";
+	} else if (kind.equals("ishere")) {
+	    return "/foreign/foreign_ishere";
+	} else if (kind.equals("extension")) {
+	    return "/foreign/foreign_extension";
+	} else if (kind.equals("query")) {
+	    return "/query/queryforeign";
+	} else if (kind.equals("foreigninoutquery")) {
+	    return "/query/queryforeigninout";
 	} else {
-	    page.setQuerysql(" t1.* from fi_foreigner t1 where 1=1");
-	    foreignlist = foreignServices.QueryList("All", page);
+	    return "";
 	}
-	List list = new ArrayList();
-	if (foreignlist != null && foreignlist.size() > 0) {
-	    for (FiForeigner forei : foreignlist) {
-		JSONObject object = new JSONObject();
-		object.put("id", forei.getId());
-		object.put("name", forei.getName());
-		object.put("sex", forei.getSex());
-		object.put("country", forei.getCountry());
-		object.put("companydepartment", forei.getCompanyDepartment());
-		object.put("passportid", forei.getPassportId());
-		object.put("role", forei.getRole());
-		object.put("isHere", forei.getIsHere());
-		list.add(object);
-	    }
-	}
-	response.setContentType("text/Xml;charset=utf-8");
-	response.setHeader("Cache-Control", "no-cache");
-	response.setHeader("pragma", "no-cache");
-	response.setDateHeader("expires", 0);
-	PrintWriter out = null;
-	try {
-	    out = response.getWriter();
-	    out.println(list);
-
-	} catch (IOException ex1) {
-	    ex1.printStackTrace();
-	} finally {
-	    out.close();
-	}
-	return null;
+	
+//	List list = new ArrayList();
+//	if (foreignlist != null && foreignlist.size() > 0) {
+//	    for (FiForeigner forei : foreignlist) {
+//		JSONObject object = new JSONObject();
+//		object.put("id", forei.getId());
+//		object.put("name", forei.getName());
+//		object.put("sex", forei.getSex());
+//		object.put("country", forei.getCountry());
+//		object.put("companydepartment", forei.getCompanyDepartment());
+//		object.put("passportid", forei.getPassportId());
+//		object.put("role", forei.getRole());
+//		object.put("isHere", forei.getIsHere());
+//		list.add(object);
+//	    }
+//	}
+//	response.setContentType("text/Xml;charset=utf-8");
+//	response.setHeader("Cache-Control", "no-cache");
+//	response.setHeader("pragma", "no-cache");
+//	response.setDateHeader("expires", 0);
+//	PrintWriter out = null;
+//	try {
+//	    out = response.getWriter();
+//	    out.println(list);
+//
+//	} catch (IOException ex1) {
+//	    ex1.printStackTrace();
+//	} finally {
+//	    out.close();
+//	}
+//	return null;
     }
 
     @RequestMapping(value = "/AjaxQuery_inout.html")
@@ -350,12 +378,12 @@ public class foreignController {
 	    HttpServletRequest request, Model model) {
 	foreignServices = (ForeignServices) springContextUtil
 		.getBean("ForeignServices");
-	PageMybatis page = new PageMybatis();
+	PageMybatis page = foreignServices.QueryCount("");
 	page.setQuerysql(" t1.* from fi_foreigner t1 where 1=1 ");
 	page.setNowpage("1");
-	List<FiForeigner> list = foreignServices.QueryList("All", page);
+	List<FiForeigner> list = foreignServices.QueryList(page);
+	page.setPageurl(Untils.requestPath(request)+"kind="+kind);
 	model.addAttribute("foreign_list", list);
-	page.setPageurl(Untils.requestPath(request));
 	model.addAttribute("page", page);
 	if (kind.equals("edit")) {
 	    return "/foreign/foreign_edit";

@@ -466,29 +466,16 @@ public class ForeignServices {
      * @param page
      * @return
      */
-    public List<FiForeigner> QueryList(String by, PageMybatis page) {
-	List<FiForeigner> list = null;
-	if (by == "All") {
-	    list = foreignDao.SelectAll("selectByPage", page);
-	}
+    public List<FiForeigner> QueryList(PageMybatis page) {
+	List<FiForeigner> list = foreignDao.SelectByPage("selectByPage", page);
 	return list;
     }
 
-    /**
-     * 
-     * @param foreignname
-     * @param passport_id
-     * @param contry_from
-     * @param numb_invitation
-     * @param post
-     * @return
-     */
-    public List<FiForeigner> QueryandInvitation(String foreignname,
+    public String getsql(String foreignname,
 	    String passport_id, String contry_from, String numb_invitation,
-	    String post,String is_here_,PageMybatis page) {
+	    String post,String is_here_) {
 	// 两个表
 	StringBuffer buffer = new StringBuffer();
-	buffer.append(page.getQuerysql());
 	if (Untils.NotNull(foreignname)) {
 	    buffer.append(" and ( t1.NAME like '%" + foreignname + "%' )");
 	}
@@ -528,12 +515,9 @@ public class ForeignServices {
 		}
 	    }
 	}
-	page.setQuerysql(buffer.toString());
-	List<FiForeigner> foreign_list = foreignDao.SelectByPage(
-		"selectByPage", page);
-	return foreign_list;
+	return buffer.toString();
     }
-
+    
     public List<FiInout> QueryByInOut(String foreign_id) {
 	List<FiInout> inout = null;
 	if (Untils.NotNull(foreign_id)) {
@@ -549,5 +533,8 @@ public class ForeignServices {
 	List<FiForeigner> foreign = foreignDao.SelectByExample(
 		"selectByExample", example);
 	return foreign;
+    }
+    public PageMybatis QueryCount(String where) {
+	return foreignDao.SelectCount("selectAllCount",where);
     }
 }
