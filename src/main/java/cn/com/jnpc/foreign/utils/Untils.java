@@ -183,7 +183,7 @@ public final class Untils {
 //	String basePath = request.getScheme() + "://" + request.getServerName()
 //		+ ":" + request.getServerPort() + path + "/";
 	String a= request.getRequestURL().toString()+"?"+(NotNull(request.getQueryString())?request.getQueryString():"");
-	//System.out.println(a);
+	System.out.println(a);
 	return a;
     }
 }

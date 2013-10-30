@@ -12,4 +12,5 @@ public interface invitationDao {
     public List<FiInvitation> SelectAll(String example,PageMybatis page);
     public FiInvitation SelectById(String example,int id);
     public FiInvitation UptataReturnObj(String example,FiInvitation invitation);
+    public PageMybatis SelectCount(String example,String where);
 }

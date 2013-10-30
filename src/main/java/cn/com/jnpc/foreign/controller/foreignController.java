@@ -159,6 +159,10 @@ public class foreignController {
 	String page_size=Untils.NotNull(request.getParameter("pagesize")) ? request
 		.getParameter("pagesize") : "";
 	String kinds=Untils.NotNull(kind) ? kind : "";
+	
+	foreignServices = (ForeignServices) springContextUtil
+		.getBean("ForeignServices");
+	
 	String query_sql=foreignServices.getsql(foreignname,passport_id, contry_from, numb_invitation, post, is_here_);
 	PageMybatis page = foreignServices.QueryCount(query_sql);
 	if(Untils.NotNull(now_page) && now_page != "1"){
@@ -169,8 +173,7 @@ public class foreignController {
 	if(Untils.NotNull(page_size) && now_page != "1"){
 	    page.setPagesize(Long.parseLong(page_size));
 	}
-	foreignServices = (ForeignServices) springContextUtil
-		.getBean("ForeignServices");
+	
 	if(Untils.NotNull(query_sql)){
 	    page.setQuerysql(query_sql);
 	}

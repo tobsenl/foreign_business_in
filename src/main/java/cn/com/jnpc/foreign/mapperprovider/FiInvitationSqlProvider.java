@@ -22,6 +22,7 @@ import cn.com.jnpc.foreign.model.FiInvitationExample;
 import cn.com.jnpc.foreign.model.FiInvitationExample.Criteria;
 import cn.com.jnpc.foreign.model.FiInvitationExample.Criterion;
 import cn.com.jnpc.foreign.po.FiInvitation;
+import cn.com.jnpc.foreign.utils.Untils;
 import cn.com.jnpc.foreign.vo.PageMybatis;
 
 public class FiInvitationSqlProvider {
@@ -171,9 +172,18 @@ public class FiInvitationSqlProvider {
         SELECT("t2.CREATE_USER");
         SELECT("t2.EDIT_USER");
         // t1.* from FI_INVITATION t1 where 
-        FROM("( select rownum r,"+page.getQuerysql()+" and rownum <"+page.getNextsize()+" ) t2");
+        FROM("( select rownum r,t1.* from fi_invitation t1 where 1=1 "+(Untils.NotNull(page.getQuerysql())?page.getQuerysql():"")+" and rownum <"+page.getNextsize()+" ) t2");
         WHERE("t2.r > "+ page.getNowsize());
         //System.out.println(SQL());
+	return SQL();
+    }
+    
+    public String selectAllcount(String where){
+	BEGIN();
+	//select t2.* from (select rownum r,t1.* from fi_foreign t1 where rownum < 2) t2 where t2.r > 0;
+	SELECT("count(t1.id) as allcount");
+	FROM(" FI_INVITATION t1 where 1=1 "+where);
+	//System.out.println(SQL());
 	return SQL();
     }
     /**

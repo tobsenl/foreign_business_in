@@ -43,4 +43,9 @@ public class invitationImpl extends SqlSessionDaoSupport implements invitationDa
 		"cn.com.jnpc.foreign.mapper.FiInvitationMapper." + example, invitation);
 	return invitation;
     }
+
+    public PageMybatis SelectCount(String example,String where) {
+	return getSqlSession().selectOne(
+		"cn.com.jnpc.foreign.mapper.FiInvitationMapper." + example, where);
+    }
 }

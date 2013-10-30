@@ -321,14 +321,12 @@ public class InvitationServices {
 	return list;
     }
 
-    public List<FiInvitation> Queryandforeign(String foreign_id_q,
-	    String invitation_id_q, String is_use_q, String indate_q,
-	    PageMybatis page) {
+    public String getsql(String foreign_id_q,
+	    String invitation_id_q, String is_use_q, String indate_q){
 	StringBuffer buffer = new StringBuffer();
-	buffer.append(page.getQuerysql());
 	if (Untils.NotNull(invitation_id_q)) {
-	    buffer.append(" and t1.INVITATION_ID = '");
-	    buffer.append(invitation_id_q + "'");
+	    buffer.append(" and (t1.INVITATION_ID like '%");
+	    buffer.append(invitation_id_q + "%') ");
 	}
 	if (Untils.NotNull(is_use_q)) {
 	    buffer.append(" and t1.IS_USE = ");
@@ -359,14 +357,14 @@ public class InvitationServices {
 		}
 		buffer.append(" )) ");
 	    }
-	    // 将获取的fimiddle集合 循环得到 invitation_id
-	    // 然后拼接sql
 	}
-	page.setQuerysql(buffer.toString());
-	return invitationDao.SelectAll("selectByPage", page);
+	return buffer.toString();
     }
-
-    public List<FiInvitation> QueryList(String method, PageMybatis page) {
+    public PageMybatis QueryCount(String where) {
+	return invitationDao.SelectCount("selectAllCount",where);
+    }
+    
+    public List<FiInvitation> QueryList(PageMybatis page) {
 	return invitationDao.SelectAll("selectByPage", page);
     }
 
