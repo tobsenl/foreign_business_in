@@ -104,4 +104,7 @@ public class QueryServices {
 	    return null;
 	}
     }
+    public String getAttachmentPath(HttpServletRequest request,String id){
+	return invitationservices.getAttachmentPath(request,id);
+    }
 }

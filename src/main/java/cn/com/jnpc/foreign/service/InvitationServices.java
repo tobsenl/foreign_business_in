@@ -371,6 +371,11 @@ public class InvitationServices {
     public FiInvitation UpdataObject(FiInvitation invitation) {
 	return invitationDao.UptataReturnObj("updateByPrimaryKey", invitation);
     }
+    public String getAttachmentPath(HttpServletRequest request,String url) {
+	 FiAttachment attachement=attchServices.QueryById(url);
+	 String workpath=Untils.getWorkPath(request,Untils.getSpitpath(attachement.getUrl()));
+	 return workpath;
+    }
 
     public String UpdataInvitation(String invitation_id, String status) {
 	// 在启用邀请函的同时需要动态修改这里的信息.

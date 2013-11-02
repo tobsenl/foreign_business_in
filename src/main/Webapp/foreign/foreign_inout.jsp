@@ -260,7 +260,6 @@
                 			}else{
                 				$("#role").html("无");
                 			}
-                			alert(a.fk_pp_url);
                 			$("#fkPpAttachmentId_").attr("href",a.fk_pp_url);
                 			$("#fkPpAttachmentId_").html("请点击此处查看图片");
                 			if(a.expert_evidence){
@@ -277,7 +276,11 @@
 	                			$("#rpExpEnddate_").html(a.rp_exp_enddate);
 	                			if(a.rp_address){
 	                				var address=a.rp_address.split(',');
-	                				$("#rpAddress_").html(address[0]+address[1]);
+	                				if(address.length > 1){
+	                					$("#rpAddress_").html(address[0]+address[1]);
+	                				}else if(address.length > 0){
+	                					$("#rpAddress_").html(address[0]);
+	                				}
 	                			}
                 			}else{
                 				$("#fkRpPermitKind_").html("无对应签证！");

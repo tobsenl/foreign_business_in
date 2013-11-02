@@ -19,6 +19,7 @@ import cn.com.jnpc.foreign.po.FiInout;
 import cn.com.jnpc.foreign.po.FiInvitation;
 import cn.com.jnpc.foreign.po.FiMiddle;
 import cn.com.jnpc.foreign.service.ForeignServices;
+import cn.com.jnpc.foreign.service.InvitationServices;
 import cn.com.jnpc.foreign.service.QueryServices;
 import cn.com.jnpc.foreign.utils.Untils;
 import cn.com.jnpc.foreign.utils.springContextUtil;
@@ -89,17 +90,22 @@ public class QueryController {
 	FiInvitation invitation=null;
 	List<FiInout> inout=null;
 	List<FiForeigner> foreign_list=null;
+	String picurl=null;
 	JSONObject object = new JSONObject();
 	if(Untils.NotNull(invit_id) && Untils.NotNull(forei_id)){
 	    queryServices = (QueryServices) springContextUtil
 		    .getBean("QueryServices");
 	    invitation=queryServices.getinvitation(invit_id);
+	    if(Untils.NotNull(invitation.getFkAttachmentId())){
+		    picurl=queryServices.getAttachmentPath(request,invitation.getFkAttachmentId());
+	    }
 	    foreign_list=queryServices.getforeignbymiddle(invitation);
 	    inout=queryServices.getinout(invit_id,forei_id);
 	}
 	if (invitation != null) {
 	    object.put("invitation", invitation);
 	    object.put("foreign_list", foreign_list);
+	    object.put("picurl", picurl);
 	    object.put("inout", inout);
 	}
 	

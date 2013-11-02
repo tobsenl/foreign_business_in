@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import cn.com.jnpc.ems.dto.User;
+import cn.com.jnpc.foreign.po.FiAttachment;
 import cn.com.jnpc.foreign.po.FiForeigner;
 import cn.com.jnpc.foreign.po.FiInvitation;
 import cn.com.jnpc.foreign.service.ForeignServices;
@@ -133,17 +134,22 @@ public class invitationController {
     }
 
     @RequestMapping(value = "/AjaxQuery_detail.html")
-    public String AjaxQuery_list(HttpServletRequest request,
+    public String AjaxQuery_detail(HttpServletRequest request,
 	    HttpServletResponse response, Model model) {
 	String invitation_id = Untils.NotNull(request
 		.getParameter("invitation_id")) ? request
 		.getParameter("invitation_id") : "";
 	FiInvitation invitation = null;
 	List foreign_list = null;
+	String picurl=null;
 	invitationServices = (InvitationServices) springContextUtil
 		.getBean("InvitationServices");
 	if (Untils.NotNull(invitation_id)) {
 	    invitation = invitationServices.QueryById(invitation_id);
+	    
+	    if(Untils.NotNull(invitation.getFkAttachmentId())){
+		    picurl=invitationServices.getAttachmentPath(request,invitation.getFkAttachmentId());
+	    }
 	    if (invitation != null && Untils.NotNull(invitation.getId())) {
 		List<FiInvitation> invitation_list = new ArrayList<FiInvitation>();
 		invitation_list.add(invitation);
@@ -165,6 +171,7 @@ public class invitationController {
 	    object.put("leavingDate", DateUtil.dateToString(
 		    invitation.getLeavingDate(), "yyyy-MM-dd"));
 	    object.put("foreign_list", foreign_list);
+	    object.put("picurl", picurl);
 	    list_jason.add(object);
 	}
 	response.setContentType("text/Xml;charset=utf-8");

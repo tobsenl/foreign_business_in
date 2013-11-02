@@ -259,10 +259,14 @@
             			$("#post").val(a.post);
             			$("#role").val(a.role);
             			$("#fk_pp_attachment_id").val(a.fk_pp);
+            			$("#pp_url").attr("href",a.fk_pp_url);
+            			$("#pp_url").html("点击此处查看 护照扫描件");
             			if(a.expert_evidence){
                 			$("input[name='expert_evidence'][value="+a.expert_evidence+"]").prop("checked",true);
                 			$("#upload_ee").css("display","");
                 			$("#fk_ee_attachment_id").val(a.fk_ee);
+                			$("#ee_url").attr("href",a.fk_ee_url);
+                			$("#ee_url").html("点击此处查看 专家证 ");
             			}
             			if(a.rp_kind){
                 			$("#residence_permit_kind").val(a.rp_kind);
@@ -745,6 +749,7 @@
 						<input type="file" id="pp_attachment" name="pp_attachment"> 
 						<input type="hidden" id="fk_pp_attachment_id" name="fk_pp_attachment_id">
 					</div>
+					<a id="pp_url"  href="javascript:;" target="_blank"></a>
 				</div>
 				<div class="row_">
 					<div class="cols1">外国专家证</div>
@@ -759,6 +764,7 @@
 						<input type="file" name="ee_attachment" id="ee_attachment">
 						<input type="hidden" id="fk_ee_attachment_id" name="fk_ee_attachment_id">
 					</div>
+					<a id="ee_url"  href="javascript:;" target="_blank"></a>
 				</div>
 				<div class="row_">
 							<div class="cols1">签证类型</div>

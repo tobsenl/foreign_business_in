@@ -211,7 +211,8 @@ float: left;
             			$("#invitationId").val(v.invitationId);
             			$("#id").val(v.id);
             			$("#fkAttachmentId").val(v.fkAttachmentId);
-            			
+            			$("#picurl").attr("href",v.picurl);
+            			$("#picurl").html("点击此处查看 邀请函");
             			var staytime=v.stayTime;
             			var times=staytime.split(",");
             			var month="";
@@ -689,6 +690,7 @@ float: left;
 					<input type="file" name="attachment" id="attachment">
 					<input type="hidden" name="fkAttachmentId" id="fkAttachmentId">
 				</div>
+				<a id="picurl"  href="javascript:;" target="_blank"></a>
 			</div>
 			<div class="row">
 				<div class="cols1">申请签证有效期<label style="color: red;">*</label></div>

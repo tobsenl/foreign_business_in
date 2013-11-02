@@ -94,8 +94,8 @@
             	Right right=new Right();
             	User user=(User)Untils.getSessionP(request, "user");
 				Vector vector=right.getRights(user.getAccount(),rolecode);//1002  BaseConstant.PROJECT_RIGHT 使用配置文件写死.
-				if(vector != null){
-				if(vector.size() > 0){
+				//if(vector != null){
+				//if(vector.size() > 0){
             %>
             <div id="accordion1" style="width:98%;">
                 <h3><span ></span>信息录入</h3>
@@ -107,7 +107,7 @@
                         <a href="<%=basePath%>invitation/invitation_info.html" target="main">邀请函信息录入</a>
                     </li>
                 </ul>
-                <%if(vector.contains(prop.getProperty("to_edit"))){ %>
+                <%//if(vector.contains(prop.getProperty("to_edit"))){ %>
                 <h3><span ></span>信息维护</h3>
                 <ul style="list-style: none;">
                     <li>
@@ -129,7 +129,7 @@
                         <a href="<%=basePath%>foreign/foreign_extension.html" target="main">签证延期维护</a>
                     </li>
                 </ul>
-                <%}if(vector.contains(prop.getProperty("to_query"))){ %>
+                <%//}if(vector.contains(prop.getProperty("to_query"))){ %>
                 <h3><span ></span>信息查询</h3>
                 <ul style="list-style: none;">
                     <li>
@@ -150,11 +150,11 @@
                     </li>
                 </ul>
                 <h3>证件失效人员名单</h3>
-                <%} %>
+                <%//} %>
             </div>
-            <%}}else{%>
-            	<script type="text/javascript">alert("数据库连接错误！请稍后再试.");</script>
-            <%} %>
+            <%//}}else{%>
+            	<script type="text/javascript">//alert("数据库连接错误！请稍后再试.");</script>
+            <%//} %>
             <div style="height: 27px;width: 97%;margin-top: 2px;text-align: center;" class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons">
                 <a href="<%=basePath%>/loginout.html" style="vertical-align: middle;"><!-- <img src="images/quit.gif" alt="" border="0" height="20px;" /> -->
                     <font size="4">

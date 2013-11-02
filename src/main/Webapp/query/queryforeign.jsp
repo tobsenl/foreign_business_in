@@ -240,7 +240,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                  }
              });
             function clearform(){
-     			$("#invitationDetail").clearForm();
+     			$("#invitation_detail").clearForm();
      			$("#showlist").html("");
      			$("#inoutlist").html("");
      			$("#inoutlist").hide();
@@ -258,7 +258,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             		clearform();
          			var v=data.invitation;
          			$("#invitationId").html(v.invitationId);
-         			
+         			$("#picurl").attr("href",data.picurl);
+        			$("#picurl").html("点击此处查看 邀请函")
          			var times=v.stayTime.split(",");
          			if(times.length > 1){
          				$("#stayTime").html(times[0]+"月"+times[1]+"天");
@@ -410,9 +411,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              	var e=$(e.target);
              	var id=$(e).find("input[type='hidden']").val();
              	
-             	$.getJSON("<%=basePath%>foreign/AjaxQuery_inout.html?foreign_id="+id,function(data){
+             	$.getJSON("<%=basePath%>foreign/AjaxQuery_detail.html?foreign_id="+id,function(data){
              		if(data){
-             			var a=data[0].foreign;
+             			var a=data[0];
              			clearform();
              			$("#name_").html(a.name);
              			if(a.sex == 1){
@@ -434,16 +435,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             			}else{
             				$("#role").html("无");
             			}
-             			$("#fkPpAttachmentId_").html(a.fk_pp_attachment_id);
+             			$("#fkPpAttachmentId_").attr("href",a.fk_pp_url);
+            			$("#fkPpAttachmentId_").html("请点击此处查看图片");
              			if(a.expert_evidence){
              				$("#expertEvidence_").html("有");
 	                			$("#upload_ee").css("display","");
-	                			$("#fkEeAttachmentId_").html(a.fk_ee_attachment_id);
+	                			$("#fkEeAttachmentId_").attr("href",a.fk_ee_url);
+	                			$("#fkEeAttachmentId_").html("请点击此处查看图片");
              			}else{
              				$("#expertEvidence_").html("无");
              			}
              			if(a.residence_permit_kind){
-             				$("#fkRpPermitKind_").html(getmatch(permit_kind,a.residence_permit_kind));
+             				$("#fkRpPermitKind_").html(getmatch(permit_kind,a.rp_kind));
 	                			$("#rpExpEnddate_,#rpAddress_").css("display","");
 	                			$("#rpExpEnddate_").html(a.rp_exp_endDate);
 	                			if(a.rp_Address != ""){
@@ -457,18 +460,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              			}else{
              				$("#fkRpPermitKind_").html("无对应签证！");
              			}
-             			
-             			$.each(data[0].inout_list,function(_dex,_value){
-             				/*
-             				+","+
-             				_value.begintime//出入境时间
-             				_value.type//出境入境
-             				_value.content//来华任务。只有入境有
-             				_value.fk_invitation_id//关联的邀请函
-             				*/
-             				$("#inout_detail").after("<div>"+_value.begintime+","+_value.type+","+_value.content+","+_value.fk_invitation_id+"</div>");
-             				//$("#inout_detail").after("");
-             			});
              		}
              	});
              	$(".form").dialog("open");
@@ -878,7 +869,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="row1" style="width: 100%">
 					<div class="cols1_">护照扫描件</div>
 					<div class="cols2_">
-						<label id="fkPpAttachmentId_"></label>
+						<a id="fkPpAttachmentId_" href="javascript:;" target="_blank"></a>
 					</div>
 				</div>
 				<div class="row1">
@@ -896,7 +887,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="row1" id="upload_ee" style="width: 100%">
 					<div class="cols1_">专家证扫描件</div>
 					<div class="cols2_">
-						<label id="fkEeAttachmentId_"></label>
+						<a id="fkEeAttachmentId_" href="javascript:;" target="_blank"></a>
 					</div>
 				</div>
 				<div class="row1">
@@ -923,12 +914,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<label id="rpAddress_"></label>
 						</div>
 					</div>
-					<div class="row1" style="width: 100%">
-						<div class="cols1_" style="background-color:#BCD2EE;width: 100%;text-align: center;">出入境信息</div>
-						<div class="cols2_">
-							<label id="inout_detail"></label>
-						</div>
-					</div>
 				</form>
         </div>
 		<div class="detail" id="invitation_detail" style="display:none;" title="邀请函信息">
@@ -944,7 +929,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="row2" style="width:100%">
 				<div class="cols1">邀请函上传</div>
 				<div class="cols2">
-					<label id="fkattachmentid"></label>
+					<a id="picurl"  href="javascript:;" target="_blank"></a>
 				</div>
 			</div>
 			<div class="row2" style="width:100%">
@@ -976,6 +961,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 			<div class="row2">
 				<div class="cols3" id="inoutlist">当前邀请函出入境信息</div>
+			</div>
+			<div class="row2" style="width: 100%">
+						<div class="cols1_" style="background-color:#BCD2EE;width: 100%;text-align: center;">出入境信息</div>
+						<div class="cols2_">
+							<label id="inout_detail"></label>
+						</div>
 			</div>
 		</div>
 			</form>
