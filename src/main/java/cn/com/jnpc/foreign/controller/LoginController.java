@@ -19,22 +19,25 @@ public class LoginController{
 	User use=null;
 	boolean flag=false;
 	try {
-		//user=EMSUtils.findUserByAccount(userId);
-	    if(user!=null && Untils.NotNull(user.getUserid()) && Untils.NotNull(user.getPasswd())){
-		flag= Untils.verifyUser( user.getUserid(),user.getPasswd());
-		if (flag) {
-			use=(User)EMSUtils.findUserByAccount(user.getUserid());
-			boolean check=Untils.setSessionP(request, "user", (Object)use);
-			if(check){
-			    model.addAttribute("user",use);
-			}else{
-			    model.addAttribute("error","系统错误请联系IT部门");
-			}
-		}else{
-		    model.addAttribute("error","用户名或者密码错误");
-		}
+	    if(Untils.getSessionP(request, "user") != null){
+		flag=true;
 	    }else{
-		model.addAttribute("error","请填写用户名密码!");
+    	    if(user!=null && Untils.NotNull(user.getUserid()) && Untils.NotNull(user.getPasswd())){
+    		flag= Untils.verifyUser( user.getUserid(),user.getPasswd());
+    		if (flag) {
+    			use=(User)EMSUtils.findUserByAccount(user.getUserid());
+    			boolean check=Untils.setSessionP(request, "user", (Object)use);
+    			if(check){
+    			    model.addAttribute("user",use);
+    			}else{
+    			    model.addAttribute("error","系统错误请联系IT部门");
+    			}
+    		}else{
+    		    model.addAttribute("error","用户名或者密码错误");
+    		}
+    	    }else{
+    		model.addAttribute("error","请填写用户名密码!");
+    	    }
 	    }
 	} catch (Exception e) {
 	    System.out.println(e.getCause()); 
@@ -48,6 +51,11 @@ public class LoginController{
     @RequestMapping(value = "/login.do")
     public String login(HttpServletRequest request,Model model){
 	return "index/index";
+    }
+    @RequestMapping(value = "/loginout.html")
+    public String loginout(HttpServletRequest request,Model model){
+	Untils.moveOutSessionP(request,"user");
+	return "/index";
     }
     
 }

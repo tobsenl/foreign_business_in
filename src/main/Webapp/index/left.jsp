@@ -94,6 +94,7 @@
             	Right right=new Right();
             	User user=(User)Untils.getSessionP(request, "user");
 				Vector vector=right.getRights(user.getAccount(),rolecode);//1002  BaseConstant.PROJECT_RIGHT 使用配置文件写死.
+				if(vector != null){
 				if(vector.size() > 0){
             %>
             <div id="accordion1" style="width:98%;">
@@ -151,9 +152,11 @@
                 <h3>证件失效人员名单</h3>
                 <%} %>
             </div>
+            <%}}else{%>
+            	<script type="text/javascript">alert("数据库连接错误！请稍后再试.");</script>
             <%} %>
             <div style="height: 27px;width: 97%;margin-top: 2px;text-align: center;" class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons">
-                <a href="Logout" style="vertical-align: middle;"><!-- <img src="images/quit.gif" alt="" border="0" height="20px;" /> -->
+                <a href="<%=basePath%>/loginout.html" style="vertical-align: middle;"><!-- <img src="images/quit.gif" alt="" border="0" height="20px;" /> -->
                     <font size="4">
                         <b>退出</b>
                     </font>

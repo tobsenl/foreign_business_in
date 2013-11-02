@@ -21,6 +21,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-    This is my JSP page. <br>
+    <script type="text/javascript">
+    	parent.window.location="<%=basePath%>/login.jsp";
+    </script>
   </body>
 </html>

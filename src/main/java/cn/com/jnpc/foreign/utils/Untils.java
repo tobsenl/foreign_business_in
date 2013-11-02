@@ -117,6 +117,16 @@ public final class Untils {
 	    return false;
 	}
     }
+    public static boolean moveOutSessionP(HttpServletRequest req, String value) {
+	HttpSession session = req.getSession();
+	if (getSessionP(req, value) != null) {
+	    session.removeAttribute(value);
+	    return true;
+	} else {
+	    session.setAttribute(value, null);
+	    return true;
+	}
+    }
 
     public static boolean NotNull(Object obj) {
 	if (obj != null && !"".equals(obj.toString().trim())) {
