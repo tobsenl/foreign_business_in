@@ -42,13 +42,13 @@ public final class Untils {
     public final static int BY_CLASSLOADER = 5;
     public final static int BY_SYSTEM_CLASSLOADER = 6;
     public final static int BY_WEBINF = 7;
-
+    public static Properties prop;
     protected static Map<String, String> parameters = new HashMap<String, String>();
 
     @SuppressWarnings("unchecked")
     public static boolean verifyUser(String userId, String password)
 	    throws IOException {
-	Properties prop = loadProperties("/ad_load.properties", 7);
+	prop = loadProperties("/ad_load.properties", 7);
 	boolean flag = true;
 	/*
 	 * String userName = "20021274"; // 用户名称 password = "123456"; // 密码
@@ -204,13 +204,6 @@ public final class Untils {
     public final static String getUrl(MultipartFile blob_v) {
 	String url = null;
 	String path = Untils.GetPath("JavaBean");
-	Properties prop = null;
-	try {
-	    prop = loadProperties("/jdbc.properties", 7);
-	} catch (IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
 	if (prop != null) {
 	    String filename = prop.getProperty("picfile");
 	    String store_path = path.replace("/WEB-INF", "/" + filename + "/")
@@ -223,13 +216,6 @@ public final class Untils {
     public final static String getSpitpath(String bpath){
 	String url = null;
 	String path = Untils.GetPath("JavaBean");
-	Properties prop = null;
-	try {
-	    prop = loadProperties("/jdbc.properties", 7);
-	} catch (IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
 	if (prop != null) {
 	    String filename = prop.getProperty("picfile");
 	    String [] value=bpath.split(filename);
