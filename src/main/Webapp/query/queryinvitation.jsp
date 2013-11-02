@@ -210,87 +210,20 @@ float: left;
         	function getdate(t){
            	 return new Date(t.time);
             }
-        	//查询列表的option
-        	var queryformoptions={
-        			dataType:  'json', 
-                 	success : function(data){
-                 		if(data){
-                 			var content="";
-                 			$.each(data,function(x,inv){
-                 				content=content+"<div class='row_'>";
-                 				content=content+"	<div class='content'>";
-                 				content=content+"		<div class='cols'>";
-                 				content=content+"           <input type='hidden' id='id' value='";
-                 				content=content+inv.id;
-                 				content=content+"	    	'>";
-                 				if(inv.invitationId == null){
-                 				content=content+"	数据缺失";
-                 				}else{
-                 				content=content+inv.invitationId;
-                 				}
-                 				content=content+"		</div>";
-                 				content=content+"		<div class='cols'>";
-                 				if(inv.stayTime == null){
-                 				content=content+"	数据缺失";
-                 				}else{
-                 					var time=inv.stayTime.split(",");
-                 					if(time.length > 1){
-                 						content=content+time[0]+"个月"+time[1]+"天";
-                 					}else if(time.length >0){
-                 						content=content+time[0]+"个月";
-                 					}
-                 				}
-                 				content=content+"		</div>";
-                 				content=content+"		<div class='cols'>";
-                 				if(inv.isUse == 1){
-                 					content=content+"	使用中";
-                 				}else if(inv.isUse == 0){
-                 					content=content+"	未使用";
-                 				}else if(inv.isUse == 2){
-                 					content=content+"	已失效";
-                 				}else if(inv.isUse == null){
-                 					content=content+"	数据缺失";
-                 				}
-                 				content=content+"		</div>";
-                 				content=content+"		<div class='cols'>";
-                 				if(inv.gobackTimes == 1){
-                 					content=content+"		一次往返";
-                 				}if(inv.gobackTimes == 2){
-                 					content=content+"		两次往返";
-                 				}if(inv.gobackTimes == 3){
-                 					content=content+"		多次往返";
-                 				}if(inv.gobackTimes == null){
-                 					content=content+"		数据缺失";
-                 				}
-                 				content=content+"		</div>";
-                 				content=content+"		<div class='cols'>";
-                 				if(inv.arrivedDate == null){
-                 					content=content+"		数据缺失";
-                 				}else{
-                 					content=content+inv.arrivedDate;
-                 				}
-                 				content=content+"		</div>";
-                 				content=content+"		<div class='cols' style='width: 12.5%;'>";
-                 				content=content+"	<div style='width: 100%;text-align: center;' class='edit'>";
-                 				content=content+"                    show";
-                 				content=content+"		<input type='hidden' value='";
-                 				content=content+inv.id;
-                 				content=content+"'>";
-                 				content=content+"</div>";
-                 				content=content+"</div>";
-                 				content=content+"</div>";
-                 				content=content+"</div>";
-                 			});
-                 			$("#row_list").html("");
-                 			$("#row_list").html(content);
-                 		}
-                 	}
-        	};
-        	
-        	//初始化ajaxform
-        	$("#queryform").ajaxForm(queryformoptions);
-        	
-        	
+        	var permit_kind=null;
+        	var company_kind=null;
+        	var country_kind=null;
+        	function getmatch(obj,val){
+        		for(var i=0;i<obj.length;i++){
+        			val=trim(val);
+        			if(obj[i].id==val){
+        				return obj[i].name;
+        			}
+        		}
+        	}
+			function trim(str){ //删除左右两端的空格
+       	     return str.replace(/(^\s*)|(\s*$)/g, "");
+       		}
         	function clearform(){
     			$("#invitationDetail").clearForm();
     			$("#showlist").html("");
@@ -307,12 +240,18 @@ float: left;
          			}
          			//$("input[name='sex'][value='"+a.sex+"']").prop("checked",true);
          			$("#birthDay_").html(a.birthday);
-         			$("#country_").html(a.country);
-         			$("#companyDepartment_").html(a.company_department);
+         			$("#country_").html(getmatch(country_kind,a.country));
+         			$("#companyDepartment_").html(getmatch(company_kind,a.company_department));
          			$("#passportId_").html(a.passport_id);
          			$("#passportExpDate_").html(a.passport_exp_date);
          			$("#post_").html(a.post);
-         			//$("#role").val(a.role);
+         			if(a.role == 1){
+        				$("#role").html("专家");
+        			}else if(a.role == 2){
+        				$("#role").html("配偶");
+        			}else{
+        				$("#role").html("无");
+        			}
          			$("#fkPpAttachmentId_").html(a.fk_pp_attachment_id);
          			if(a.expert_evidence){
          				$("#expertEvidence_").html("有");
@@ -322,10 +261,9 @@ float: left;
          				$("#expertEvidence_").html("无");
          			}
          			if(a.residence_permit_kind){
-                			$("#fkRpPermitKind_").html(a.residence_permit_kind);
+                			$("#fkRpPermitKind_").html(getmatch(permit_kind,a.residence_permit_kind));
                 			$("#rpExpEnddate_,#rpAddress_").css("display","");
                 			$("#rpExpEnddate_").html(a.rp_exp_endDate);
-                			alert(a.rp_Address);
                 			if(a.rp_Address != ""){
                 				var address=a.rp_Address.split(',');
                 				if(address.length > 1){
@@ -348,7 +286,6 @@ float: left;
          				*/
          				$("#inout_detail").after("<div>"+_value.begintime+","+_value.type+","+_value.content+","+_value.fk_invitation_id+"</div>");
          				//$("#inout_detail").after("");
-         				alert(_value.begintime);
          			});
          			$("#foreign_detail").dialog("open");
         		}else{
@@ -372,13 +309,26 @@ float: left;
            	content=content+value.passportId+"";
            	content=content+"</div>";
            	content=content+"<div class='info_cols'>";
-           	content=content+value.country+"";
+           	content=content+getmatch(country_kind,value.country)+"";
            	content=content+"</div>";
            	content=content+"<div class='info_cols'>";
-           	content=content+value.companyDepartment+"";
+           	
+           	var v=getmatch(company_kind,value.companyDepartment+"");
+			   if(v.length>9){
+				   content=content+v.substring(0,9)+"……";
+			   }else{
+				   content=content+v;
+			   }
            	content=content+"</div>";
            	content=content+"<div class='info_cols'>";
-           	content=content+(value.role==""?"(无对应信息)":value.role);
+            if(value.role == 1 ){
+            	content=content+"专家";
+				}else if(value.role == 2){
+					content=content+"配偶";
+				   }else if(value.role == ""){
+					   content=content+"（无对应信息）";
+			   }
+           	//content=content+(value.role==""?"(无对应信息)":value.role);
            	content=content+"</div>";
            	content=content+"<div class='info_cols'>";
            	content=content+(value.isHere=="1"?"是":"否");
@@ -508,6 +458,9 @@ float: left;
                 }
 			});
 			$(".button").on("click","#query",function(){
+				var relurl= getUrl("query");
+				//alert(relurl);
+	        	$("#queryform").attr("action",relurl);
 				$("#queryform").submit();
 			});
 			$(".button").on("click","#clear",function(){
@@ -516,6 +469,9 @@ float: left;
 				$("#invitation_id_q").val("");
 				$("#indate_q").val("");
 				$("input[name='is_use_q']").removeAttr("checked");
+				var relurl= getUrl("query");
+	        	$("#queryform").attr("action",relurl);
+				$("#queryform").submit();
 			});
 			
 			
@@ -603,6 +559,145 @@ float: left;
 				});
 				$("#foreign_id_q").val(temp);
 			});
+			 $.get("<%=basePath%>index/permit_kind.xml",function(y){
+	   				var contrylist=$(y).find("kind");
+	   				if(contrylist.length > 0){
+	   					var j_value="[";
+	   					for(var i=0;i<contrylist.length;i++){
+	   						var o=contrylist[i];
+	   						var id=$(o).find("id").text();
+	   						var name=$(o).find("name").text();
+	   						if(i==contrylist.length-1){
+	   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+	   						}else{
+	   							j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+	   						}
+	   						$("#residence_permit_kind").children().last().after("<option value='"+id+"'>"+name+"</option>")
+	   					}
+	   					j_value=j_value+"]";
+	   					permit_kind=eval("("+j_value+")");
+	   				}
+	   			});
+	            $.get("<%=basePath%>index/country.xml",function(y){
+					var contrylist=$(y).find("country");
+					if(contrylist.length > 0){
+						var j_value="[";
+						for(var i=0;i<contrylist.length;i++){
+							var o=contrylist[i];
+							var id=$(o).find("id").text();
+							var name=$(o).find("name").text();
+							var relname=$(o).find("relname").text();
+							if(i==contrylist.length-1){
+								j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+							}else{
+								j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+							}
+							$("#contry").children().last().after("<option value='"+id+"'>"+relname+"("+name+")</option>")
+						}
+						j_value=j_value+"]";
+						country_kind=eval("("+j_value+")");
+						setCountry(country_kind);
+					}
+				});
+	            $.get("<%=basePath%>index/Company3th.xml",function(y){
+					var contrylist=$(y).find("company");
+					if(contrylist.length > 0){
+						var j_value="[";
+						for(var i=0;i<contrylist.length;i++){
+							var o=contrylist[i];
+							var id=$(o).find("id").text();
+							var name=$(o).find("name").text();
+							if(i==contrylist.length-1){
+								j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}";
+							}else{
+								j_value=j_value+"{'id':'"+id+"','name':'"+name+"'}, ";
+							}
+							$("#post").children().last().after("<option value='"+id+"'>"+name+"</option>")
+						}
+						j_value=j_value+"]";
+						company_kind=eval("("+j_value+")");
+						setCompanyDepartment(company_kind);
+					}
+				});
+	            function setCountry(_kind){
+	   	            $.each($("#row_list").find("[title='country']"),function(c,b){
+	   	         	  $(b).html(getmatch(_kind,$(b).html())); 
+	   	            });
+	   			}
+				function setCompanyDepartment(_kind){
+	   	            $.each($("#row_list").find("[title='companyDepartment']"),function(c,b){
+	   	            	var p=getmatch(_kind,$(b).html());
+	   	            	if(p.length>9){
+	   	            		$(b).html(p.substring(0,9)+"……");
+	   	            	}else{
+	   	            		$(b).html(getmatch(_kind,$(b).html())); 
+	   	            	}
+	   	            });
+	   			}
+	            function getUrl(v){
+					var page_url=$("#pageurl").val();
+					var attr=page_url.split("&");
+					var pageurl="";
+					for(var i=0;i<attr.length;i++){
+						if(v=="page"){
+							if(attr[i].match("pagesize") != null){
+								continue;
+							}else if(attr[i].match("nowpage") != null){
+								continue;
+							}else{
+								if(i==0){
+									pageurl=pageurl+attr[i].replace("invitation_toquery","search_list");
+								}else{
+									pageurl=pageurl+"&"+attr[i];
+								}
+							}
+						}else if(v=="query"){
+							if(attr[i].match("foreign_name") != null){
+								continue;
+							}else if(attr[i].match("passport_id_q") != null){
+								continue;
+							}else if(attr[i].match("contry_q") != null){
+								continue;
+							}else if(attr[i].match("post_q") != null){
+								continue;
+							}else{
+								if(i==0){
+									pageurl=pageurl+attr[i].replace("invitation_toquery","search_list");
+									
+								}else{
+									pageurl=pageurl+"&"+attr[i];
+								}
+							}
+						}
+					}
+					return pageurl;
+				}
+				function check_submit(e){
+					var e=e.target;
+					var name=e.nodeName;
+					var now_index="";
+					if(name == "A"){
+						now_index=$(e).attr("name");
+					}
+					var page_size=$("#pagesize").val();
+					var allcount=$("#allcount").val();
+					var page_url=$("#pageurl").val();
+					var attr=page_url.split("&");
+					var pageurl= getUrl("page");
+					$("#nowpage").val(now_index);
+					if(parseInt(page_size) > parseInt(allcount)){
+						alert("每页显示数不能超出总数据量！请重新填写每页显示数");
+					}else{
+						$("#page").attr("action",pageurl);
+						$("#page").submit();
+					}
+				}
+				$("#pagination-clean").on("click","a",function(e){
+					check_submit(e);
+				});
+				$("#pagination-clean").on("blur","input",function(e){
+					check_submit(e);
+				});
 		});
         </script>
 </head>
@@ -611,7 +706,7 @@ float: left;
 	<div class="container">
 		<jsp:include page="/index/top.jsp" />
 		<div class="body">
-        	<form id="queryform" name="queryform" method="get" action="invitation/invitation_query.html">
+        	<form id="queryform" name="queryform" method="post">
         	<center>邀请函信息查询</center>
             <div class="rows">
 			<div class="colsx1">邀请函ID</div><div class="colsx2"><input type="text" id="invitation_id_q" name="invitation_id_q"></div>
@@ -676,22 +771,50 @@ float: left;
 					</div>
 					</c:forEach>
 					</div>
-            <DIV style="float: right;width: 80%;text-align: right;  padding-right:5%;" >
+            <DIV style="float: right;width: 80%;text-align: right; padding-right:10%;" >
+	                <form id="page" method="post">
 	                 <ul id="pagination-clean" >
-						<li class="previous-off">总记录数：<i></i></li>
-						<li class="previous-off">总页数：<i></i></li>
-						<li class="previous-off" style="padding:0 0 5px 6px;">每页显示数：<b><input type="text" id="countpage" value="" size="1" style="margin:0; padding:0;border:solid 1px #DEDEDE;"></b></li>
-						<li class="previous-off">«Previous</li>
-						<li><a title="转到第1页" href="javascript:;">1</a></li>
-						<li class="active" title="当前页"><a href="javascript:;">2</a></li>
-						<li><a title="转到第3页" href="javascript:;">3</a></li>
-						<li><a title="转到第4页" href="javascript:;">4</a></li>
-						<li><a title="转到第5页" href="javascript:;">5</a></li>
-						<li><a title="转到第6页" href="javascript:;">6</a></li>
-						<li><a title="转到第7页" href="javascript:;">7</a></li>
-						<li><a title="转到第8页" href="javascript:;">8</a></li>
-						<li class="next"><a href="?page=2">Next »</a></li>
+						<li class="previous-off">总记录数：<i>${page.allcount }</i></li>
+						<li class="previous-off">总页数：<i>${page.allpagesize }</i></li>
+						<li class="previous-off" style="padding:0 0 5px 6px;">每页显示数：<b><input type="text" id="pagesize" name="pagesize" value="${page.pagesize }" size="1" style="margin:0; padding:0;border:solid 1px #DEDEDE;"></b></li>
+						<c:if test="${page.nowpage == 1 }">
+						<li class="previous-off">Previous</li>
+						</c:if>
+						<c:if test="${page.nowpage != 1 }">
+						<li class="previous-off"><a href ="javascript: ;" name="1" title="首页">&lt;&lt; Previous</a></li>
+						</c:if>
+						
+						<c:if test="${page.nowpage > 3 }">
+							<c:forEach begin="${page.nowpage-2}" end="${page.allpagesize }" var="i">
+							<c:if test="${i == page.nowpage}">
+								<li class="active" title="当前页">${i}</li>  
+							</c:if>
+							<c:if test="${i != page.nowpage}">
+								<li><a href ="javascript: ;" title="转到第${i}页" name="${i}">${i}</a></li> 
+							</c:if>
+							</c:forEach>
+						</c:if>
+						<c:if test="${page.nowpage <= 3 }">
+							<c:forEach begin="1" end="${page.allpagesize }" var="i">
+								<c:if test="${i == page.nowpage}">
+									<li class="active" title="当前页">${i}</li>  
+								</c:if>
+								<c:if test="${i != page.nowpage}">
+									<li><a href ="javascript: ;" title="转到第${i}页" name="${i}">${i}</a></li> 
+								</c:if>
+							</c:forEach>
+						</c:if>
+						<c:if test="${page.allpagesize <=1 }">
+						<li class="previous-off">Next</li>
+						</c:if>
+						<c:if test="${page.allpagesize > 1 }">
+						<li class="next"><a href ="javascript: ;" title="第${page.nowpage+1}页" name="${page.nowpage+1}">Next >></a></li>
+						</c:if>
+						<input type="hidden" id="nowpage" name="nowpage" value="${page.nowpage}"/>
 					</ul>
+				</form>
+				<input type="hidden" id="pageurl" name="pageurl" value="${page.pageurl}"/>
+				<input type="hidden" id="allcount" name="allcount" value="${page.allcount}"/>
             </DIV>
 				</div>
 			</div>
@@ -776,8 +899,8 @@ float: left;
 					</div>
 				</div>
 				<div class="row1" style="width: 100%">
-					<div class="cols1_">单 位</div>
-					<div class="cols2_">
+					<div class="cols1_" style="width: 15%;">单 位</div>
+					<div class="cols2_" style="width: 85%;text-align: center;">
 						<label id="companyDepartment_"></label>
 					</div>
 				</div>
@@ -807,19 +930,25 @@ float: left;
 				<div class="row1">
 					<div class="cols1_">身 份</div>
 					<div class="cols2_">
-						<label id="post_"></label>
+						<label id="role"></label>
 					</div>
 				</div>
 				<div class="row1">
-					<div class="cols1_">外国专家证</div>
+					<div class="cols1_">职  位</div>
 					<div class="cols2_">
-						<label id="expertEvidence_"></label>
+						<label id="post_"></label>
 					</div>
 				</div>
 				<div class="row1" id="upload_ee" style="width: 100%">
 					<div class="cols1_">专家证扫描件</div>
 					<div class="cols2_">
 						<label id="fkEeAttachmentId_"></label>
+					</div>
+				</div>
+				<div class="row1">
+					<div class="cols1_">外国专家证</div>
+					<div class="cols2_">
+						<label id="expertEvidence_"></label>
 					</div>
 				</div>
 				<div class="row1">
@@ -840,8 +969,13 @@ float: left;
 							<label id="rpAddress_"></label>
 						</div>
 					</div>
+					<div class="row1" style="width: 100%">
+						<div class="cols1_" style="background-color:#BCD2EE;width: 100%;text-align: center;">出入境信息</div>
+						<div class="cols2_">
+							<label id="inout_detail"></label>
+						</div>
+					</div>
 				</form>
-				<div style="text-align: center;" id="inout_detail">出入境信息</div>
         	</div>
 	</div>
 	<jsp:include page="/index/bottom.jsp" />

@@ -96,6 +96,7 @@
                 float: left;
                 position: relative;
                 line-height: 15px;
+                overflow: hidden;
             }
             .Crow {
                 width: 100%;
@@ -259,11 +260,14 @@
                 			}else{
                 				$("#role").html("无");
                 			}
-                			$("#fkPpAttachmentId_").html(a.fk_pp_url);
+                			alert(a.fk_pp_url);
+                			$("#fkPpAttachmentId_").attr("href",a.fk_pp_url);
+                			$("#fkPpAttachmentId_").html("请点击此处查看图片");
                 			if(a.expert_evidence){
                 				$("#expertEvidence_").html("有");
 	                			$("#upload_ee").css("display","");
-	                			$("#fkEeAttachmentId_").html(a.fk_ee_url);
+	                			$("#fkEeAttachmentId_").attr("href",a.fk_ee_url);
+	                			$("#fkEeAttachmentId_").html("请点击此处查看图片");
                 			}else{
                 				$("#expertEvidence_").html("无");
                 			}
@@ -729,7 +733,7 @@
 				<div class="row1" style="width: 100%">
 					<div class="cols1_">护照扫描件</div>
 					<div class="cols2_">
-						<label id="fkPpAttachmentId_"></label>
+						<a id="fkPpAttachmentId_" href="javascript:;" target="_blank"></a>
 					</div>
 				</div>
 				<div class="row1">
@@ -747,7 +751,7 @@
 				<div class="row1" id="upload_ee" style="width: 100%">
 					<div class="cols1_">专家证扫描件</div>
 					<div class="cols2_">
-						<label id="fkEeAttachmentId_"></label>
+						<a id="fkEeAttachmentId_" href="javascript:;" target="_blank"></a>
 					</div>
 				</div>
 				<div class="row1">

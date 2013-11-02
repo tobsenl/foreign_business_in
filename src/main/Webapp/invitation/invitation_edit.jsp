@@ -269,6 +269,9 @@ float: left;
 				$("#invitation_id_q").val("");
 				$("#indate_q").val("");
 				$("input[name='is_use_q']").removeAttr("checked");
+				var relurl= getUrl("query");
+	        	$("#queryform").attr("action",relurl);
+				$("#queryform").submit();
 			});
 			
 			
@@ -521,7 +524,6 @@ float: left;
 				var page_size=$("#pagesize").val();
 				var allcount=$("#allcount").val();
 				var page_url=$("#pageurl").val();
-				alert(page_url);
 				var attr=page_url.split("&");
 				var pageurl= getUrl("page");
 				$("#nowpage").val(now_index);

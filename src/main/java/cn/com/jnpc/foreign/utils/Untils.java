@@ -264,8 +264,9 @@ public final class Untils {
     }
 
     public final static String storePic(String path, MultipartFile blob) {
-	String url = checkDisk(path);
 	try {
+	    path=path.replaceAll("\\\\", "/");
+	    String url = checkDisk(path);
 	    String endsuffix = blob.getOriginalFilename().substring(
 		    blob.getOriginalFilename().lastIndexOf("."));
 	    String newFileName = UUID.randomUUID() + endsuffix;
@@ -273,17 +274,18 @@ public final class Untils {
 	    File file = new File(url);
 	    file.mkdirs();
 	    blob.transferTo(file);
+	    return url;
 	} catch (IOException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	    return null;
 	}
-	return url;
     }
 
     public final static String storePic(String path, byte[] content) {
-	String url = checkDisk(path);
 	try {
+	    path=path.replaceAll("\\\\", "/");
+	    String url = checkDisk(path);
 	    File file =null;
 	    if(Untils.NotNull(url)){
 		file = new File(url);		
@@ -304,11 +306,13 @@ public final class Untils {
 
     public final static String checkDisk(String url) {
 	if (NotNull(url)) {
+	    url=url.replaceAll("\\\\", "/");
 	    File file = new File(url);
 	    if (file.exists()) {
 		return file.toString();
 	    } else {
 		if (url.substring(url.lastIndexOf(".")).toCharArray().length <= 4) {
+		    file = new File(url.substring(0, url.lastIndexOf("/")));
 		    file.mkdirs();
 		    return null;
 		} else {
@@ -323,14 +327,14 @@ public final class Untils {
 
     public final static String getWorkPath(HttpServletRequest request,
 	    String url) {
+	url=url.replaceAll("\\\\", "/");
 	String basePath = request.getScheme()
 		+ "://"
 		+ request.getServerName()
 		+ ":"
 		+ request.getServerPort()
 		+ "/"
-		+ request.getContextPath().substring(0,
-			request.getContextPath().indexOf("/")) + "/" + url;
-	return basePath;
+		+ request.getContextPath();
+	return basePath + "/" + url;
     }
 }

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import cn.com.jnpc.foreign.po.FiForeigner;
 import cn.com.jnpc.foreign.po.FiInout;
@@ -73,9 +74,9 @@ public class QueryServices {
 	    return null;
 	}
     }
-    public foreigner getforeignQueryByid(String id){
+    public foreigner getforeignQueryByid(String id,HttpServletRequest request){
 	if(Untils.NotNull(id)){
-	    return foreignservices.QueryByid(id);
+	    return foreignservices.QueryByid(request,id);
 	}else{
 	    return null;
 	}

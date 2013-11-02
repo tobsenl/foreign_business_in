@@ -91,9 +91,9 @@
                 margin-left: 15%;
             }
              .row_button {
-                width: 60%;
+                width: 75%;
 				position: relative;
-				line-height: 30px;
+				line-height: 20px;
 				float: left;
             }
             .Crow {
@@ -418,7 +418,6 @@
 						}else{
 							if(i==0){
 								pageurl=pageurl+attr[i].replace("foreign_edit","search_list");
-								
 							}else{
 								pageurl=pageurl+"&"+attr[i];
 							}
@@ -542,9 +541,10 @@
                 </div>
                 </form>
             </div>
-        </div><br/>
+        </div>
 		<div class="body">
-            <center>
+		<br/>
+            <center style="width:100%;float: left;">
                 专家信息维护列表
             </center>
             <br/>

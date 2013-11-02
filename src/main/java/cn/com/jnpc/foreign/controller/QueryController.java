@@ -127,7 +127,7 @@ public class QueryController {
 	if(Untils.NotNull(invit_id) && Untils.NotNull(forei_id)){
 	    queryServices = (QueryServices) springContextUtil
 		    .getBean("QueryServices");
-	    foreign = queryServices.getforeignQueryByid(forei_id);
+	    foreign = queryServices.getforeignQueryByid(forei_id,request);
 	    inout = queryServices.getinout(invit_id,forei_id);
 	}
 	if (foreign != null) {
