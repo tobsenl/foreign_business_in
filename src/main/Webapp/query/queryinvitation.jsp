@@ -56,6 +56,9 @@ body{
 				position:relative;
 				float:left;
 			}
+			.content > .cols{
+			background-color:#bcd2ee; 
+			}
 			.colsx1{
 				width:13%;
 				text-align:right;
@@ -741,7 +744,7 @@ float: left;
 					<div id="row_list">
 					<c:forEach items="${invitation_list}" var="inv">
 					<div class="row_">
-						<div class="content">
+						<div class="content" style="cursor:pointer;">
 							<div class="cols">${inv.invitationId }<input type="hidden" id="id" value="${inv.id}"></div>
 							<div class="cols">
 							<c:if test='${fn:substringBefore(inv.stayTime,",") != ""}'>

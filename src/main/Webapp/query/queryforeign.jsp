@@ -62,6 +62,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    width: 100%;
 		    float: left;
 		}
+		.content > .cols{
+			background-color:#bcd2ee; 
+		}
 		
 		.title .cols {
 		    font-weight: bold;
@@ -728,8 +731,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
             <div id="row_list">
             <c:forEach items="${foreign_list}" var="foreign" >
-            <div class="row">
-                <div class="content" style="cursor:pointer;background-color:#BCD2EE;">
+            <div class="row" style="cursor:pointer;">
+                <div class="content" >
                     
                     <div class="cols" style="width: 20%;">
                         ${foreign.name}<input type='hidden' id="id" value="${foreign.id}">

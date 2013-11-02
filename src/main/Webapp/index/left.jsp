@@ -146,7 +146,7 @@
                 <h3><span ></span>信息统计</h3>
                 <ul style="list-style: none;">
                     <li>
-                        <a href="#" target="main">专家引进情况统计</a>
+                        <a href="javascript:;" target="main">专家引进情况统计</a>
                     </li>
                 </ul>
                 <h3>证件失效人员名单</h3>
