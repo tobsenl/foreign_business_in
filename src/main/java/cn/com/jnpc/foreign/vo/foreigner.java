@@ -27,10 +27,24 @@ public class foreigner {
     private String role;
 
     private String fk_pp_attachment_id;
+    private String fk_pp_url;
 
+    public String getFk_pp_url() {
+        return fk_pp_url;
+    }
+    public void setFk_pp_url(String fk_pp_url) {
+        this.fk_pp_url = fk_pp_url;
+    }
+    public String getFk_ee_url() {
+        return fk_ee_url;
+    }
+    public void setFk_ee_url(String fk_ee_url) {
+        this.fk_ee_url = fk_ee_url;
+    }
     private String expert_evidence;
 
     private String fk_ee_attachment_id;
+    private String fk_ee_url;
 
     private String fk_rp_permit_id;
 

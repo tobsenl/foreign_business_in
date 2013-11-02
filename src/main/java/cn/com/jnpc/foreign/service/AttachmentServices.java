@@ -16,132 +16,176 @@ import cn.com.jnpc.foreign.utils.Untils;
 
 public class AttachmentServices {
     private static Logger log = Logger.getLogger(AttachmentServices.class);
-    String blob_id=null;
-   
+    String blob_id = null;
+
     FiBlob blob;
-    
+
     fiBlobDao blobdao;
-    
-    @Resource(name="fiBlobDao")
+
+    @Resource(name = "fiBlobDao")
     private void setBlobdao(fiBlobDao blobdao) {
-        this.blobdao = blobdao;
+	this.blobdao = blobdao;
     }
+
     FiAttachment attachment;
-    
+
     attachmentDao attachmentdao;
-    @Resource(name="attachmentDao")
+
+    @Resource(name = "attachmentDao")
     private void setAttachmentdao(attachmentDao attachmentdao) {
-        this.attachmentdao = attachmentdao;
+	this.attachmentdao = attachmentdao;
     }
+
     String b_id;
-    
-    public FiAttachment InsertReturObject(MultipartFile blob_v,User user,int type) {
-	try{
-	    FiBlob blobA=null;
-	    FiAttachment attachmentB=null;
-	if(blob_v.getSize()>0){
-	    blob=new FiBlob();
-	    blob.setFileV(blob_v.getBytes());
-	    blobA=blobdao.InsertReturnObject("insert",blob);
-	}
-	String name=blob_v.getOriginalFilename();
-	attachment=new FiAttachment();
-	attachment.setOldName(name);//文件名称
-	attachment.setType(Integer.parseInt(type+""));//类型 是PP 还是 RP之类
-	if (blobA!=null) {
-	    if(Untils.NotNull(blobA.getId()+"")){
-		    attachment.setFileId(blobA.getId()+"");//对应的附件的存储
+
+    public FiAttachment InsertReturObject(MultipartFile blob_v, User user,
+	    int type) {
+	try {
+	    FiBlob blobA = null;
+	    FiAttachment attachmentB = null;
+	    String path = null;
+	    if (blob_v.getSize() > 0) {
+		blob = new FiBlob();
+		blob.setFileV(blob_v.getBytes());
+		blobA = blobdao.InsertReturnObject("insert", blob);
+		path = Untils.getUrl(blob_v);
 	    }
-	}
-	
-	attachment.setStatus(Integer.parseInt("0"));//是否删除 1 删除 0 未删除
-	attachment.setCreateTime(new Date());//创建时间
-	if(user != null && Untils.NotNull(user.getAccount())){
-	    attachment.setCreateUser(user.getAccount());
-	}
-	attachment.setIsDefer(Integer.parseInt("0"));//是否属于延期
-	attachment.setParentType("1");//父类ID 这里应该填写树状的ID
-	attachmentB=attachmentdao.InsertReturnObject("insert",attachment);
-	if(blobA!=null && attachmentB!=null){
-    	if(Untils.NotNull(attachmentB.getId())){
-    	    blobA.setParentId(attachmentB.getId()+"");
-    	    blobdao.Updata("updateByPrimaryKey", blobA);
-    	}
-	}
-	return attachment;
-	}catch(Exception e){
-	    log.info(e.getMessage());
-	    log.info(e.toString());
-	    log.info(e.getCause());
-	    return null;
-	}finally{
-	    return attachment;
-	}
-    }
-    public FiAttachment UpdataReturnObject(MultipartFile blob_v,User user,String id) {
-	try{
-	    FiBlob blobA=null;
-	    FiAttachment attachmentB=null;
-	    if(Untils.NotNull(id)){		
-		attachment=attachmentdao.SelectByPrimaryKey("selectByPrimaryKey", id);
-	    }else{
-		attachment=new FiAttachment();
+	    String name = blob_v.getOriginalFilename();
+	    attachment = new FiAttachment();
+	    attachment.setOldName(name);// 文件名称
+	    if (Untils.NotNull(path)) {
+		attachment.setUrl(path);
 	    }
-	    if(blob_v.getSize()>0){
-		if(Untils.NotNull(attachment.getFileId())){
-		    blob=blobdao.SelectByPrimaryKey("SelectByPrimaryKey",attachment.getFileId());
-		    blob.setFileV(blob_v.getBytes());
-		    blobA=blobdao.UpdataByPrimaryKey("updateByPrimaryKeyWithBLOBs",blob);
-		}else{
-		    blob=new FiBlob();
-		    blob.setFileV(blob_v.getBytes());
-		    blobA=blobdao.InsertReturnObject("insert",blob);
+	    attachment.setType(Integer.parseInt(type + ""));// 类型 是PP 还是 RP之类
+	    if (blobA != null) {
+		if (Untils.NotNull(blobA.getId() + "")) {
+		    attachment.setFileId(blobA.getId() + "");// 对应的附件的存储
 		}
 	    }
-	    String name=blob_v.getOriginalFilename();
-	    attachment.setOldName(name);//文件名称//类型 是PP 还是 RP之类
-	    if(blobA!=null){
-	    if(Untils.NotNull(blobA.getId())){
-		attachment.setFileId(blobA.getId()+"");//对应的附件的存储
+
+	    attachment.setStatus(Integer.parseInt("0"));// 是否删除 1 删除 0 未删除
+	    attachment.setCreateTime(new Date());// 创建时间
+	    if (user != null && Untils.NotNull(user.getAccount())) {
+		attachment.setCreateUser(user.getAccount());
 	    }
+	    attachment.setIsDefer(Integer.parseInt("0"));// 是否属于延期
+	    attachment.setParentType("1");// 父类ID 这里应该填写树状的ID
+	    attachmentB = attachmentdao
+		    .InsertReturnObject("insert", attachment);
+	    if (blobA != null && attachmentB != null) {
+		if (Untils.NotNull(attachmentB.getId())) {
+		    blobA.setParentId(attachmentB.getId() + "");
+		    blobdao.Updata("updateByPrimaryKey", blobA);
+		}
 	    }
-	    attachment.setStatus(Integer.parseInt("0"));//是否删除 1 删除 0 未删除
-	    attachment.setEditTime(new Date());//创建时间
-	    if(user != null && Untils.NotNull(user.getAccount())){
-		attachment.setEditUser(user.getAccount());
-	    }
-	    attachment.setIsDefer(Integer.parseInt("0"));//是否属于延期
-	    attachment.setParentType("1");//父类ID 这里应该填写树状的ID
-	    if(Untils.NotNull(attachment.getId())){
-		attachmentB=attachmentdao.UpdataReturnObject("updateByPrimaryKey",attachment);
-	    }else{
-		attachmentB=attachmentdao.InsertReturnObject("insert",attachment);
-	    }
-	    //System.out.println("attachment.getId(): "+attachment.getId());
-	    if(blobA!=null && attachmentB!=null){
-    	    if(Untils.NotNull(attachmentB.getId())){
-    		blobA.setParentId(attachmentB.getId()+"");
-    		blobdao.Updata("updateByPrimaryKey", blobA);
-    	    }
-	    }
-//	System.out.println(blob);
-	    return attachmentB;
-	}catch(Exception e){
+	    return attachment;
+	} catch (Exception e) {
 	    log.info(e.getMessage());
 	    log.info(e.toString());
 	    log.info(e.getCause());
 	    return null;
-	}finally{
+	} finally {
 	    return attachment;
 	}
     }
-    public void UpdataObject(FiAttachment attachment){
-	attachmentdao.Updata("updateByPrimaryKey",attachment);
+
+    public FiAttachment UpdataReturnObject(MultipartFile blob_v, User user,
+	    String id) {
+	try {
+	    FiBlob blobA = null;
+	    FiAttachment attachmentB = null;
+	    String path = null;
+	    if (Untils.NotNull(id)) {
+		attachment = attachmentdao.SelectByPrimaryKey(
+			"selectByPrimaryKey", id);
+	    } else {
+		attachment = new FiAttachment();
+	    }
+	    if (blob_v.getSize() > 0) {
+		if (Untils.NotNull(attachment.getFileId())) {
+		    blob = blobdao.SelectByPrimaryKey("SelectByPrimaryKey",
+			    attachment.getFileId());
+		    blob.setFileV(blob_v.getBytes());
+		    blobA = blobdao.UpdataByPrimaryKey(
+			    "updateByPrimaryKeyWithBLOBs", blob);
+		} else {
+		    blob = new FiBlob();
+		    blob.setFileV(blob_v.getBytes());
+		    blobA = blobdao.InsertReturnObject("insert", blob);
+		}
+		path = Untils.getUrl(blob_v);
+	    }
+	    String name = blob_v.getOriginalFilename();
+	    attachment.setOldName(name);// 文件名称//类型 是PP 还是 RP之类
+	    if (blobA != null) {
+		if (Untils.NotNull(blobA.getId())) {
+		    attachment.setFileId(blobA.getId() + "");// 对应的附件的存储
+		}
+	    }
+	    if (Untils.NotNull(path)) {
+		attachment.setUrl(path);
+	    }
+	    attachment.setStatus(Integer.parseInt("0"));// 是否删除 1 删除 0 未删除
+	    attachment.setEditTime(new Date());// 创建时间
+	    if (user != null && Untils.NotNull(user.getAccount())) {
+		attachment.setEditUser(user.getAccount());
+	    }
+	    attachment.setIsDefer(Integer.parseInt("0"));// 是否属于延期
+	    attachment.setParentType("1");// 父类ID 这里应该填写树状的ID
+	    if (Untils.NotNull(attachment.getId())) {
+		attachmentB = attachmentdao.UpdataReturnObject(
+			"updateByPrimaryKey", attachment);
+	    } else {
+		attachmentB = attachmentdao.InsertReturnObject("insert",
+			attachment);
+	    }
+	    // System.out.println("attachment.getId(): "+attachment.getId());
+	    if (blobA != null && attachmentB != null) {
+		if (Untils.NotNull(attachmentB.getId())) {
+		    blobA.setParentId(attachmentB.getId() + "");
+		    blobdao.Updata("updateByPrimaryKey", blobA);
+		}
+	    }
+	    // System.out.println(blob);
+	    return attachmentB;
+	} catch (Exception e) {
+	    log.info(e.getMessage());
+	    log.info(e.toString());
+	    log.info(e.getCause());
+	    return null;
+	} finally {
+	    return attachment;
+	}
     }
-    public FiAttachment QueryById(String id){
-	return attachmentdao.SelectByPrimaryKey("selectByPrimaryKey",id);
+
+    public void UpdataObject(FiAttachment attachment) {
+	attachmentdao.Updata("updateByPrimaryKey", attachment);
     }
-    public void DeleteByID(String id){
-	attachmentdao.DeleteByPrimaryKey("deleteByPrimaryKey",id);
+
+    public FiAttachment QueryById(String id) {
+	FiAttachment attach = attachmentdao.SelectByPrimaryKey(
+		"selectByPrimaryKey", id);
+
+	String path = attach.getUrl();
+	String now_path = Untils.checkDisk(path);
+	if (now_path != null) {
+	    return attach;
+	} else {
+	    if (Untils.NotNull(attach.getFileId())) {
+		FiBlob blob = blobdao.SelectByPrimaryKey("selectByPrimaryKey",
+			attach.getFileId());
+		String url = Untils.getUrl(blob,path,attach.getOldName());
+		if (Untils.NotNull(url)) {
+		    attach.setUrl(url);
+		    UpdataObject(attach);
+		}
+	    }
+	    return attach;
+
+	}
+    }
+
+    public void DeleteByID(String id) {
+	attachmentdao.DeleteByPrimaryKey("deleteByPrimaryKey", id);
     }
 }

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -425,7 +427,7 @@ public class ForeignServices {
      * @param id
      * @return
      */
-    public foreigner QueryByid(String id) {
+    public foreigner QueryByid(HttpServletRequest request,String id) {
 	FiForeigner foreign = foreignDao.SelectById("selectByPrimaryKey",
 		Integer.parseInt(id));
 	foreigner forei = new foreigner();
@@ -442,8 +444,18 @@ public class ForeignServices {
 	forei.setPost(foreign.getPost());
 	forei.setRole(foreign.getRole());
 	forei.setFk_pp_attachment_id(foreign.getFkPpAttachmentId());
-	forei.setExpert_evidence(foreign.getExpertEvidence() + "");
+	if(Untils.NotNull(foreign.getFkPpAttachmentId())){
+	    FiAttachment attachement=sattachment.QueryById(foreign.getFkPpAttachmentId());
+	    String workpath=Untils.getWorkPath(request,Untils.getSpitpath(attachement.getUrl()));
+	    forei.setFk_pp_url(workpath);
+	}
 	forei.setFk_ee_attachment_id(foreign.getFkEeAttachmentId());
+	if(Untils.NotNull(foreign.getFkEeAttachmentId())){
+	    FiAttachment attachement=sattachment.QueryById(foreign.getFkEeAttachmentId());
+	    String workpath=Untils.getWorkPath(request,Untils.getSpitpath(attachement.getUrl()));
+	    forei.setFk_ee_url(workpath);
+	}
+	forei.setExpert_evidence(foreign.getExpertEvidence() + "");
 
 	forei.setFk_invitation_id(foreign.getFkInvitationId());
 	forei.setIs_here(foreign.getIsHere() + "");

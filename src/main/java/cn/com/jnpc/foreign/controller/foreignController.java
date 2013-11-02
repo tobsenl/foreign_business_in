@@ -2,11 +2,8 @@ package cn.com.jnpc.foreign.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +21,6 @@ import cn.com.jnpc.ems.dto.User;
 import cn.com.jnpc.foreign.po.FiForeigner;
 import cn.com.jnpc.foreign.po.FiInout;
 import cn.com.jnpc.foreign.service.ForeignServices;
-import cn.com.jnpc.foreign.service.InOutServices;
 import cn.com.jnpc.foreign.utils.Untils;
 import cn.com.jnpc.foreign.utils.springContextUtil;
 import cn.com.jnpc.foreign.vo.PageMybatis;
@@ -198,37 +194,6 @@ public class foreignController {
 	} else {
 	    return "";
 	}
-	
-//	List list = new ArrayList();
-//	if (foreignlist != null && foreignlist.size() > 0) {
-//	    for (FiForeigner forei : foreignlist) {
-//		JSONObject object = new JSONObject();
-//		object.put("id", forei.getId());
-//		object.put("name", forei.getName());
-//		object.put("sex", forei.getSex());
-//		object.put("country", forei.getCountry());
-//		object.put("companydepartment", forei.getCompanyDepartment());
-//		object.put("passportid", forei.getPassportId());
-//		object.put("role", forei.getRole());
-//		object.put("isHere", forei.getIsHere());
-//		list.add(object);
-//	    }
-//	}
-//	response.setContentType("text/Xml;charset=utf-8");
-//	response.setHeader("Cache-Control", "no-cache");
-//	response.setHeader("pragma", "no-cache");
-//	response.setDateHeader("expires", 0);
-//	PrintWriter out = null;
-//	try {
-//	    out = response.getWriter();
-//	    out.println(list);
-//
-//	} catch (IOException ex1) {
-//	    ex1.printStackTrace();
-//	} finally {
-//	    out.close();
-//	}
-//	return null;
     }
 
     @RequestMapping(value = "/AjaxQuery_inout.html")
@@ -241,7 +206,7 @@ public class foreignController {
 		.getBean("ForeignServices");
 	List<FiInout> inout = null;
 	if (Untils.NotNull(id)) {
-	    foreign = foreignServices.QueryByid(id);
+	    foreign = foreignServices.QueryByid(request,id);
 	    inout = foreignServices.QueryByInOut(id);
 	}
 	List<JSONObject> list = new ArrayList();
@@ -332,7 +297,7 @@ public class foreignController {
 	foreignServices = (ForeignServices) springContextUtil
 		.getBean("ForeignServices");
 	if (Untils.NotNull(id)) {
-	    foreign = foreignServices.QueryByid(id);
+	    foreign = foreignServices.QueryByid(request,id);
 	}
 	List list = new ArrayList();
 	if (foreign != null) {
@@ -348,8 +313,10 @@ public class foreignController {
 	    object.put("post", foreign.getPost());
 	    object.put("role", foreign.getRole());
 	    object.put("fk_pp", foreign.getFk_pp_attachment_id());
+	    object.put("fk_pp_url", foreign.getFk_pp_url());
 	    object.put("expert_evidence", foreign.getExpert_evidence());
 	    object.put("fk_ee", foreign.getFk_ee_attachment_id());
+	    object.put("fk_ee_url", foreign.getFk_ee_url());
 	    object.put("fk_invitation", foreign.getFk_invitation_id());
 	    object.put("fk_permit", foreign.getFk_rp_permit_id());
 	    object.put("is_here", foreign.getIs_here());
