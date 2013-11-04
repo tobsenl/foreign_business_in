@@ -156,6 +156,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    float: left;
 		    text-align: left;
 		}
+		.rowb{
+            	width: 100%;
+            	 position: relative;
+                float: left;
+            }
+            .titleb{
+             width: 100%;
+              position: relative;
+                float: left;
+             }
+            .contentb{
+            width: 100%;
+             position: relative;
+                float: left;
+            }
+            .colsb{
+             position: relative;
+                float: left;
+            }
     </style>
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -197,6 +216,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              });
              function clearform(){
      			$("#form1").clearForm();
+     			$(".rowb").remove();
      			$("#rpExpEnddate_,#rpAddress_,#upload_ee").css("display","none");
              }
              $("#formshow").dialog({
@@ -219,6 +239,58 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	 var id=$(e).find("input[type='hidden']#id").val();
               	$.getJSON("<%=basePath%>query/query_invitation_list.html?foreign_id="+id,show_list_detail);
              });
+             function getdate(t){
+            	 return new Date(t.time);
+             }
+             function addrow(this_,value){
+               	 var content="";
+               	 content=content+"";
+               	 content=content+"<div class='contentb' style='width:100%;'>";
+               	 content=content+"<div class='colsb' style='width:20%;'>";
+               	 if(value.type == 1){
+               	 content=content+"入境";
+               	 }else if(value.type == 0){
+               	 content=content+"出境";
+               	 }else if(value.type == 2){
+               	 content=content+"签证延期";
+               	 }
+               	 content=content+"</div>";
+               	 content=content+"<div class='colsb' style='width:40%;'>";
+               	 if(value.type != 2){
+               		 //alert(value.beginTime);
+               		 var date=getdate(value.beginTime);
+               		 content=content+date.getFullYear()+"-"+(date.getMonth() + 1)+"-"+(date.getDate());
+               	 }else{
+               		 var deferdate=getdate(value.endTime);
+               		 content=content+"签证延期至"+deferdate.getFullYear()+"-"+(deferdate.getMonth() + 1)+"-"+(deferdate.getDate());
+               	 }
+               	 content=content+"</div>";
+               	 content=content+"<div class='colsb' style='width:30%;'>";
+               	 if(value.type == 1){
+               		 content=content+value.content;
+               	 }
+               	 content=content+"</div>";
+               	 content=content+"</div>";
+               	 $(this_).next().append(content);
+                }
+                function title(this_,value){
+               	 var content="";
+               	 content=content+"<div class='rowb' style='width:100%;'>";
+               	 content=content+"<div class='titleb' style='width:100%;'>";
+               	 content=content+"<div class='colsb' style='width:20%;'>";
+               	 content=content+"出入境类型";
+               	 content=content+"</div>";
+               	 content=content+"<div class='colsb' style='width:40%;'>";
+               	 content=content+"时间";
+               	 content=content+"</div>";
+               	 content=content+"<div class='colsb' style='width:30%;'>";
+               	 content=content+"备注";
+               	 content=content+"</div>";
+               	 content=content+"</div>";
+               	 content=content+"</div>";
+               	 $(this_).after(content);
+               	 addrow(this_,value);
+                }
              $("#row_list").on("click",".show",function(e){
              	var e=$(e.target);
              	var id=$(e).find("input[type='hidden']").val();
@@ -284,6 +356,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              				$("#inout_detail").after("<div>"+_value.begintime+","+_value.type+","+_value.content+","+_value.fk_invitation_id+"</div>");
              				//$("#inout_detail").after("");
              			});
+             			
+             			var io=$(data[0].inout_list);
+             			if(io.length > 0){
+             				$("#inoutlist").show();
+             				var position_=$("#inoutall");
+             				for(var k=0;k<io.length;k++){
+             					var j=io[k];
+             					if(k==0){
+             						title(position_,j);
+             					}else{
+             						addrow(position_,j);
+             					}
+             				};
+             			}
              		}
              	});
              	$(".form").dialog("open");
@@ -738,12 +824,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<label id="rpAddress_"></label>
 						</div>
 					</div>
-					<div class="row1" style="width: 100%">
-						<div class="cols1_" style="background-color:#BCD2EE;width: 100%;text-align: center;">出入境信息</div>
-						<div class="cols2_">
-							<label id="inout_detail"></label>
-						</div>
-					</div>
+					<div class="row2" style="width: 100%"  id="inoutlist">
+				<div class="cols1_" style="background-color:#BCD2EE;width: 100%;text-align: center;" id="inoutall">出入境信息</div>		
+			</div>
 				</form>
         </div>
 	</div>

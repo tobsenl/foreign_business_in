@@ -167,8 +167,10 @@ public class AttachmentServices {
 		"selectByPrimaryKey", id);
 
 	String path = attach.getUrl();
-	String now_path = Untils.checkDisk(path);
-	if (now_path != null) {
+	path=path.replaceAll("\\\\", "/");
+	String syspath=Untils.getfilepath();
+	String now_path = Untils.checkDisk(path,syspath);
+	if (!syspath.equals("/"+now_path.replaceAll("\\\\", "/"))) {
 	    return attach;
 	} else {
 	    if (Untils.NotNull(attach.getFileId())) {

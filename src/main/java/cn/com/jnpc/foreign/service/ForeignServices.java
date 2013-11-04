@@ -54,7 +54,6 @@ public class ForeignServices {
 	this.middleservice = middleservice;
     }
 
-    FiResidencePermit permit;
 
     FiForeigner foreigner;
 
@@ -107,6 +106,7 @@ public class ForeignServices {
 	Date passport_exp_date = null;
 	Date birthday = null;
 	Date rp_enddate = null;
+	FiResidencePermit permit=null;
 	String ee_number = Untils.NotNull(foreign.getExpert_evidence()) ? foreign
 		.getExpert_evidence() : "";
 	try {
@@ -236,6 +236,7 @@ public class ForeignServices {
 	Date passport_exp_date = null;
 	Date birthday = null;
 	Date rp_enddate = null;
+	FiResidencePermit permit=null;
 	String ee_number = Untils.NotNull(foreign.getExpert_evidence()) ? foreign
 		.getExpert_evidence() : "";
 	try {

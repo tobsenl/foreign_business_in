@@ -155,7 +155,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    width: 60%;
 		    float: left;
 		    text-align: left;
-		}
+		}.rowb{
+            	width: 100%;
+            	 position: relative;
+                float: left;
+            }
+            .titleb{
+             width: 100%;
+              position: relative;
+                float: left;
+             }
+            .contentb{
+            width: 100%;
+             position: relative;
+                float: left;
+            }
+            .colsb{
+             position: relative;
+                float: left;
+            }
     </style>
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -173,6 +191,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			function trim(str){ //删除左右两端的空格
        	     return str.replace(/(^\s*)|(\s*$)/g, "");
        		}
+			$("#inoutlist").hide();
 			var options={
 					dataType:  'json',
 	          		success : function(datas){
@@ -198,6 +217,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              });
              function clearform(){
      			$("#form1").clearForm();
+     			$(".rowb").remove();
      			$("#rpExpEnddate_,#rpAddress_,#upload_ee").css("display","none");
              }
              $("#formshow").dialog({
@@ -243,7 +263,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              			
              			$("#fkPpAttachmentId_").attr("href",a.fk_pp_url);
             			$("#fkPpAttachmentId_").html("请点击此处查看图片");
-             			if(a.expert_evidence){
+             			if(a.expert_evidence == 1){
              				$("#expertEvidence_").html("有");
 	                			$("#upload_ee").css("display","");
 	                			$("#fkEeAttachmentId_").attr("href",a.fk_ee_url);
@@ -251,7 +271,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              			}else{
              				$("#expertEvidence_").html("无");
              			}
-             			if(a.residence_permit_kind){
+             			if(a.residence_permit_kind != 0){
 	                			$("#fkRpPermitKind_").html(getmatch(permit_kind,a.residence_permit_kind));
 	                			$("#rpExpEnddate_,#rpAddress_").css("display","");
 	                			$("#rpExpEnddate_").html(a.rp_exp_endDate);
@@ -266,22 +286,75 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              			}else{
              				$("#fkRpPermitKind_").html("无对应签证！");
              			}
-             			
-             			$.each(data[0].inout_list,function(_dex,_value){
-             				/*
-             				+","+
-             				_value.begintime//出入境时间
-             				_value.type//出境入境
-             				_value.content//来华任务。只有入境有
-             				_value.fk_invitation_id//关联的邀请函
-             				*/
-             				$("#inout_detail").after("<div>"+_value.begintime+","+_value.type+","+_value.content+","+_value.fk_invitation_id+"</div>");
-             				//$("#inout_detail").after("");
-             			});
+             				var io=data[0].inout_list;
+                 			if(io.length > 0){
+                 				$("#inoutlist").show();
+                 				var position_=$("#inoutall");
+                 				$.each(io,function(k,j){
+                 					if(k==0){
+                 						title(position_,j);
+                 					}else{
+                 						addrow(position_,j);
+                 					}
+                 				});
+                 			}
              		}
              	});
              	$(".form").dialog("open");
              });
+             
+             function getdate(t){
+            	 return new Date(t.time);
+             }
+             function addrow(this_,value){
+               	 var content="";
+               	 content=content+"";
+               	 content=content+"<div class='contentb' style='width:100%;'>";
+               	 content=content+"<div class='colsb' style='width:20%;'>";
+               	 if(value.type == 1){
+               	 content=content+"入境";
+               	 }else if(value.type == 0){
+               	 content=content+"出境";
+               	 }else if(value.type == 2){
+               	 content=content+"签证延期";
+               	 }
+               	 content=content+"</div>";
+               	 content=content+"<div class='colsb' style='width:40%;'>";
+               	 if(value.type != 2){
+               		 //alert(value.beginTime);
+               		 var date=getdate(value.beginTime);
+               		 content=content+date.getFullYear()+"-"+(date.getMonth() + 1)+"-"+(date.getDate());
+               	 }else{
+               		 var deferdate=getdate(value.endTime);
+               		 content=content+"签证延期至"+deferdate.getFullYear()+"-"+(deferdate.getMonth() + 1)+"-"+(deferdate.getDate());
+               	 }
+               	 content=content+"</div>";
+               	 content=content+"<div class='colsb' style='width:30%;'>";
+               	 if(value.type == 1){
+               		 content=content+value.content;
+               	 }
+               	 content=content+"</div>";
+               	 content=content+"</div>";
+               	 $(this_).next().append(content);
+                }
+                function title(this_,value){
+               	 var content="";
+               	 content=content+"<div class='rowb' style='width:100%;'>";
+               	 content=content+"<div class='titleb' style='width:100%;'>";
+               	 content=content+"<div class='colsb' style='width:20%;'>";
+               	 content=content+"出入境类型";
+               	 content=content+"</div>";
+               	 content=content+"<div class='colsb' style='width:40%;'>";
+               	 content=content+"时间";
+               	 content=content+"</div>";
+               	 content=content+"<div class='colsb' style='width:30%;'>";
+               	 content=content+"备注";
+               	 content=content+"</div>";
+               	 content=content+"</div>";
+               	 content=content+"</div>";
+               	 $(this_).after(content);
+               	 addrow(this_,value);
+                }
              
              
             $("#allcheckbox").click(function(e){
@@ -808,12 +881,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<label id="rpAddress_"></label>
 						</div>
 					</div>
-					<div class="row1" style="width: 100%">
-						<div class="cols1_" style="background-color:#BCD2EE;width: 100%;text-align: center;">出入境信息</div>
-						<div class="cols2_">
-							<label id="inout_detail"></label>
-						</div>
-					</div>
+			<div class="row2" style="width: 100%"  id="inoutlist">
+				<div class="cols1_" style="background-color:#BCD2EE;width: 100%;text-align: center;" id="inoutall">出入境信息</div>		
+			</div>
 				</form>
         </div>
 	</div>

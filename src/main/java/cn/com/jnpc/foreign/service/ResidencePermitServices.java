@@ -108,6 +108,7 @@ public class ResidencePermitServices {
 			FiInout inout=new FiInout();
 			inout.setFkForeignerId(foreign.getId()+"");
 			inout.setFkInvitationId(foreign.getFkInvitationId());
+			inout.setBeginTime(new Date());
 			inout.setEndTime(fipermit_.getRpExpEnddate());
 			inout.setStatus(0);
 			inout.setType(2);

@@ -214,11 +214,17 @@ public final class Untils {
     public final static String getUrl(MultipartFile blob_v) {
 	String url = null;
 	String path = Untils.GetPath("JavaBean");
-	if (prop != null) {
-	    String filename = prop.getProperty("picfile");
-	    String store_path = path.replace("/WEB-INF", "/" + filename + "/")
-		    + DateUtil.getCurrentDate("yyyy-MM-dd");
-	    url = storePic(store_path, blob_v);
+	try {
+		prop = loadProperties("/ad_load.properties", 7);
+		if (prop != null) {
+			String filename = prop.getProperty("picfile");
+			String store_path = path.replace("/WEB-INF", "/" + filename + "/")
+					+ DateUtil.getCurrentDate("yyyy-MM-dd");
+			url = storePic(store_path, blob_v);
+		}
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
 	return url;
     }
@@ -226,48 +232,59 @@ public final class Untils {
     public final static String getSpitpath(String bpath){
 	String url = null;
 	String path = Untils.GetPath("JavaBean");
-	if (prop != null) {
-	    String filename = prop.getProperty("picfile");
-	    String [] value=bpath.split(filename);
-	    if(value.length == 2){
-		url=filename+value[1];
-	    }
+	try {
+		prop = loadProperties("/ad_load.properties", 7);
+		if (prop != null) {
+			String filename = prop.getProperty("picfile");
+			String [] value=bpath.split(filename);
+			if(value.length == 2){
+				url=filename+value[1];
+			}
+		}
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	}
 	return url;
     }
     
     public final static String getUrl(FiBlob blob,String oldpath,String filename) {
 	String url = null;
-	String path = Untils.GetPath("JavaBean");
 	String store_path =null;
+	String syspath =getfilepath();
+	String endsuffix=filename.substring(
+			filename.lastIndexOf("."));
+	String newFileName = UUID.randomUUID() + endsuffix;
 	if(Untils.NotNull(oldpath)){
 	    store_path=oldpath;
 	}else{
-	    store_path = path.replace("/WEB-INF", "/temp_store/")
-		+ DateUtil.getCurrentDate("yyyy-MM-dd");
-	    String endsuffix=filename.substring(
-		    filename.lastIndexOf("."));
-	    String newFileName = UUID.randomUUID() + endsuffix;
-	    store_path=store_path + File.separator + newFileName;
+		store_path=syspath + File.separator + newFileName;
 	}
 	byte[] content = blob.getFileV();
 	if (content.length > 0) {
-	    url = storePic(store_path, content);
+	    url = storePic(store_path, content,syspath);
 	    return url;
 	} else {
 	    return null;
 	}
     }
+    public final static String getfilepath() {
+    	String path = Untils.GetPath("JavaBean");
+    	String syspath = path.replace("/WEB-INF", "/temp_store/")
+    			+ DateUtil.getCurrentDate("yyyy-MM-dd");
+    	return syspath;
+    }
 
     public final static String storePic(String path, MultipartFile blob) {
 	try {
 	    path=path.replaceAll("\\\\", "/");
-	    String url = checkDisk(path);
+	    String syspath=getfilepath();
+	    String url = checkDisk(path,syspath);
 	    String endsuffix = blob.getOriginalFilename().substring(
 		    blob.getOriginalFilename().lastIndexOf("."));
 	    String newFileName = UUID.randomUUID() + endsuffix;
 	    url = url + File.separator + newFileName;
-	    File file = new File(url);
+	    File file = new File(url.replaceAll("\\\\", "/"));
 	    file.mkdirs();
 	    blob.transferTo(file);
 	    return url;
@@ -278,15 +295,16 @@ public final class Untils {
 	}
     }
 
-    public final static String storePic(String path, byte[] content) {
+    public final static String storePic(String path, byte[] content,String syspath) {
 	try {
 	    path=path.replaceAll("\\\\", "/");
-	    String url = checkDisk(path);
+	    String url = checkDisk(path,syspath);
 	    File file =null;
+	    url=url+path.substring(path.lastIndexOf("/"),path.toCharArray().length);
 	    if(Untils.NotNull(url)){
-		file = new File(url);		
+		file = new File(url.replaceAll("\\\\", "/"));		
 	    }else{
-		file = new File(path);		
+		return null;	
 	    }
 	    OutputStream outstream = new BufferedOutputStream(
 		    new FileOutputStream(file));
@@ -300,7 +318,7 @@ public final class Untils {
 	}
     }
 
-    public final static String checkDisk(String url) {
+    public final static String checkDisk(String url,String syspath) {
 	if (NotNull(url)) {
 	    url=url.replaceAll("\\\\", "/");
 	    File file = new File(url);
@@ -308,9 +326,9 @@ public final class Untils {
 		return file.toString();
 	    } else {
 		if (url.substring(url.lastIndexOf(".")).toCharArray().length <= 4) {
-		    file = new File(url.substring(0, url.lastIndexOf("/")));
+		    file = new File(syspath);
 		    file.mkdirs();
-		    return null;
+		    return file.toString();
 		} else {
 		    file.mkdirs();
 		    return file.toString();

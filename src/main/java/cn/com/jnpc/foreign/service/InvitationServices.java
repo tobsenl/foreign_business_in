@@ -412,6 +412,7 @@ public class InvitationServices {
 		FiForeigner foreign = foreignservice.QueryByid_fi(fiMiddle
 			.getFkPersonId());
 		foreign.setFkInvitationId(invitation.getId() + "");
+		foreign.setFkBeuse(Integer.parseInt(status));
 		foreignservice.UpdataObject(foreign);
 	    }
 	    UpdataObject(invitation);

@@ -179,6 +179,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 float: left;
                 width: 16.5%;
             }
+            .rowb{
+            	width: 100%;
+            	 position: relative;
+                float: left;
+            }
+            .titleb{
+             width: 100%;
+              position: relative;
+                float: left;
+             }
+            .contentb{
+            width: 100%;
+             position: relative;
+                float: left;
+            }
+            .colsb{
+             position: relative;
+                float: left;
+            }
+            
     </style>
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -242,23 +262,65 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                      }
                  }
              });
-            function clearform(){
+            function clearforminvi(){
      			$("#invitation_detail").clearForm();
      			$("#showlist").html("");
-     			$("#inoutlist").html("");
+     			$(".rowb").remove();
      			$("#inoutlist").hide();
  			}
-            function addrow(n,m){
-            	
+            function addrow(this_,value){
+           	 var content="";
+           	 content=content+"";
+           	 content=content+"<div class='contentb' style='width:100%;'>";
+           	 content=content+"<div class='colsb' style='width:20%;'>";
+           	 if(value.type == 1){
+           	 content=content+"入境";
+           	 }else if(value.type == 0){
+           	 content=content+"出境";
+           	 }else if(value.type == 2){
+           	 content=content+"签证延期";
+           	 }
+           	 content=content+"</div>";
+           	 content=content+"<div class='colsb' style='width:40%;'>";
+           	 if(value.type != 2){
+           		 //alert(value.beginTime);
+           		 var date=getdate(value.beginTime);
+           		 content=content+date.getFullYear()+"-"+(date.getMonth() + 1)+"-"+(date.getDate());
+           	 }else{
+           		 var deferdate=getdate(value.endTime);
+           		 content=content+"签证延期至"+deferdate.getFullYear()+"-"+(deferdate.getMonth() + 1)+"-"+(deferdate.getDate());
+           	 }
+           	 content=content+"</div>";
+           	 content=content+"<div class='colsb' style='width:30%;'>";
+           	 if(value.type == 1){
+           		 content=content+value.content;
+           	 }
+           	 content=content+"</div>";
+           	 content=content+"</div>";
+           	 $(this_).next().append(content);
             }
-            function title(n,m){
-            	var content="";
-            	content=content+"";
-            	addrow()
+            function title(this_,value){
+           	 var content="";
+           	 content=content+"<div class='rowb' style='width:100%;'>";
+           	 content=content+"<div class='titleb' style='width:100%;'>";
+           	 content=content+"<div class='colsb' style='width:20%;'>";
+           	 content=content+"出入境类型";
+           	 content=content+"</div>";
+           	 content=content+"<div class='colsb' style='width:40%;'>";
+           	 content=content+"时间";
+           	 content=content+"</div>";
+           	 content=content+"<div class='colsb' style='width:30%;'>";
+           	 content=content+"备注";
+           	 content=content+"</div>";
+           	 content=content+"</div>";
+           	 content=content+"</div>";
+           	 $(this_).after(content);
+           	 addrow(this_,value);
             }
+            
              var showinvitation=function(data){
             	 if(data){
-            		clearform();
+            		clearforminvi();
          			var v=data.invitation;
          			$("#invitationId").html(v.invitationId);
          			$("#picurl").attr("href",data.picurl);
@@ -280,26 +342,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          			var leavingDate=getdate(v.leavingDate);
          			$("#arrivedDate").html(arrivedDate.getFullYear()+"-"+(arrivedDate.getMonth() + 1)+"-"+(arrivedDate.getDate()));
          			$("#leavingDate").html(leavingDate.getFullYear()+"-"+(leavingDate.getMonth() + 1)+"-"+(leavingDate.getDate()));
-         			/* 通过人查到邀请函 此邀请函只显示当前此人的出入境信息
-         			if(data.foreign_list !=null && data.foreign_list.length > 0){
-         				$.each(eval(data.foreign_list),function(i,foreign){
-         					$("#showlist").append("<div class='cols4'><input type='hidden' name='foreign_id"+(i+1)+"' value='"+foreign.id+"' /><div class='clos5'> 姓名: "+foreign.name+ " 护照号（ "+foreign.passportId+" ）</div><div class='clos6'>X</div></div>");
-         				});
-         			}*/
-         			var io=data.inout;
+         			
+         			var io=$(data.inout);
          			if(io.length > 0){
-         				var position_=$("#inoutlist");
-         				$.each(io,function(k,j){
+         				$("#inoutlist").show();
+         				var position_=$("#inoutall");
+         				for(var k=0;k<io.length;k++){
+         					var j=io[k];
          					if(k==0){
          						title(position_,j);
          					}else{
          						addrow(position_,j);
          					}
-         					if(j.type=="1"){
-         						
-         					}
-         				});
-         				position_.show();
+         				};
          			}
          			$("#invitation_detail").dialog("open");
             	 }else{
@@ -962,14 +1017,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="row2" style="disable:true;">
 				<div class="cols3" id="showlist">所含外籍人员</div>
 			</div>
-			<div class="row2">
-				<div class="cols3" id="inoutlist">当前邀请函出入境信息</div>
-			</div>
-			<div class="row2" style="width: 100%">
-						<div class="cols1_" style="background-color:#BCD2EE;width: 100%;text-align: center;">出入境信息</div>
-						<div class="cols2_">
-							<label id="inout_detail"></label>
-						</div>
+			<div class="row2" style="width: 100%"  id="inoutlist">
+				<div class="cols1_" style="background-color:#BCD2EE;width: 100%;text-align: center;" id="inoutall">出入境信息</div>		
 			</div>
 		</div>
 			</form>
