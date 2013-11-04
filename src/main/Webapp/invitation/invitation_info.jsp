@@ -234,6 +234,10 @@ float: left;
    			 	}
             });
         });
+        $(".button").on("mouseup","input[type='reset']",function(){
+        	$("#showlist .cols4").remove();
+        	$("#numb").val("0");
+		});
 	});
 </script>
 </head>
@@ -297,7 +301,7 @@ float: left;
 				<div class="cols3" id="showlist">所含外籍人员</div>
 			</div>
 			<div class="button">
-				<input type="button" value="提	交" onclick="f_subinv();">&nbsp &nbsp &nbsp<input type="button"
+				<input type="button" value="提	交" onclick="f_subinv();">&nbsp &nbsp &nbsp<input type="reset"
 					value="重	置">
 			</div>
 		</div>

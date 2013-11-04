@@ -216,6 +216,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              });
              function clearform(){
      			$("#form1").clearForm();
+
+     			$("#form1").find("label").html("");
+            	$("#form1").find("a").html("");
+            	$("#form1").find("a").attr("href","");
      			$(".rowb").remove();
      			$("#rpExpEnddate_,#rpAddress_,#upload_ee").css("display","none");
              }

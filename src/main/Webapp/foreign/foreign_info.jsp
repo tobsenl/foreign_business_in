@@ -180,6 +180,10 @@ body {
 					}
 				}
 			});
+			$(".button").on("mousedown","input[type='reset']",function(){
+				$("#rp_div").css("display","none");
+				$("#upload_ee").css("display","none");
+			});
 	});
 </script>
 </head>
@@ -348,7 +352,7 @@ body {
 					</div>
 				</div>
 				<div class="button">
-					<input type="button" onclick="f_submit();" value="提	交">&nbsp; &nbsp; &nbsp;<input type="button"
+					<input type="button" onclick="f_submit();" value="提	交">&nbsp; &nbsp; &nbsp;<input type="reset"
 						value="重	置">
 				</div>
 				<div class="button"></div>

@@ -248,9 +248,16 @@ float: left;
        		}
         	function clearform(){
     			$("#invitationDetail").clearForm();
+     			$("#invitationDetail").find("label").html("");
+            	$("#invitationDetail").find("a").html("");
+            	$("#invitationDetail").find("a").attr("href","");
     			$("#showlist").html("");
 			}
         	function clearformfore(){
+        		$("#foreign_detail").clearForm();
+        		$("#foreign_detail").find("label").html("");
+            	$("#foreign_detail").find("a").html("");
+            	$("#foreign_detail").find("a").attr("href","");
     			$(".rowb").remove();
         	}
         	function addrow(this_,value){
@@ -543,13 +550,6 @@ float: left;
 			});
 			$(".button").on("click","#clear",function(){
 				$("#foreign_id_q").val("");
-				$("#foreign_name_q").val("");
-				$("#invitation_id_q").val("");
-				$("#indate_q").val("");
-				$("input[name='is_use_q']").removeAttr("checked");
-				var relurl= getUrl("query");
-	        	$("#queryform").attr("action",relurl);
-				$("#queryform").submit();
 			});
 			
 			
@@ -797,7 +797,7 @@ float: left;
 			<input type="text" id="foreign_name_q" name="foreign_name_q" size="100"/>
 			<input type="hidden" id="foreign_id_q" name="foreign_id_q"></div>
 			</div>
-			<div class="button" style="float: left;position: relative;"><input type="button" id="query" name="query" value="查询">&nbsp; &nbsp; &nbsp;<input id="clear" name="clear" type="button" value="清空"></div>
+			<div class="button" style="float: left;position: relative;"><input type="button" id="query" name="query" value="查询">&nbsp; &nbsp; &nbsp;<input id="clear" name="clear" type="reset" value="清空"></div>
 			</form>
 			
 			<div class="table_">

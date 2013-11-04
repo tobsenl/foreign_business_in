@@ -240,6 +240,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              });
              function clearform(){
      			$("#form1").clearForm();
+     			$("#form1").find("label").html("");
+            	$("#form1").find("a").html("");
+            	$("#form1").find("a").attr("href","");
      			$("#rpExpEnddate_,#rpAddress_,#upload_ee").css("display","none");
              }
              $("#formshow").dialog({
@@ -264,6 +267,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              });
             function clearforminvi(){
      			$("#invitation_detail").clearForm();
+     			$("#invitation_detail").find("label").html("");
+            	$("#invitation_detail").find("a").html("");
+            	$("#invitation_detail").find("a").attr("href","");
      			$("#showlist").html("");
      			$(".rowb").remove();
      			$("#inoutlist").hide();

@@ -203,6 +203,9 @@
                 });
                 function clearform(){
         			$("#form1").clearForm();
+        			$("#form1").find("label").html("");
+                	$("#form1").find("a").html("");
+                	$("#form1").find("a").attr("href","");
         			$("#upload_ee").css("display","none");
         			$("#rpExpEnddate_,#rpAddress_").css("display","none");
                 }
@@ -212,6 +215,9 @@
                     width: 700,
                     buttons: {
                         关闭: function(){
+                        	$("#inoutform").find("label").html("");
+                        	$("#inoutform").find("a").html("");
+                        	$("#inoutform").find("a").attr("href","");
                             $(this).dialog("close");
                         }
                     }
@@ -406,6 +412,7 @@
 	   		   				if(value !=""){
 	   		   					$("#extension_pp").html(value);
 	   		   				}
+	   		   				$("#extensionform").clearForm();
 	   		   				$("#extension").dialog("open");
 	   					}else{
 	   						alert("请勾选要修改的人员后再点击尝试！");

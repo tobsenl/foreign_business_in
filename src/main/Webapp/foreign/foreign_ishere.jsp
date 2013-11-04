@@ -217,6 +217,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              });
              function clearform(){
      			$("#form1").clearForm();
+     			$("#form1").find("label").html("");
+            	$("#form1").find("a").html("");
+            	$("#form1").find("a").attr("href","");
      			$(".rowb").remove();
      			$("#rpExpEnddate_,#rpAddress_,#upload_ee").css("display","none");
              }
@@ -226,6 +229,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                  width: 700,
                  buttons: {
                      关闭: function(){
+                    	$("#formshow").find("label").html("");
+                     	$("#formshow").find("a").html("");
+                     	$("#formshow").find("a").attr("href","");
                          $(this).dialog("close");
                      }
                  }
@@ -300,6 +306,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                  			}
              		}
              	});
+             	
              	$(".form").dialog("open");
              });
              
