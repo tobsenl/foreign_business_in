@@ -262,7 +262,6 @@ public class foreignController {
 
 		}
 	    }
-
 	    message = "是否再连信息保存成功！";
 	} catch (Exception e) {
 	    message = "是否再连信息保存失败！";

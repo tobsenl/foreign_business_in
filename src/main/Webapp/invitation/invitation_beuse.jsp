@@ -328,7 +328,7 @@ float: left;
 				}
 			});
 			
-			var checklist =function(formData, jqForm, options){
+			function checklist(e){
 				var temp=$("input[type='checkbox']:checked");
    				var id="";
    				var value="";
@@ -367,18 +367,32 @@ float: left;
 					dataType:  'json',
 	          		success : function(datas){
 						if(datas){
-							alert(datas);
+							alert(datas.message);
 						}
-					},
-					beforeSubmit:checklist//这里验证之后还是会提交
+					}
 			};
+			$("#foreign_here").ajaxForm(options);
 			$("#used").click(function(){
 				$("input[name='usedit_status']").val("1");
-				$(this).ajaxSubmit(options);
+				var a=$("input[type='checkbox']:checked");
+				if(a.length >= 1){
+					$("#foreign_here").attr("action","<%=basePath%>invitation/invitation_usedit.html");
+					$("#foreign_here").submit();
+				}else{   					
+   					alert("请勾选要修改的人员后再点击尝试！");
+   					return false;
+   				}
 			});
 			$("#lapse").click(function(){
 				$("input[name='usedit_status']").val("2");
-				$(this).ajaxSubmit(options);
+				var a=$("input[type='checkbox']:checked");
+				if(a.length >= 1){
+					$("#foreign_here").attr("action","<%=basePath%>invitation/invitation_usedit.html");
+					$("#foreign_here").submit();
+				}else{   					
+   					alert("请勾选要修改的人员后再点击尝试！");
+   					return false;
+   				}
 			});
 			
 			
@@ -550,14 +564,14 @@ float: left;
 					</div>
 					</c:forEach>
 					</div>
-<form action="<%=basePath%>invitation/invitation_usedit.html" method="post" id="foreign_here">
+<form  method="post" id="foreign_here">
 			<div class="row_" style="float: left;width: 20%;">
 			<input type="hidden" id="usedit_id_list" name="usedit_id_list" />
             <input type="hidden" name="usedit_status"/>
-                <button id="used" name="used">
+                <button id="used" name="used" type="button">
                     	启用
                 </button>
-                <button id="lapse" name="lapse">
+                <button id="lapse" name="lapse" type="button">
                     	设为失效
                 </button>
             </div>

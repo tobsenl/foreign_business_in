@@ -595,11 +595,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                     </div>
                     <center>
-		                <button id="query" >
+		                <button id="query" type="button">
 		                    查询
 		                </button>
 		                &nbsp; &nbsp; &nbsp;
-		                <button id="clear">
+		                <button id="clear" type="button">
 		                    清空
 		                </button>
 		            </center>

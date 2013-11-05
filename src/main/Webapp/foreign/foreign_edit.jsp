@@ -534,11 +534,11 @@
                     </div>
                 <div class="row_button">
                     <center>
-		                <button id="query" >
+		                <button id="query" type="button">
 		                    查询
 		                </button>
 		                &nbsp; &nbsp; &nbsp;
-		                <button id="clear">
+		                <button id="clear" type="button">
 		                    清空
 		                </button>
 		            </center>
@@ -619,7 +619,7 @@
             </c:forEach>
             </div>
             <div class="row" style="float: left;width: 10%; height:15px">
-                <button>
+                <button type="button">
                     批量删除
                 </button>
             </div>

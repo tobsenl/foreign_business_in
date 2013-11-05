@@ -614,7 +614,7 @@ float: left;
 					</c:forEach>
 					</div>
 					<div class="row_" style="float: left;width: 10%;">
-                <button>
+                <button type="button">
                     批量删除
                 </button>
             </div>

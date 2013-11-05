@@ -196,11 +196,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					dataType:  'json',
 	          		success : function(datas){
 						if(datas){
-							alert(datas);
+							alert(datas.message);
 						}
-					},
-					beforeSubmit:checklist//这里验证之后还是会提交
+					}
 				};
+			$("#foreign_here").ajaxForm(options);
              $("#message").dialog({
                  autoOpen: false,
                  modal: true,
@@ -371,6 +371,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          		   $("input[type='checkbox']").attr("checked",'true');
          	   }
             });
+            $(".body").on("blur","input[type='checkbox']",checklist);
             
             $("#query").click(function(){
          	   var relurl= getUrl("query");
@@ -442,7 +443,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					setCompanyDepartment(company_kind);
 				}
 			});
-			var checklist =function(formData, jqForm, options){
+			function checklist(e){
 				var temp=$("input[type='checkbox']:checked");
    				var id="";
    				var value="";
@@ -471,22 +472,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    				}
    				if(id != ""){
    					$("#inhere_id_list").val(id);
-   					return true;
-   				}else{   					
-   					alert("请勾选要修改的人员后再点击尝试！");
-   					return false;
    				}
+   				alert($("#inhere_id_list").val());
 			};
 			$("#query").click(function(){
 				$("#queryform").submit();
 			});
 			$("#ishere").click(function(){
 				$("input[name='is_here_status']").val("1");
-				$(this).ajaxSubmit(options);
+				var a=$("input[type='checkbox']:checked");
+				if(a.length <= 0 ){
+   					alert("请勾选要修改的人员后再点击尝试！");
+				}else{   					
+					$("#foreign_here").attr("action","<%=basePath%>foreign/foreign_hereis.html");
+					$("#foreign_here").submit();
+   				}
 			});
 			$("#ishere_no").click(function(){
 				$("input[name='is_here_status']").val("0");
-				$(this).ajaxSubmit(options);
+				var a=$("input[type='checkbox']:checked");
+				if(a.length <= 0){
+   					alert("请勾选要修改的人员后再点击尝试！");
+				}else{   					
+					$("#foreign_here").attr("action","<%=basePath%>foreign/foreign_hereis.html");
+					$("#foreign_here").submit();
+   				}
 			});
 			function setCountry(_kind){
    	            $.each($("#row_list").find("[title='country']"),function(c,b){
@@ -641,11 +651,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                     </div>
                     <center>
-		                <button id="query" >
+		                <button id="query" type="button">
 		                    查询
 		                </button>
 		                &nbsp; &nbsp; &nbsp;
-		                <button id="clear">
+		                <button id="clear" type="button">
 		                    清空
 		                </button>
 		            </center>
@@ -732,14 +742,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
             </c:forEach>
             </div>
-            <form action="<%=basePath%>foreign/foreign_hereis.html" method="post" id="foreign_here">
+            <form  method="post" id="foreign_here">
             <div  class="row" style="float: left;padding-left: 2%;">
             <input type="hidden" id="inhere_id_list" name="inhere_id_list" />
             <input type="hidden" name="is_here_status"/>
-                <button id="ishere">
+                <button id="ishere" type="button">
                     在连
                 </button>
-                <button id="ishere_no">
+                <button id="ishere_no" type="button">
                     不在连
                 </button>
             </div>

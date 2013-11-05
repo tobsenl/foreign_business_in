@@ -253,6 +253,8 @@ public class invitationController {
 		    }
 
 		}
+	    }else{
+		message = "需要启用的邀请函id为空！";
 	    }
 	} catch (Exception e) {
 	    message = "邀请函" + (status.equals("1") ? "启用失败" : "无法正常失效");

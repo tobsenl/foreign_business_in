@@ -556,11 +556,11 @@
                     </div>
                 <div class="row_button">
                     <center>
-		                <button id="query" >
+		                <button id="query" type="button">
 		                    查询
 		                </button>
 		                &nbsp; &nbsp; &nbsp;
-		                <button id="clear">
+		                <button id="clear" type="button">
 		                    清空
 		                </button>
 		            </center>
@@ -641,7 +641,7 @@
             </c:forEach>
             </div>
             <div class="row" style="float: left;padding-left: 2%;">
-                <button id="inout_write">
+                <button id="inout_write" type="button">
                     出入境资料填写
                 </button>
             </div>

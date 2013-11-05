@@ -570,11 +570,11 @@
                     </div>
                 <div class="row_button">
                     <center>
-		                <button id="query" >
+		                <button id="query" type="button">
 		                    查询
 		                </button>
 		                &nbsp; &nbsp; &nbsp;
-		                <button id="clear">
+		                <button id="clear" type="button">
 		                    清空
 		                </button>
 		            </center>
@@ -654,7 +654,7 @@
             </c:forEach>
             </div>
             <div class="row" style="float:left;margin-left:2%;">
-                <button id="extension_write">
+                <button id="extension_write" type="button">
                    签证延期资料填写
                 </button>
             </div>
