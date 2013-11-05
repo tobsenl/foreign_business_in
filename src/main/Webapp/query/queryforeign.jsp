@@ -491,7 +491,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              			$("#companyDepartment_").html(getmatch(company_kind,a.company_department));
              			$("#passportId_").html(a.passport_id);
              			$("#passportExpDate_").html(a.passport_exp_date);
-             			$("#post_").html(a.post);
+             			if(a.post==null){
+            				$("#post_").html("无");
+            			}else{
+            				$("#post_").html(a.post);
+            			}
              			if(a.role == 1){
             				$("#role").html("专家");
             			}else if(a.role == 2){
@@ -501,25 +505,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             			}
              			$("#fkPpAttachmentId_").attr("href",a.fk_pp_url);
             			$("#fkPpAttachmentId_").html("请点击此处查看图片");
-             			if(a.expert_evidence){
+             			if(a.expert_evidence ==1){
              				$("#expertEvidence_").html("有");
 	                			$("#upload_ee").css("display","");
 	                			$("#fkEeAttachmentId_").attr("href",a.fk_ee_url);
 	                			$("#fkEeAttachmentId_").html("请点击此处查看图片");
              			}else{
+             				$("#upload_ee").css("display","none");
              				$("#expertEvidence_").html("无");
              			}
-             			if(a.residence_permit_kind){
+             			$("#exp,#add").css("display","none");
+             			if(a.rp_kind){
              				$("#fkRpPermitKind_").html(getmatch(permit_kind,a.rp_kind));
 	                			$("#rpExpEnddate_,#rpAddress_").css("display","");
-	                			$("#rpExpEnddate_").html(a.rp_exp_endDate);
-	                			if(a.rp_Address != ""){
-	                				var address=a.rp_Address.split(',');
+	                			$("#rpExpEnddate_").html(a.rp_exp_enddate);
+	                			if(a.rp_address != ""){
+	                				$("#exp,#add").css("display","");
+	                				var address=a.rp_address.split(',');
 	                				if(address.length > 1){
 	                					$("#rpAddress_").html(address[0]+address[1]);
 	                				}else if(address.length > 0){
 	                					$("#rpAddress_").html(address[0]);
 	                				}
+	                			}else{
+		                			$("#exp,#add").css("display","none");
 	                			}
              			}else{
              				$("#fkRpPermitKind_").html("无对应签证！");
@@ -948,16 +957,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label id="post_"></label>
 					</div>
 				</div>
-				<div class="row1" id="upload_ee" style="width: 100%">
-					<div class="cols1_">专家证扫描件</div>
-					<div class="cols2_">
-						<a id="fkEeAttachmentId_" href="javascript:;" target="_blank"></a>
-					</div>
-				</div>
 				<div class="row1">
 					<div class="cols1_">外国专家证</div>
 					<div class="cols2_">
 						<label id="expertEvidence_"></label>
+					</div>
+				</div>
+				<div class="row1" id="upload_ee" style="width: 100%">
+					<div class="cols1_">专家证扫描件</div>
+					<div class="cols2_">
+						<a id="fkEeAttachmentId_" href="javascript:;" target="_blank"></a>
 					</div>
 				</div>
 				<div class="row1">
@@ -966,13 +975,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<label id="fkRpPermitKind_"></label>
 					</div>
 				</div>
-					<div class="row1">
+					<div class="row1" id="exp">
 								<div class="cols1_">签证有限期至</div>
 								<div class="cols2_">
 									<label id="rpExpEnddate_"></label>
 								</div>
 					</div>
-					<div class="row1">
+					<div class="row1" id="add">
 						<div class="cols1_">居留地址</div>
 						<div class="cols2_">
 							<label id="rpAddress_"></label>

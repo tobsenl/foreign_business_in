@@ -86,6 +86,10 @@ function f_subinv(){
 		alert("请输入的月份！");
 		 return false;
 	}
+	if(isNaN(month)){
+		alert("请输入数字!");
+		return false;
+	}
 	if(parseInt(month)>12||parseInt(month)<=0){
 		alert("请输入正确的月份");
 		return false;
@@ -95,7 +99,11 @@ function f_subinv(){
 		alert("请输入的日期！");
 		 return false;
 	}
-	if(parseInt(day)>31||parseInt(month)<=0){
+	if(isNaN(day)){
+		alert("请输入数字!");
+		return false;
+	}
+	if(parseInt(day)>31||parseInt(day)<=0){
 		alert("请输入正确的日期的！");
 		return false;
 	}
