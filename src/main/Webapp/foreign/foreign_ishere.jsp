@@ -197,6 +197,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	          		success : function(datas){
 						if(datas){
 							alert(datas.message);
+							window.location.href=window.location.href;
 						}
 					}
 				};
@@ -379,7 +380,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
          		   $("input[type='checkbox']").attr("checked",'true');
          	   }
             });
-            $(".body").on("blur","input[type='checkbox']",checklist);
+            $("#ishere , #ishere_no").focus(function(e){
+            	var temp=$("input[type='checkbox']:checked");
+   				var id="";
+   				var value="";
+   				if(temp){
+   					if(temp.length > 0){
+   						if(temp.length > 1){
+	   						$.each(temp,function(x,v){
+	   							var te=$(v).parent(".cols").next().html();
+	   							te=trim(te);
+	   							if($(v).val() != "0"){
+	   		   						id=id+$(v).val()+",";
+	   							}if(te != "姓名"){
+	   		   						value=value+te+",";
+	   							}
+	   		   				});
+   						}else if (temp.length == 1){
+   							var te=$(temp).parent(".cols").next().html();
+   							te=trim(te);
+   							if($(temp).val() != "0"){
+   		   						id=id+$(temp).val()+",";
+   							}if(te != "姓名"){
+   		   						value=value+te+",";
+   							}
+   						}
+   					}
+   				}
+   				if(id != ""){
+   					$("#inhere_id_list").val(id);
+   				}
+            });
             
             $("#query").click(function(){
          	   var relurl= getUrl("query");
@@ -451,38 +482,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					setCompanyDepartment(company_kind);
 				}
 			});
-			function checklist(e){
-				var temp=$("input[type='checkbox']:checked");
-   				var id="";
-   				var value="";
-   				if(temp){
-   					if(temp.length > 0){
-   						if(temp.length > 1){
-	   						$.each(temp,function(x,v){
-	   							var te=$(v).parent(".cols").next().html();
-	   							te=trim(te);
-	   							if($(v).val() != "0"){
-	   		   						id=id+$(v).val()+",";
-	   							}if(te != "姓名"){
-	   		   						value=value+te+",";
-	   							}
-	   		   				});
-   						}else if (temp.length == 1){
-   							var te=$(v).parent(".cols").next().html();
-   							te=trim(te);
-   							if($(v).val() != "0"){
-   		   						id=id+$(v).val()+",";
-   							}if(te != "姓名"){
-   		   						value=value+te+",";
-   							}
-   						}
-   					}
-   				}
-   				if(id != ""){
-   					$("#inhere_id_list").val(id);
-   				}
-   				alert($("#inhere_id_list").val());
-			};
 			$("#query").click(function(){
 				$("#queryform").submit();
 			});

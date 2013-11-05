@@ -221,10 +221,23 @@ public class invitationController {
 	User user = (User) Untils.getSessionP(request, "user");
 	invitationServices = (InvitationServices) springContextUtil
 		.getBean("InvitationServices");
-	String massage = invitationServices.storeUpdata(invitation, request,
+	String message = invitationServices.storeUpdata(invitation, request,
 		attachment, user);
-	// model.addAttribute("return_info", massage);
-	// return "/invitation/invitation_info";
+	response.setContentType("text/Xml;charset=utf-8");
+	response.setHeader("Cache-Control", "no-cache");
+	response.setHeader("pragma", "no-cache");
+	response.setDateHeader("expires", 0);
+	PrintWriter out = null;
+	try {
+	    out = response.getWriter();
+	    JSONObject object1 = new JSONObject();
+	    object1.put("message", message);
+	    out.println(object1);
+	} catch (IOException ex1) {
+	    ex1.printStackTrace();
+	} finally {
+	    out.close();
+	}
 	return null;
     }
 

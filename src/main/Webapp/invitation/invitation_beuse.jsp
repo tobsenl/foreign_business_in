@@ -328,21 +328,13 @@ float: left;
 				}
 			});
 			
-			function checklist(e){
+			$("#used,#lapse").focus(function(e){
 				var temp=$("input[type='checkbox']:checked");
    				var id="";
    				var value="";
    				if(temp){
    					if(temp.length > 0){
-   						if($(temp).val() != "0"){
-   							var te=$(temp).parent(".cols").next().html();
-   							te=trim(te);
-   							if($(temp).val() != "0"){
-   		   						id=id+$(temp).val()+",";
-   							}if(te != "邀请函号码"){
-   		   						value=value+te+",";
-   							}
-   						}else if(temp.length > 1){
+   						if(temp.length > 1){
 	   						$.each(temp,function(x,v){
 	   							var te=$(v).parent(".cols").next().html();
 	   							te=trim(te);
@@ -352,22 +344,27 @@ float: left;
 	   		   						value=value+te+",";
 	   							}
 	   		   				});
+   						}else if($(temp).val() == 1){
+   							var te=$(temp).parent(".cols").next().html();
+   							te=trim(te);
+   							if($(temp).val() != "0"){
+   		   						id=id+$(temp).val()+",";
+   							}if(te != "邀请函号码"){
+   		   						value=value+te+",";
+   							}
    						}
    					}
    				}
    				if(id != ""){
    					$("#usedit_id_list").val(id);
-   					return true;
-   				}else{   					
-   					alert("请勾选要操作的邀请函后再点击尝试！");
-   					return false;
    				}
-			};
+			});
 			var options={
 					dataType:  'json',
 	          		success : function(datas){
 						if(datas){
 							alert(datas.message);
+							window.location.href=window.location.href;
 						}
 					}
 			};
@@ -379,8 +376,7 @@ float: left;
 					$("#foreign_here").attr("action","<%=basePath%>invitation/invitation_usedit.html");
 					$("#foreign_here").submit();
 				}else{   					
-   					alert("请勾选要修改的人员后再点击尝试！");
-   					return false;
+   					alert("请勾选要操作的邀请函后再点击尝试！");
    				}
 			});
 			$("#lapse").click(function(){
@@ -390,8 +386,7 @@ float: left;
 					$("#foreign_here").attr("action","<%=basePath%>invitation/invitation_usedit.html");
 					$("#foreign_here").submit();
 				}else{   					
-   					alert("请勾选要修改的人员后再点击尝试！");
-   					return false;
+   					alert("请勾选要操作的邀请函后再点击尝试！");
    				}
 			});
 			

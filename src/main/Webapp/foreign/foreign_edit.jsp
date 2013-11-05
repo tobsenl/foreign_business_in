@@ -162,7 +162,8 @@
         	var options = {
                  	dataType:  'json', 
                  	success : function(data){
-                 		//alert(data);
+                 		alert(data.message);
+                 		window.location.href=window.location.href;
                  	},
                  	beforeSubmit:checksubmit
                  };
