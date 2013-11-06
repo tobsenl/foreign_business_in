@@ -629,7 +629,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         邀请函
                     </div>
                     <div class="cols2">
-                        <input type="text" id="numb" name="numb">
+                        <input type="text" id="invitation_numb" name="invitation_numb">
                     </div>
                     
                 </div>

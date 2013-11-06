@@ -493,13 +493,13 @@ public class ForeignServices {
 	    buffer.append(" and ( t1.NAME like '%" + foreignname + "%' )");
 	}
 	if (Untils.NotNull(passport_id)) {
-	    buffer.append(" and ( t1.PASSPORT_ID in(" + passport_id + ") )");
+	    buffer.append(" and ( t1.PASSPORT_ID in('" + passport_id + "') )");
 	}
 	if (Untils.NotNull(contry_from)) {
 	    buffer.append(" and t1.COUNTRY ='" + contry_from + "'");
 	}
 	if (Untils.NotNull(post)) {
-	    buffer.append(" and t1.POST ='" + post + "'");
+	    buffer.append(" and t1.COMPANY_DEPARTMENT ='" + post + "'");
 	}
 	if (Untils.NotNull(is_here_)) {
 	    buffer.append(" and t1.IS_HERE =" + is_here_ );

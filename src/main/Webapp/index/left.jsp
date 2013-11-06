@@ -145,7 +145,6 @@
                         <a href="javascript:;" target="main">专家引进情况统计</a>
                     </li>
                 </ul>
-                <h3>证件失效人员名单</h3>
                 <%} %>
             </div>
             <%}}else{%>
