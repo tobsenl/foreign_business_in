@@ -54,7 +54,6 @@ public class ForeignServices {
 	this.middleservice = middleservice;
     }
 
-
     FiForeigner foreigner;
 
     InvitationServices invitationServices;
@@ -106,7 +105,10 @@ public class ForeignServices {
 	Date passport_exp_date = null;
 	Date birthday = null;
 	Date rp_enddate = null;
-	FiResidencePermit permit=null;
+	FiResidencePermit permit = null;
+	pp_attachmentObject = null;
+	ee_attachmentObject = null;
+	permitObject = null;
 	String ee_number = Untils.NotNull(foreign.getExpert_evidence()) ? foreign
 		.getExpert_evidence() : "";
 	try {
@@ -236,7 +238,10 @@ public class ForeignServices {
 	Date passport_exp_date = null;
 	Date birthday = null;
 	Date rp_enddate = null;
-	FiResidencePermit permit=null;
+	FiResidencePermit permit = null;
+	pp_attachmentObject = null;
+	ee_attachmentObject = null;
+	permitObject = null;
 	String ee_number = Untils.NotNull(foreign.getExpert_evidence()) ? foreign
 		.getExpert_evidence() : "";
 	try {
@@ -417,6 +422,38 @@ public class ForeignServices {
 	foreignDao.UpdataReturnObject("updateByPrimaryKey", foreign);
     }
 
+    public String UpdataIsHere(String id, String status) {
+	FiForeigner foreign_ = QueryByid_fi(id);
+	if (foreign_ != null) {
+	    if (Untils.NotNull(foreign_.getFkInvitationId())) {
+		List<FiInout> inoutlist = inoutservices.QueryByinvitforeign(
+			foreign_.getFkInvitationId(), id);
+		boolean flag = false;
+		if (inoutlist != null && inoutlist.size() > 0) {
+		    FiInout inout = inoutlist.get(0);// 最近一条
+		    if (status.equals("1") && inout.getType() == 1) {// 在连
+			flag = true;
+		    } else if (status.equals("0") && inout.getType() == 0) {// 不在连
+			flag = true;
+		    }else{
+			return foreign_.getName()+"已经"+(inout.getType()==0?"出境":"入境");
+		    }
+		} else {
+		    return "无对应的出入境信息无法进行是否在连操作!";
+		}
+		if (flag) {
+		    foreign_.setIsHere(Integer.parseInt(status));
+		    UpdataObject(foreign_);
+		}
+		return "是否在连信息保存成功！";
+	    } else {
+		return foreign_.getName() + "无对应邀请函信息";
+	    }
+	} else {
+	    return "未查询到对应的外籍人员信息";
+	}
+    }
+
     public FiForeigner QueryByid_fi(String id) {
 	FiForeigner foreign = foreignDao.SelectById("selectByPrimaryKey",
 		Integer.parseInt(id));
@@ -428,7 +465,7 @@ public class ForeignServices {
      * @param id
      * @return
      */
-    public foreigner QueryByid(HttpServletRequest request,String id) {
+    public foreigner QueryByid(HttpServletRequest request, String id) {
 	FiForeigner foreign = foreignDao.SelectById("selectByPrimaryKey",
 		Integer.parseInt(id));
 	foreigner forei = new foreigner();
@@ -445,15 +482,19 @@ public class ForeignServices {
 	forei.setPost(foreign.getPost());
 	forei.setRole(foreign.getRole());
 	forei.setFk_pp_attachment_id(foreign.getFkPpAttachmentId());
-	if(Untils.NotNull(foreign.getFkPpAttachmentId())){
-	    FiAttachment attachement=sattachment.QueryById(foreign.getFkPpAttachmentId());
-	    String workpath=Untils.getWorkPath(request,Untils.getSpitpath(attachement.getUrl()));
+	if (Untils.NotNull(foreign.getFkPpAttachmentId())) {
+	    FiAttachment attachement = sattachment.QueryById(foreign
+		    .getFkPpAttachmentId());
+	    String workpath = Untils.getWorkPath(request,
+		    Untils.getSpitpath(attachement.getUrl()));
 	    forei.setFk_pp_url(workpath);
 	}
 	forei.setFk_ee_attachment_id(foreign.getFkEeAttachmentId());
-	if(Untils.NotNull(foreign.getFkEeAttachmentId())){
-	    FiAttachment attachement=sattachment.QueryById(foreign.getFkEeAttachmentId());
-	    String workpath=Untils.getWorkPath(request,Untils.getSpitpath(attachement.getUrl()));
+	if (Untils.NotNull(foreign.getFkEeAttachmentId())) {
+	    FiAttachment attachement = sattachment.QueryById(foreign
+		    .getFkEeAttachmentId());
+	    String workpath = Untils.getWorkPath(request,
+		    Untils.getSpitpath(attachement.getUrl()));
 	    forei.setFk_ee_url(workpath);
 	}
 	forei.setExpert_evidence(foreign.getExpertEvidence() + "");
@@ -484,9 +525,9 @@ public class ForeignServices {
 	return list;
     }
 
-    public String getsql(String foreignname,
-	    String passport_id, String contry_from, String numb_invitation,
-	    String post,String is_here_) {
+    public String getsql(String foreignname, String passport_id,
+	    String contry_from, String numb_invitation, String post,
+	    String is_here_) {
 	// 两个表
 	StringBuffer buffer = new StringBuffer();
 	if (Untils.NotNull(foreignname)) {
@@ -502,7 +543,7 @@ public class ForeignServices {
 	    buffer.append(" and t1.COMPANY_DEPARTMENT ='" + post + "'");
 	}
 	if (Untils.NotNull(is_here_)) {
-	    buffer.append(" and t1.IS_HERE =" + is_here_ );
+	    buffer.append(" and t1.IS_HERE =" + is_here_);
 	}
 	if (Untils.NotNull(numb_invitation)) {
 	    List<FiInvitation> invitation = invitationServices
@@ -512,16 +553,16 @@ public class ForeignServices {
 			.QueryByInvitation(invitation);
 		if (middle_list != null && middle_list.size() > 0) {
 		    buffer.append(" and ( t1.id in (");
-		    int j=0;
+		    int j = 0;
 		    for (int i = 0; i < middle_list.size(); i++) {// 从middle对象中获取personID
 			FiMiddle middle = middle_list.get(i);
-			if(Untils.NotNull(middle.getFkPersonId())){
-        			if (i == 0) {
-        			    j++;
-        			    buffer.append(middle.getFkPersonId());
-        			} else {
-        			    buffer.append("," + middle.getFkPersonId());
-        			}
+			if (Untils.NotNull(middle.getFkPersonId())) {
+			    if (i == 0) {
+				j++;
+				buffer.append(middle.getFkPersonId());
+			    } else {
+				buffer.append("," + middle.getFkPersonId());
+			    }
 			}
 		    }
 		    buffer.append("))");
@@ -530,15 +571,15 @@ public class ForeignServices {
 	}
 	return buffer.toString();
     }
-    
+
     public List<FiInout> QueryByInOut(String foreign_id) {
 	List<FiInout> inout = null;
 	if (Untils.NotNull(foreign_id)) {
-	     inout = inoutservices.QueryByid_fi(foreign_id);
+	    inout = inoutservices.QueryByid_fi(foreign_id);
 	}
 	return inout;
     }
-    
+
     public List<FiForeigner> QueryByIdlist(List id) {
 	FiForeignerExample example = new FiForeignerExample();
 	example.createCriteria().andIdIn(id);
@@ -547,7 +588,8 @@ public class ForeignServices {
 		"selectByExample", example);
 	return foreign;
     }
+
     public PageMybatis QueryCount(String where) {
-	return foreignDao.SelectCount("selectAllCount",where);
+	return foreignDao.SelectCount("selectAllCount", where);
     }
 }

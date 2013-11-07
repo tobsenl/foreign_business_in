@@ -399,9 +399,12 @@ public class InvitationServices {
 	    if ((invitation.getIsUse() + "").equals("2")) {
 		message = invitation.getInvitationId() + "该邀请函已经处于失效状态!";
 		statu = false;
-	    } else {
+	    } else if((invitation.getIsUse() + "").equals("1")){
 		message = "邀请函成功修改为失效!";
 		statu = true;
+	    } else if ((invitation.getIsUse() + "").equals("0")){
+		message = invitation.getInvitationId() + "该邀请函只有在启用状态下才可失效!";
+		statu = false;
 	    }
 	}
 	if (statu) {

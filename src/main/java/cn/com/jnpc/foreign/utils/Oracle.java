@@ -22,7 +22,7 @@ import java.util.*;
 
 public class Oracle {
 	
-	private String ds = "jdbc/intraweb";
+	private String ds = "jdbc/intrawebnew";
 
  
   /**

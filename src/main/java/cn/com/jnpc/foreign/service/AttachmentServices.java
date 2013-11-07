@@ -103,7 +103,7 @@ public class AttachmentServices {
 	    }
 	    if (blob_v.getSize() > 0) {
 		if (Untils.NotNull(attachment.getFileId())) {
-		    blob = blobdao.SelectByPrimaryKey("SelectByPrimaryKey",
+		    blob = blobdao.SelectByPrimaryKey("selectByPrimaryKey",
 			    attachment.getFileId());
 		    blob.setFileV(blob_v.getBytes());
 		    blobA = blobdao.UpdataByPrimaryKey(

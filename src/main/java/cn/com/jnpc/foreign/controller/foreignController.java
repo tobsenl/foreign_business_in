@@ -253,16 +253,12 @@ public class foreignController {
 		    String[] array = id.split(",");
 		    for (int i = 0; i < array.length; i++) {
 			if (Untils.NotNull(array[i])) {
-			    FiForeigner foreign_ = foreignServices
-				    .QueryByid_fi(array[i]);
-			    foreign_.setIsHere(Integer.parseInt(status));
-			    foreignServices.UpdataObject(foreign_);
+			    message =foreignServices.UpdataIsHere(array[i],status);
 			}
 		    }
 
 		}
 	    }
-	    message = "是否再连信息保存成功！";
 	} catch (Exception e) {
 	    message = "是否再连信息保存失败！";
 	} finally {
