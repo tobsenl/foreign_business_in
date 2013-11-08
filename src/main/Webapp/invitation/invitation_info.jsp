@@ -245,6 +245,29 @@ float: left;
 <body>
 	<div class="container">
 		<jsp:include page="/index/top.jsp" />
+		<c:choose>
+			<c:when test="${return_info == '成功创建!' }" >
+		<script type="text/javascript">
+			if(!confirm("邀请函信息成功创建！是否继续新建邀请函？")){
+				self.location="<%=basePath%>/index/main.jsp";
+			}
+		</script>
+			</c:when>
+			<c:when test="${return_info == '新建失败!' }" >
+		<script type="text/javascript">
+			if(!confirm("邀请函信息新建失败！是否重新输入?")){
+				self.location="<%=basePath%>/index/main.jsp";
+			}
+		</script>
+			</c:when>
+			<c:otherwise>
+				<script type="text/javascript">
+				var sx='${return_info}';
+				alert(sx);
+		</script>
+			</c:otherwise>
+		</c:choose>
+		
 		<form action="invitation/invitation_add.html" id="form1" method="post" enctype="multipart/form-data">
 		<div class="table">
 			<div class="rowh1">邀请函信息录入</div>

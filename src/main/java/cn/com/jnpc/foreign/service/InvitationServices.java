@@ -82,15 +82,34 @@ public class InvitationServices {
 	try {
 	    List<FiMiddle> list_m_id = new ArrayList<FiMiddle>();
 	    // 进行循环将删除行的error数据剔除
+	    
 	    for (int i = 1; i <= numb; i++) {
 		String r_foreign_id = request.getParameter("foreign_id" + i);
 		String foreign_id = Untils.NotNull(r_foreign_id) ? r_foreign_id
 			: "";
+		boolean flag=false;
 		if (Untils.NotNull(foreign_id)) {
+		    FiForeigner fore=foreignservice.QueryByid_fi(foreign_id);
+		    if(Untils.NotNull(fore.getIsHere()+"")){
+			if(fore.getIsHere() == 1 ){//在连
+			     return fore.getName()+" 目前处于在连状态！无法关联新的邀请函。";
+			}else{//不在连
+			    if(Untils.NotNull(fore.getFkInvitationId()) && fore.getFkBeuse() != 1){
+				flag=true;
+			    }else if(!Untils.NotNull(fore.getFkInvitationId())){
+				flag=true;
+			    }
+			else{
+				return fore.getName()+" 目前存在处于使用状态的邀请函！无法关联新的邀请函。";
+			    }
+			}
+		    }
+		    if(flag){
 		    // 生成middle数据不含 invitationID
 		    FiMiddle middle_id = middleservice.InsertReturObject(
 			    foreign_id, user);
 		    list_m_id.add(middle_id);
+		    }
 		} else {
 		    continue;
 		}
@@ -171,6 +190,16 @@ public class InvitationServices {
 		String foreign_id = Untils.NotNull(r_foreign_id) ? r_foreign_id
 			: "";
 		if (Untils.NotNull(foreign_id)) {
+		    FiForeigner fore=foreignservice.QueryByid_fi(foreign_id);
+		    if(Untils.NotNull(fore.getIsHere()+"")){
+			if(fore.getIsHere() == 1 ){//在连
+			     return fore.getName()+" 目前处于在连状态！无法关联新的邀请函。";
+			}else{//不在连
+			    if(Untils.NotNull(fore.getFkInvitationId()) && fore.getFkBeuse() == 1){
+				return fore.getName()+" 目前存在处于使用状态的邀请函！无法关联新的邀请函。";				
+			    }
+			}
+		    }
 		    // 生成middle数据不含 invitationID
 		    int x = 0;
 		    FiMiddle tempmiddle = null;
@@ -222,6 +251,8 @@ public class InvitationServices {
 		middle.setFkPersonPpid(foreign.getPassportId());
 		middleservice.UpdataObject(middle);
 	    }
+	    fiinvitation = invitationDao.SelectById("selectByPrimaryKey",
+		    new_invitation.getId());
 	    FiAttachment attch = null;
 	    // 保存附件
 	    if (Untils.NotNull(new_invitation.getFkAttachmentId())
@@ -234,16 +265,18 @@ public class InvitationServices {
 			    .InsertReturObject(attachment, user, 0);
 		}
 		if (attch != null) {
-		    attch.setCardId(fiinvitation.getInvitationId());
-		    attch.setEndTime(fiinvitation.getArrivedDate());
-		    attch.setStartTime(fiinvitation.getLeavingDate());
+//		    attch.setCardId(fiinvitation.getInvitationId());
+//		    attch.setEndTime(fiinvitation.getArrivedDate());
+//		    attch.setStartTime(fiinvitation.getLeavingDate());
+		    attch.setCardId(new_invitation.getInvitationId());
+		    attch.setEndTime(new_invitation.getArrivedDate());
+		    attch.setStartTime(new_invitation.getLeavingDate());
 		    attch.setKfParentId(new_invitation.getId() + "");
 		    attchServices.UpdataObject(attch);
 		}
 	    }
 	    // 为invitation 填充数据
-	    fiinvitation = invitationDao.SelectById("selectByPrimaryKey",
-		    new_invitation.getId());
+	    
 	    fiinvitation.setEditDate(new Date());
 	    if (user != null) {
 		fiinvitation.setEditUser(user.getAccount());
@@ -322,7 +355,7 @@ public class InvitationServices {
     }
 
     public String getsql(String foreign_id_q,
-	    String invitation_id_q, String is_use_q, String indate_q){
+	    String invitation_id_q, String is_use_q, String indate_q,String kind){
 	StringBuffer buffer = new StringBuffer();
 	if (Untils.NotNull(invitation_id_q)) {
 	    buffer.append(" and (t1.INVITATION_ID like '%");
@@ -336,7 +369,12 @@ public class InvitationServices {
 	    buffer.append(" and t1.ARRIVED_DATE = to_date('");
 	    buffer.append(indate_q);
 	    buffer.append("','yyyy-mm-dd hh24:mi:ss')");
+	}if(kind.equals("edit")){
+	    buffer.append(" and t1.is_use = 0");
+	}else if(kind.equals("beuse")){
+	    buffer.append(" and t1.is_use <> 2 ");
 	}
+	
 	if (Untils.NotNull(foreign_id_q)) {
 	    // 通过fimiddle的fk_foreign_id in ()
 	    List<FiMiddle> middle_list = middleservice

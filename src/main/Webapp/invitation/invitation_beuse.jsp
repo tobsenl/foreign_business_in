@@ -344,11 +344,11 @@ float: left;
 	   		   						value=value+te+",";
 	   							}
 	   		   				});
-   						}else if($(temp).val() == 1){
-   							var te=$(temp).parent(".cols").next().html();
+   						}else if($(temp).length == 1){
+   							var te=$(temp[0]).parent(".cols").next().html();
    							te=trim(te);
-   							if($(temp).val() != "0"){
-   		   						id=id+$(temp).val()+",";
+   							if($(temp[0]).val() != "0"){
+   		   						id=id+$(temp[0]).val()+",";
    							}if(te != "邀请函号码"){
    		   						value=value+te+",";
    							}

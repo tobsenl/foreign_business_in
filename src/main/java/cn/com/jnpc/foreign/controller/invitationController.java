@@ -61,7 +61,9 @@ public class invitationController {
 	    Model model) {
 	invitationServices = (InvitationServices) springContextUtil
 		.getBean("InvitationServices");
-	PageMybatis page = invitationServices.QueryCount("");
+	String query_sql = invitationServices.getsql("",
+		"", "", "",kind);
+	PageMybatis page = invitationServices.QueryCount(query_sql);
 	page.setNowpage(Long.parseLong("1"));
 	List<FiInvitation> list = invitationServices.QueryList(page);
 	page.setPageurl(Untils.requestPath(request) + "kind=" + kind);
@@ -104,7 +106,7 @@ public class invitationController {
 		.getBean("InvitationServices");
 
 	String query_sql = invitationServices.getsql(foreign_id_q,
-		invitation_id_q, is_use_q, indate_q);
+		invitation_id_q, is_use_q, indate_q,kind);
 	PageMybatis page = invitationServices.QueryCount(query_sql);
 	if (Untils.NotNull(now_page) && now_page != "1") {
 	    page.setNowpage(Long.parseLong(now_page));

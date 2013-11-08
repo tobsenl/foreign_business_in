@@ -48,13 +48,33 @@ public class InOutServices {
 		    FiForeigner foreign = foreignServices.QueryByid_fi(str);
 		    boolean flag=false;
 		    if (Untils.NotNull(foreign.getFkInvitationId())) {
-			if(foreign.getIsHere() == 1 && "0".equals(inout.getType())){//在连就出境
-			    flag=true;
-			}else if(foreign.getIsHere() == 0 && "1".equals(inout.getType())){
-			    flag=true;
-			}else{
-			    return foreign.getName()+"当前处于 "+(foreign.getIsHere()==1?"在连 状态":"不在连 状态")+"无法进行"+("1".equals(inout.getType())?"入境":"出境")+"操作";
-			}
+		    	List<FiInout> inoutlist=QueryByinvitforeign(foreign.getFkInvitationId()+"",foreign.getId()+"");
+				if((foreign.getIsHere() == 1) && (0 == inout.getType())){//在连就出境
+					if(inoutlist.size()>0){
+						FiInout fout=inoutlist.get(0);
+						if(fout.getType() == 0){
+							return foreign.getName()+"之前"+fout.getCreateDate()+"已经进行了出境操作！";
+						}else{
+							flag=true;
+						}
+					}else{
+						return foreign.getName()+"对应的邀请函中无对应的入境信息！无法进行出境操作！";
+					}
+				}else if((foreign.getIsHere() == 0) && (1 == inout.getType())){
+					if(inoutlist.size()>0){
+						FiInout fout=inoutlist.get(0);
+						if(fout.getType() != 0){
+							return foreign.getName()+"已经进行了"+(fout.getType()==1?"入境":"签证延期");
+						}else{
+							flag=true;
+						}
+					}else{
+						return foreign.getName()+"对应的邀请函中无对应的入境信息！无法进行出境操作！";
+					}
+				    flag=true;
+				}else{
+				    return foreign.getName()+"当前处于 "+(foreign.getIsHere()==1?"在连 状态":"不在连 状态")+"无法进行"+("1".equals(inout.getType())?"入境":"出境")+"操作";
+				}
 		    } else {
 			return foreign.getName() + "无对应邀请函";
 			// 这里还需要添加 1.判断写入时是否存在邀请函。存在则可以写inout；
