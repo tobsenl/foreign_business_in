@@ -30,7 +30,7 @@ function f_submit(){
 		alert("请选择出生年月！");
 		return false;
 	}
-	if($('select[name="country"]').val()=="1"){
+	if($('select[name="country"]').val()=="0"){
 		alert("请选择国籍！");
 		return false;
 	}
@@ -55,6 +55,13 @@ function f_submit(){
 			alert("请输入护照扫描件！");
 			return false;
 		}
+		var obj=document.getElementById('residence_permit_kind');
+		var text=obj.options[obj.selectedIndex].text;
+		if(text != "居留许可"){
+			alert("签证类型此时必须为居留许可");
+			return false;
+		}
+
 	}
 	if($('select[name="residence_permit_kind"]').val()!="0"){
 		if($('input[name="rp_exp_endDate"]').val()==""){

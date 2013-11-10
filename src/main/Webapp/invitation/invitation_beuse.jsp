@@ -488,7 +488,7 @@ float: left;
         	<center>邀请函启用维护</center>
             <div class="rows">
 			<div class="colsx1">邀请函ID</div><div class="colsx2"><input type="text" id="invitation_id_q" name="invitation_id_q"></div>
-			<div class="colsx1">邀请函状态</div><div class="colsx2"><input type="radio" name="is_use_q" value="0">未使用<input type="radio" name="is_use_q" value="1">使用中<input type="radio" name="is_use_q" value="2">已失效</div>
+			<div class="colsx1">邀请函状态</div><div class="colsx2"><input type="radio" name="is_use_q" value="0">未使用<input type="radio" name="is_use_q" value="1">使用中</input></div>
             <div class="colsx1">拟入境日期</div><div class="colsx2"><input type="text" name="indate_q" id="indate_q" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></div>
 			</div>
 			<div class="rows" style="float: left;">

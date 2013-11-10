@@ -90,7 +90,7 @@ public class AttachmentServices {
     }
 
     public FiAttachment UpdataReturnObject(MultipartFile blob_v, User user,
-	    String id) {
+	    String id,int type) {
 	try {
 	    FiBlob blobA = null;
 	    FiAttachment attachmentB = null;
@@ -126,6 +126,7 @@ public class AttachmentServices {
 		attachment.setUrl(path);
 	    }
 	    attachment.setStatus(Integer.parseInt("0"));// 是否删除 1 删除 0 未删除
+	    attachment.setType(type);
 	    attachment.setEditTime(new Date());// 创建时间
 	    if (user != null && Untils.NotNull(user.getAccount())) {
 		attachment.setEditUser(user.getAccount());
@@ -149,9 +150,10 @@ public class AttachmentServices {
 	    // System.out.println(blob);
 	    return attachmentB;
 	} catch (Exception e) {
-	    log.info(e.getMessage());
-	    log.info(e.toString());
-	    log.info(e.getCause());
+	    //log.info(e.getMessage());
+	    //log.info(e.toString());
+	    //log.info(e.getCause());
+	    System.out.println(e.toString()+" /ok/ "+e.getCause());
 	    return null;
 	} finally {
 	    return attachment;

@@ -268,7 +268,7 @@ public class ForeignServices {
 		if (Untils.NotNull(foreign.getFk_pp_attachment_id())) {
 		    pp_attachmentObject = sattachment.UpdataReturnObject(
 			    pp_attachment, user,
-			    foreign.getFk_pp_attachment_id());
+			    foreign.getFk_pp_attachment_id(),1);
 		} else {
 		    pp_attachmentObject = sattachment.InsertReturObject(
 			    pp_attachment, user, 1);
@@ -287,7 +287,7 @@ public class ForeignServices {
 		    if (Untils.NotNull(foreign.getFk_ee_attachment_id())) {
 			ee_attachmentObject = sattachment.UpdataReturnObject(
 				ee_attachment, user,
-				foreign.getFk_ee_attachment_id());
+				foreign.getFk_ee_attachment_id(),2);
 
 		    } else {
 			ee_attachmentObject = sattachment.InsertReturObject(
@@ -306,6 +306,7 @@ public class ForeignServices {
 		if (Untils.NotNull(foreign.getFk_ee_attachment_id())) {
 		    sattachment.DeleteByID(foreign.getFk_ee_attachment_id());
 		    foreigner.setFkEeAttachmentId("");
+		    foreigner.setExpertEvidence(Integer.parseInt(ee_number));
 		}
 	    }
 	    // 存储附件居留许可
@@ -503,6 +504,7 @@ public class ForeignServices {
 	forei.setIs_here(foreign.getIsHere() + "");
 	forei.setStatus(foreign.getStatus() + "");
 	if (Untils.NotNull(foreign.getFkRpPermitId())) {
+	    forei.setFk_rp_permit_id(foreign.getFkRpPermitId());
 	    FiResidencePermit permit = permitservices.QueryById(foreign
 		    .getFkRpPermitId());
 	    forei.setResidence_permit_id(permit.getResidencePermitId());

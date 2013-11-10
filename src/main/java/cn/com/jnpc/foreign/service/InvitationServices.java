@@ -187,8 +187,7 @@ public class InvitationServices {
 
 	    for (int i = 1; i <= numb; i++) {
 		String r_foreign_id = request.getParameter("foreign_id" + i);
-		String foreign_id = Untils.NotNull(r_foreign_id) ? r_foreign_id
-			: "";
+		String foreign_id = Untils.NotNull(r_foreign_id) ? r_foreign_id : "";
 		if (Untils.NotNull(foreign_id)) {
 		    FiForeigner fore=foreignservice.QueryByid_fi(foreign_id);
 		    if(Untils.NotNull(fore.getIsHere()+"")){
@@ -216,8 +215,9 @@ public class InvitationServices {
 				user);
 		    } else {
 			if (tempmiddle != null) {
-			    tempmiddle.setFkPersonId(foreign_id);
-			    middle_id = middleservice.UpdataObject(tempmiddle);
+			    //tempmiddle.setFkPersonId(foreign_id);
+			    middle_id = tempmiddle;
+			    //middleservice.UpdataObject(tempmiddle);
 			}
 		    }
 		    if (middle_id != null) {
@@ -233,12 +233,12 @@ public class InvitationServices {
 		FiMiddle tempmiddle = null;
 		for (FiMiddle fiMiddle2 : list_m_id) {
 		    String new_id = fiMiddle2.getFkPersonId();
-		    if (!old_id.equals(new_id)) {
+		    if (old_id.equals(new_id)) {
 			x = x + 1;
 		    }
 		}
-		if (x > 0) {
-		    middleservice.deleteByPrimaryKey(old_id);
+		if (x == 0) {
+		    middleservice.deleteByPrimaryKey(fiMiddle.getId()+"");
 		}
 	    }
 	    for (int j = 0; j < list_m_id.size(); j++) {
@@ -259,7 +259,7 @@ public class InvitationServices {
 		    || attachment.getSize() > 0) {
 		if (Untils.NotNull(new_invitation.getFkAttachmentId())) {
 		    attch = attchServices.UpdataReturnObject(attachment, user,
-			    "0");
+			    new_invitation.getFkAttachmentId(),0);
 		} else {
 		    attch = attchServices
 			    .InsertReturObject(attachment, user, 0);

@@ -262,7 +262,7 @@
             			$("#fk_pp_attachment_id").val(a.fk_pp);
             			$("#pp_url").attr("href",a.fk_pp_url);
             			$("#pp_url").html("点击此处查看 护照扫描件");
-            			if(a.expert_evidence){
+            			if(a.expert_evidence == 1){
                 			$("input[name='expert_evidence'][value="+a.expert_evidence+"]").prop("checked",true);
                 			$("#upload_ee").css("display","");
                 			$("#fk_ee_attachment_id").val(a.fk_ee);
@@ -702,7 +702,7 @@
 					</div>
 					<div class="cols2">
 						<select id="country" name="country">
-							<option value=""></option>
+							<option value="0"></option>
 						</select>
 					</div>
 				</div>
@@ -790,7 +790,7 @@
 						<div class="cols1">居留地址<label style="color: red;">*</label></div>
 						<div class="cols2">
 							<select id="_Address" name="_Address">
-								<option value=""></option>
+								<option value="0"></option>
 							</select>小区<input type="text" id="address"> <input type="hidden"
 								id="rp_Address" name="rp_Address" />
 						</div>

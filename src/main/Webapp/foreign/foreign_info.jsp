@@ -239,7 +239,7 @@ body {
 					</div>
 					<div class="cols2">
 						<select id="country" name="country">
-							<option value="1"></option>
+							<option value="0"></option>
 							<!-- 
 							<option value="11">American(美国)</option>
 							<option value="12">Australia(澳大利亚)</option>

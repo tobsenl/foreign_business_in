@@ -65,6 +65,7 @@ public class invitationController {
 		"", "", "",kind);
 	PageMybatis page = invitationServices.QueryCount(query_sql);
 	page.setNowpage(Long.parseLong("1"));
+	page.setQuerysql(query_sql);
 	List<FiInvitation> list = invitationServices.QueryList(page);
 	page.setPageurl(Untils.requestPath(request) + "kind=" + kind);
 	model.addAttribute("invitation_list", list);

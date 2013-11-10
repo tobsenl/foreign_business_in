@@ -263,7 +263,9 @@ float: left;
 			<c:otherwise>
 				<script type="text/javascript">
 				var sx='${return_info}';
-				alert(sx);
+				if(sx != "" && sx != null){
+					alert(sx);
+				}
 		</script>
 			</c:otherwise>
 		</c:choose>

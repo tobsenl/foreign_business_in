@@ -69,7 +69,7 @@ public class InOutServices {
 							flag=true;
 						}
 					}else{
-						return foreign.getName()+"对应的邀请函中无对应的入境信息！无法进行出境操作！";
+					    flag=true;
 					}
 				    flag=true;
 				}else{
