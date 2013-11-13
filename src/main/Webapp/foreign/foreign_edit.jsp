@@ -303,13 +303,9 @@
             	}
             });
             
-           $("#allcheckbox").click(function(e){
-        	   if($(this).attr("checked") == "checked"){
-        		   $("input[type='checkbox']").removeAttr("checked");
-        	   }else{
-        		   $("input[type='checkbox']").attr("checked",'true');
-        	   }
-           });
+            $("#allcheckbox").click(function(){ 
+            	$("input:checkbox").prop('checked',this.checked) 
+            });
            
            $("#query").click(function(){
         	   var relurl= getUrl("query");

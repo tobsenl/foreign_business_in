@@ -216,24 +216,44 @@
                     width: 700,
                     buttons: {
                         关闭: function(){
-                        	$("#inoutform").find("label").html("");
-                        	$("#inoutform").find("a").html("");
-                        	$("#inoutform").find("a").attr("href","");
                             $(this).dialog("close");
                         }
                     }
                 });
+                function checkinoutform(){
+                	var val=$("#type :selected").val();
+                	if( val == ""){
+                		return "请选择出入境类型";
+                	}else if(val == "1"){
+                		if(trim($("#content").val()) == ""){
+                			return "请填写入境的来华任务";
+                		}if(trim($("#begintime").val()) == ""){
+                			return "请填写时间";
+                		}
+                	}else if(val == "0"){
+                		if(trim($("#begintime").val()) == ""){
+                			return "请填写时间";
+                		}
+                	}
+                	return "验证成功!";
+                }
                 $("#inout").dialog({
                     autoOpen: false,
                     modal: true,
                     width: 700,
                     buttons: {
                         确定: function(){
+                        	var bo=checkinoutform();
+                        	if(bo=="验证成功!"){
                         	$("#inoutform").submit();
+                        	
                             $(this).dialog("close");
+                        	}else{
+                        		alert(bo);
+                        	}
                         },
                         关闭: function(){
-                        	
+                        	$("#inoutform").clearForm();
                             $(this).dialog("close");
                         }
                     }
@@ -306,13 +326,9 @@
                 });
                 
                 
-               $("#allcheckbox").click(function(e){
-            	   if($(this).attr("checked") == "checked"){
-            		   $("input[type='checkbox']").removeAttr("checked");
-            	   }else{
-            		   $("input[type='checkbox']").attr("checked",'true');
-            	   }
-               });
+                $("#allcheckbox").click(function(){ 
+                	$("input:checkbox").prop('checked',this.checked) 
+                });
                
                $("#query").click(function(){
             	   var relurl= getUrl("query");
@@ -391,6 +407,17 @@
 	   				var value="";
 	   				if(temp){
 	   					if(temp.length > 0){
+	   					if(temp.length > 1){
+	   						$.each(temp,function(x,v){
+	   							var te=$(v).parent(".cols").next().html();
+	   							te=trim(te);
+	   							if($(v).val() != "0"){
+	   		   						id=id+$(v).val()+",";
+	   							}if(te != "姓名"){
+	   		   						value=value+te+",";
+	   							}
+	   		   				});
+   						}else if(temp.length > 0){
 	   						if($(temp).val() != "0"){
 	   							var te=$(temp).parent(".cols").next().html();
 	   							te=trim(te);
@@ -399,17 +426,8 @@
 	   							}if(te != "姓名"){
 	   		   						value=value+te+",";
 	   							}
-	   						}else if(temp.length > 1){
-		   						$.each(temp,function(x,v){
-		   							var te=$(v).parent(".cols").next().html();
-		   							te=trim(te);
-		   							if($(v).val() != "0"){
-		   		   						id=id+$(v).val()+",";
-		   							}if(te != "姓名"){
-		   		   						value=value+te+",";
-		   							}
-		   		   				});
 	   						}
+   						}
 	   						if(id != ""){
 	   		   					$("#inout_pp_id").val(id);
 	   		   				}
@@ -422,7 +440,6 @@
 	   						alert("请勾选要修改的人员后再点击尝试！");
 	   					}
 	   				}
-	   				
 	   			});
 	   			function getUrl(v){
 					var page_url=$("#pageurl").val();
@@ -503,6 +520,20 @@
 	   	            	}
 	   	            });
 	   			}
+				$("#content[name='content']").parent().parent(".row").css("display","none");
+				$("#type").change(function(e){
+					var e=e.target;
+					var value=$(e).val();
+					var parent=$("#content[name='content']").parent().parent(".row");
+					if(value==""){
+						$(parent).css("display","none");
+					}else if(value=="1"){
+						$(parent).css("display","");
+					}else if(value=="0"){
+						$(parent).css("display","none");
+					}
+					
+				})
             });
         </script>
 </head>

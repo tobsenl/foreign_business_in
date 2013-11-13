@@ -257,13 +257,10 @@ float: left;
 				$("#foreign_id_q").val("");
 			});
 			
-			$("#allcheckbox").click(function(e){
-	         	   if($(this).attr("checked") == "checked"){
-	         		   $("input[type='checkbox']").removeAttr("checked");
-	         	   }else{
-	         		   $("input[type='checkbox'][disabled!='disabled']").attr("checked",'true');
-	         	   }
-	        });
+			$("#allcheckbox").click(function(){ 
+            	$("input:checkbox").prop('checked',this.checked) 
+            });
+			
 			
 			function split( val ) {
 				return val.split( /,\s*/ );

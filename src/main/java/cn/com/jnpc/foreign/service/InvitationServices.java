@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import cn.com.jnpc.ems.dto.User;
@@ -24,7 +25,7 @@ import cn.com.jnpc.foreign.utils.DateUtil;
 import cn.com.jnpc.foreign.utils.JnpcException;
 import cn.com.jnpc.foreign.utils.Untils;
 import cn.com.jnpc.foreign.vo.PageMybatis;
-
+@Service("InvitationServices")
 public class InvitationServices {
     private static Logger log = Logger.getLogger(InvitationServices.class);
 

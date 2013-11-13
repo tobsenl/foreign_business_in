@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import cn.com.jnpc.ems.dto.User;
@@ -14,6 +15,7 @@ import cn.com.jnpc.foreign.po.FiAttachment;
 import cn.com.jnpc.foreign.po.FiBlob;
 import cn.com.jnpc.foreign.utils.Untils;
 
+@Service(value="AttachmentServices")
 public class AttachmentServices {
     private static Logger log = Logger.getLogger(AttachmentServices.class);
     String blob_id = null;

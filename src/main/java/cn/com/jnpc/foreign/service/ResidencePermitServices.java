@@ -6,6 +6,9 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.jnpc.ems.dto.User;
 import cn.com.jnpc.foreign.dao.ResidencePermitDao;
@@ -14,7 +17,7 @@ import cn.com.jnpc.foreign.po.FiInout;
 import cn.com.jnpc.foreign.po.FiMiddle;
 import cn.com.jnpc.foreign.po.FiResidencePermit;
 import cn.com.jnpc.foreign.utils.Untils;
-
+@Service("ResidencePermitServices")
 public class ResidencePermitServices {
     private static Logger log = Logger.getLogger(ResidencePermitServices.class);
     ResidencePermitDao permitDao;
@@ -42,6 +45,7 @@ public class ResidencePermitServices {
         this.inoutservices = inoutservices;
     }
 
+    //@Transactional(propagation=Propagation.REQUIRED)
     public FiResidencePermit InsertReturObject(FiResidencePermit permit,
 	    User user) {
 	try {

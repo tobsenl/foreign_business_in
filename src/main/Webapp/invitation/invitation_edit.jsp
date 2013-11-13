@@ -535,6 +535,9 @@ float: left;
 			$("#pagination-clean").on("blur","input",function(e){
 				check_submit(e);
 			});
+			$("#allcheckbox").click(function(){ 
+            	$("input:checkbox").prop('checked',this.checked) 
+            });
 		});
         </script>
 </head>
@@ -564,7 +567,7 @@ float: left;
 					<div class="row_">
 						<div class="title ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all">
 							<div class="cols">
-                            	<input type="checkbox">
+                            	<input type="checkbox" id="allcheckbox" value="0">
                         	</div>
 							<div class="cols">邀请函号码</div>
 							<div class="cols">申请签证有效期</div>

@@ -29,7 +29,7 @@ import cn.com.jnpc.foreign.utils.Untils;
 import cn.com.jnpc.foreign.vo.PageMybatis;
 import cn.com.jnpc.foreign.vo.foreigner;
 
-@Service
+@Service("ForeignServices")
 public class ForeignServices {
     private static Logger log = Logger.getLogger(ForeignServices.class);
 

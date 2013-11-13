@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import cn.com.jnpc.ems.dto.User;
 import cn.com.jnpc.foreign.dao.fiInOutDao;
@@ -14,7 +15,7 @@ import cn.com.jnpc.foreign.model.FiInoutExample.Criteria;
 import cn.com.jnpc.foreign.po.FiForeigner;
 import cn.com.jnpc.foreign.po.FiInout;
 import cn.com.jnpc.foreign.utils.Untils;
-
+@Service("InOutServices")
 public class InOutServices {
     private static Logger log = Logger.getLogger(InOutServices.class);
 

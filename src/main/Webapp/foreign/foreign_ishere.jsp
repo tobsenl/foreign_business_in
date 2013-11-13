@@ -373,13 +373,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 }
              
              
-            $("#allcheckbox").click(function(e){
-         	   if($(this).attr("checked") == "checked"){
-         		   $("input[type='checkbox']").removeAttr("checked");
-         	   }else{
-         		   $("input[type='checkbox']").attr("checked",'true');
-         	   }
-            });
+                $("#allcheckbox").click(function(){ 
+                	$("input:checkbox").prop('checked',this.checked) 
+                });
             $("#ishere , #ishere_no").focus(function(e){
             	var temp=$("input[type='checkbox']:checked");
    				var id="";

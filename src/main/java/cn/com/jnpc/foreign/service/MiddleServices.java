@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Service;
+
 import cn.com.jnpc.ems.dto.User;
 import cn.com.jnpc.foreign.dao.fiMiddleDao;
 import cn.com.jnpc.foreign.model.FiMiddleExample;
@@ -14,7 +16,7 @@ import cn.com.jnpc.foreign.po.FiForeigner;
 import cn.com.jnpc.foreign.po.FiInvitation;
 import cn.com.jnpc.foreign.po.FiMiddle;
 import cn.com.jnpc.foreign.utils.Untils;
-
+@Service("MiddleServices")
 public class MiddleServices {
     FiMiddle middle;
     

@@ -307,14 +307,9 @@
                 });
                 
                 
-               $("#allcheckbox").click(function(e){
-            	   if($(this).attr("checked") == "checked"){
-            		   $("input[type='checkbox']").removeAttr("checked");
-            	   }else{
-            		   $("input[type='checkbox']").attr("checked",'true');
-            	   }
-               });
-               
+                $("#allcheckbox").click(function(){ 
+                	$("input:checkbox").prop('checked',this.checked) 
+                });
                $.get("<%=basePath%>index/country.xml",function(y){
    				var contrylist=$(y).find("country");
    				if(contrylist.length > 0){
@@ -395,6 +390,17 @@
 	   				var value="";
 	   				if(temp){
 	   					if(temp.length > 0){
+	   				 	if(temp.length > 1){
+	   						$.each(temp,function(x,v){
+	   							var te=$(v).parent(".cols").next().html();
+	   							te=trim(te);
+	   							if($(v).val() != "0"){
+	   		   						id=id+$(v).val()+",";
+	   							}if(te != "姓名"){
+	   		   						value=value+te+",";
+	   							}
+	   		   				});
+						}else if(temp.length > 0){
 	   						if($(temp).val() != "0"){
 	   							var te=$(temp).parent(".cols").next().html();
 	   							te=trim(te);
@@ -403,17 +409,8 @@
 	   							}if(te != "姓名"){
 	   		   						value=value+te+",";
 	   							}
-	   						}else if(temp.length > 1){
-		   						$.each(temp,function(x,v){
-		   							var te=$(v).parent(".cols").next().html();
-		   							te=trim(te);
-		   							if($(v).val() != "0"){
-		   		   						id=id+$(v).val()+",";
-		   							}if(te != "姓名"){
-		   		   						value=value+te+",";
-		   							}
-		   		   				});
 	   						}
+						}
 	   						if(id != ""){
 	   		   					$("#extension_id").val(id);
 	   		   				}
@@ -426,7 +423,6 @@
 	   						alert("请勾选要修改的人员后再点击尝试！");
 	   					}
 	   				}
-	   				
 	   			});
 	   			$("#address").blur(function(){
 	   				var temp_address=$("#_Address  option:selected").text()+","+$("#address").val();

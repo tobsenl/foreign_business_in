@@ -7,13 +7,15 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.stereotype.Service;
+
 import cn.com.jnpc.foreign.po.FiForeigner;
 import cn.com.jnpc.foreign.po.FiInout;
 import cn.com.jnpc.foreign.po.FiInvitation;
 import cn.com.jnpc.foreign.po.FiMiddle;
 import cn.com.jnpc.foreign.utils.Untils;
 import cn.com.jnpc.foreign.vo.foreigner;
-
+@Service("QueryServices")
 public class QueryServices {
     MiddleServices middleservices;
     InvitationServices invitationservices;
