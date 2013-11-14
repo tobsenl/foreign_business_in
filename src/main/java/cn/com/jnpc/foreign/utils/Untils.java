@@ -11,12 +11,14 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.naming.Context;
@@ -201,16 +203,26 @@ public final class Untils {
     }
 
     public final static String requestPath(HttpServletRequest request) {
+//	String path = request.getQueryString();
 	// String path = request.getContextPath();
 	// String basePath = request.getScheme() + "://" +
 	// request.getServerName()
 	// + ":" + request.getServerPort() + path + "/";
-	String a = request.getRequestURL().toString()
-		+ "?"
-		+ (NotNull(request.getQueryString()) ? request.getQueryString()
-			: "");
-	// System.out.println(a);
-	return a;
+	String a = request.getRequestURL().toString()+"?";
+	Map map=request.getParameterMap();
+	StringBuffer bf=new StringBuffer();
+	Set keysSet=map.keySet();
+	Iterator iterator = keysSet.iterator();
+	while (iterator.hasNext()) {
+            String key=iterator.next().toString();
+            String[] str = (String[])map.get(key);
+            bf.append("&"+ key + "=" + str[0]);
+        }
+        if(bf.length()>0){
+            return a+(bf.toString().substring(1));
+        }else{
+            return a;
+        }
     }
 
     public final static String getUrl(MultipartFile blob_v) {
