@@ -358,6 +358,7 @@ public class InvitationServices {
     public String getsql(String foreign_id_q,
 	    String invitation_id_q, String is_use_q, String indate_q,String kind){
 	StringBuffer buffer = new StringBuffer();
+	buffer.append(" and t1.status <> 1");
 	if (Untils.NotNull(invitation_id_q)) {
 	    buffer.append(" and (t1.INVITATION_ID like '%");
 	    buffer.append(invitation_id_q + "%') ");
@@ -407,6 +408,25 @@ public class InvitationServices {
 	return invitationDao.SelectAll("selectByPage", page);
     }
 
+    public String del(String idstr) {
+	if (Untils.NotNull(idstr)) {
+	    List<String> getlist = Untils.getlistBystr(idstr);
+	    if (getlist != null && getlist.size() > 0) {
+		for (int i = 0; i < getlist.size(); i++) {
+		    String id = getlist.get(i);
+		    FiInvitation invita = QueryById(id);
+		    invita.setStatus(1);// 0初始化 1删除(失效)
+		    UpdataObject(invita);
+		}
+		return "操作成功!";
+	    } else {
+		return "需要删除的邀请函列表为空！请确认后再提交";
+	    }
+	} else {
+	    return "需要删除的邀请函列表为空！请确认后再提交";
+	}
+    }
+    
     public FiInvitation UpdataObject(FiInvitation invitation) {
 	return invitationDao.UptataReturnObj("updateByPrimaryKey", invitation);
     }

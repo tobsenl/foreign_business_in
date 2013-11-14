@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import cn.com.jnpc.ems.dto.User;
 import cn.com.jnpc.foreign.dao.foreignDao;
 import cn.com.jnpc.foreign.model.FiForeignerExample;
+import cn.com.jnpc.foreign.model.FiForeignerExample.Criteria;
 import cn.com.jnpc.foreign.model.FiInvitationExample;
 import cn.com.jnpc.foreign.po.FiAttachment;
 import cn.com.jnpc.foreign.po.FiForeigner;
@@ -268,7 +269,7 @@ public class ForeignServices {
 		if (Untils.NotNull(foreign.getFk_pp_attachment_id())) {
 		    pp_attachmentObject = sattachment.UpdataReturnObject(
 			    pp_attachment, user,
-			    foreign.getFk_pp_attachment_id(),1);
+			    foreign.getFk_pp_attachment_id(), 1);
 		} else {
 		    pp_attachmentObject = sattachment.InsertReturObject(
 			    pp_attachment, user, 1);
@@ -287,7 +288,7 @@ public class ForeignServices {
 		    if (Untils.NotNull(foreign.getFk_ee_attachment_id())) {
 			ee_attachmentObject = sattachment.UpdataReturnObject(
 				ee_attachment, user,
-				foreign.getFk_ee_attachment_id(),2);
+				foreign.getFk_ee_attachment_id(), 2);
 
 		    } else {
 			ee_attachmentObject = sattachment.InsertReturObject(
@@ -412,11 +413,32 @@ public class ForeignServices {
      */
     public List<FiForeigner> QueryByName(String name) {
 	foreignerexample = new FiForeignerExample();
-	foreignerexample.createCriteria().andNameLike(name);
+	Criteria criter=foreignerexample.createCriteria();
+	criter.andNameLike(name);
+	criter.andStatusNotEqualTo(1);
 	foreignerexample.setOrderByClause(" name desc");
 	List<FiForeigner> list = foreignDao.SelectByExample("selectByExample",
 		foreignerexample);
 	return list;
+    }
+
+    public String del(String idstr) {
+	if (Untils.NotNull(idstr)) {
+	    List<String> getlist = Untils.getlistBystr(idstr);
+	    if (getlist != null && getlist.size() > 0) {
+		for (int i = 0; i < getlist.size(); i++) {
+		    String id = getlist.get(i);
+		    FiForeigner forei = QueryByid_fi(id);
+		    forei.setStatus(1);// 0初始化 1删除(失效)
+		    UpdataObject(forei);
+		}
+		return "操作成功!";
+	    } else {
+		return "需要删除的人员列表为空！请确认后再提交";
+	    }
+	} else {
+	    return "需要删除的人员列表为空！请确认后再提交";
+	}
     }
 
     public void UpdataObject(FiForeigner foreign) {
@@ -436,8 +458,9 @@ public class ForeignServices {
 			flag = true;
 		    } else if (status.equals("0") && inout.getType() == 0) {// 不在连
 			flag = true;
-		    }else{
-			return foreign_.getName()+"已经"+(inout.getType()==0?"出境":"入境");
+		    } else {
+			return foreign_.getName() + "已经"
+				+ (inout.getType() == 0 ? "出境" : "入境");
 		    }
 		} else {
 		    return "无对应的出入境信息无法进行是否在连操作!";
@@ -532,6 +555,7 @@ public class ForeignServices {
 	    String is_here_) {
 	// 两个表
 	StringBuffer buffer = new StringBuffer();
+	buffer.append(" and t1.status <> 1 ");
 	if (Untils.NotNull(foreignname)) {
 	    buffer.append(" and ( t1.NAME like '%" + foreignname + "%' )");
 	}

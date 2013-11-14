@@ -234,6 +234,34 @@ public class foreignController {
 	}
 	return null;
     }
+    @RequestMapping(value = "/foreign_del.html")
+    public String AjaxDel(HttpServletRequest request,
+	    HttpServletResponse response) {
+	String idstr = Untils.NotNull(request.getParameter("delete_id")) ? request
+		.getParameter("delete_id") : "";
+	foreignServices = (ForeignServices) springContextUtil
+			.getBean("ForeignServices");
+		String message=foreignServices.del(idstr);
+		
+		
+		response.setContentType("text/Xml;charset=utf-8");
+		response.setHeader("Cache-Control", "no-cache");
+		response.setHeader("pragma", "no-cache");
+		response.setDateHeader("expires", 0);
+		PrintWriter out = null;
+		try {
+		    out = response.getWriter();
+		    JSONObject object1 = new JSONObject();
+		    object1.put("message", message);
+		    out.println(object1);
+		    
+		} catch (IOException ex1) {
+		    ex1.printStackTrace();
+		} finally {
+		    out.close();
+		}
+		return null;
+    }
 
     @RequestMapping(value = "/foreign_hereis.html")
     public String Edit_hereis(HttpServletRequest request,
@@ -343,7 +371,9 @@ public class foreignController {
 	    HttpServletRequest request, Model model) {
 	foreignServices = (ForeignServices) springContextUtil
 		.getBean("ForeignServices");
-	PageMybatis page = foreignServices.QueryCount("");
+	String query_sql=foreignServices.getsql("","", "", "", "", "");
+	PageMybatis page = foreignServices.QueryCount(query_sql);
+	page.setQuerysql(query_sql);
 	page.setNowpage(Long.parseLong("1"));
 	List<FiForeigner> list = foreignServices.QueryList(page);
 	page.setPageurl(Untils.requestPath(request)+"kind="+kind);

@@ -174,16 +174,7 @@ float: left;
         </style>
         <script>
         $(document).ready(function(){
-        	  $(".row_").has("button").click(function(){
-        		  var temp=$("input[type='checkbox']:checked");
-              	if(temp){
-              		if(temp.length > 0){
-              				alert("以上勾选的外籍人员你确定要删除么?");
-              		}else{
-     						alert("请勾选要修改的人员后再点击尝试！");
-     					}
-              	}
-        	  });
+        	  
         	//修改页面的option
         	var formoptions={
         			dataType:  'json', 
@@ -535,7 +526,52 @@ float: left;
 			$("#pagination-clean").on("blur","input",function(e){
 				check_submit(e);
 			});
-			$("#allcheckbox").click(function(){ 
+			var doptions={
+					dataType:  'json',
+	          		success : function(datas){
+						if(datas){
+							alert(datas.message);
+							window.location.href=window.location.href;
+						}
+					}
+				};
+			$("#invitation_del").ajaxForm(doptions);
+            $("#invit_del").focus(function(){
+   				var temp=$("input[type='checkbox']:checked");
+   				var id="";
+   				if(temp){
+   					if(temp.length > 0){
+   					if(temp.length > 1){
+   						$.each(temp,function(x,v){
+   							if($(v).val() != "0"){
+   		   						id=id+$(v).val()+",";
+   							}
+   		   				});
+						}else if(temp.length > 0){
+   						if($(temp).val() != "0"){
+   							if($(temp).val() != "0"){
+   		   						id=id+$(temp).val()+",";
+   							}
+   						}
+						}
+   						if(id != ""){
+   		   					$("#delete_id").val(id);
+   		   				}
+   					}else{
+   						alert("请勾选要删除的人员后再尝试！");
+   					}
+   				}
+   			});
+            $("#invit_del").click(function(){
+            	var temp=$("input[type='checkbox']:checked");
+            	if(temp.length > 0 ){
+            		if(confirm("确认删除选中的外籍人员信息？")){
+					$("#invitation_del").attr("action","<%=basePath%>invitation/invitation_del.html");
+					$("#invitation_del").submit();
+            		}
+				}
+            });
+            $("#allcheckbox").click(function(){ 
             	$("input:checkbox").prop('checked',this.checked) 
             });
 		});
@@ -617,7 +653,10 @@ float: left;
 					</c:forEach>
 					</div>
 					<div class="row_" style="float: left;width: 10%;">
-                <button type="button">
+               <form method="post" name="invitation_del" id="invitation_del">
+                	<input type="hidden" id="delete_id" name="delete_id"/>
+                </form>
+                <button type="button" id="invit_del" name="invit_del">
                     批量删除
                 </button>
             </div>

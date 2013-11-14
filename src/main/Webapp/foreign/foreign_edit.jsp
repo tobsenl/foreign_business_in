@@ -290,19 +290,51 @@
             	$(".form").dialog("open");
             });
             
-            
-            $(".row").has("button").click(function(){
-            	var temp=$("input[type='checkbox']:checked");
-            	if(temp){
-            		if(temp.length > 0){
-            			 $("#message").dialog("open");
-                         $("#message").html("以上勾选的外籍人员你确定要删除么?");
-            		}else{
-   						alert("请勾选要修改的人员后再点击尝试！");
+            var doptions={
+					dataType:  'json',
+	          		success : function(datas){
+						if(datas){
+							alert(datas.message);
+							window.location.href=window.location.href;
+						}
+					}
+				};
+			$("#foreign_del").ajaxForm(doptions);
+            $("#forei_del").focus(function(){
+   				var temp=$("input[type='checkbox']:checked");
+   				var id="";
+   				if(temp){
+   					if(temp.length > 0){
+   					if(temp.length > 1){
+   						$.each(temp,function(x,v){
+   							if($(v).val() != "0"){
+   		   						id=id+$(v).val()+",";
+   							}
+   		   				});
+						}else if(temp.length > 0){
+   						if($(temp).val() != "0"){
+   							if($(temp).val() != "0"){
+   		   						id=id+$(temp).val()+",";
+   							}
+   						}
+						}
+   						if(id != ""){
+   		   					$("#delete_id").val(id);
+   		   				}
+   					}else{
+   						alert("请勾选要删除的人员后再尝试！");
    					}
-            	}
+   				}
+   			});
+            $("#forei_del").click(function(){
+            	var temp=$("input[type='checkbox']:checked");
+            	if(temp.length > 0 ){
+            		if(confirm("确认删除选中的外籍人员信息？")){
+					$("#foreign_del").attr("action","<%=basePath%>foreign/foreign_del.html");
+					$("#foreign_del").submit();
+            		}
+				}
             });
-            
             $("#allcheckbox").click(function(){ 
             	$("input:checkbox").prop('checked',this.checked) 
             });
@@ -553,7 +585,7 @@
             <div class="row">
                 <div class="title ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all">
                     <div class="cols" style="width: 5%;">
-                        <input type="checkbox" id="allcheckbox">
+                        <input type="checkbox" id="allcheckbox" value="0">
                     </div>
                     <div class="cols" style="width: 20%;">
                         姓名
@@ -617,9 +649,13 @@
             </c:forEach>
             </div>
             <div class="row" style="float: left;width: 10%; height:15px">
-                <button type="button">
+            	<form method="post" name="foreign_del" id="foreign_del">
+                	<input type="hidden" id="delete_id" name="delete_id"/>
+                </form>
+                <button type="button" id="forei_del" name="forei_del">
                     批量删除
                 </button>
+                
             </div>
             <DIV style="float: right;width: 80%;text-align: right; padding-right:5%" >
             	<form id="page" method="post">

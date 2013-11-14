@@ -81,6 +81,36 @@ public class invitationController {
 	}
     }
 
+    @RequestMapping(value = "/invitation_del.html")
+    public String AjaxDel(HttpServletRequest request,
+	    HttpServletResponse response) {
+	String idstr = Untils.NotNull(request.getParameter("delete_id")) ? request
+		.getParameter("delete_id") : "";
+		invitationServices = (InvitationServices) springContextUtil
+			.getBean("InvitationServices");
+		String message=invitationServices.del(idstr);
+		
+		
+		response.setContentType("text/Xml;charset=utf-8");
+		response.setHeader("Cache-Control", "no-cache");
+		response.setHeader("pragma", "no-cache");
+		response.setDateHeader("expires", 0);
+		PrintWriter out = null;
+		try {
+		    out = response.getWriter();
+		    JSONObject object1 = new JSONObject();
+		    object1.put("message", message);
+		    out.println(object1);
+		    
+		} catch (IOException ex1) {
+		    ex1.printStackTrace();
+		} finally {
+		    out.close();
+		}
+		return null;
+    }
+    
+    
     @RequestMapping(value = "/search_list.html")
     public String invitationQuery(@RequestParam("kind") String kind,
 	    HttpServletRequest request, HttpServletResponse response,

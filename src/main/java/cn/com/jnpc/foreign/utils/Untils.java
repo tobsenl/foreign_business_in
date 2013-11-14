@@ -8,8 +8,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -273,6 +275,22 @@ public final class Untils {
     	String syspath = path.replace("/WEB-INF", "/temp_store/")
     			+ DateUtil.getCurrentDate("yyyy-MM-dd");
     	return syspath;
+    }
+    public final static List<String> getlistBystr(String str) {
+	List<String> list=null;
+	str=str.trim();
+	if(NotNull(str)){
+	    list=new ArrayList<String>();
+	    String [] strlist =str.split(",");
+	    for (int i = 0; i < strlist.length; i++) {
+		if(Untils.NotNull(strlist[i])){
+		    list.add(strlist[i]);
+		}else{
+		    continue;
+		} 
+	    }
+	}
+	return list;
     }
 
     public final static String storePic(String path, MultipartFile blob) {
