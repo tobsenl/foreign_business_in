@@ -616,8 +616,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    			}
 			function getUrl(v){
 				var page_url=$("#pageurl").val();
-				var attr=page_url.split("&");
-				var pageurl="";
+				var url=page_url.split("?");
+				var pageurl=url[0].replace("foreign_query","search_list");
+				var attr=url[1].split("&");
+				var s=0;
 				for(var i=0;i<attr.length;i++){
 					if(v=="page"){
 						if(attr[i].match("pagesize") != null){
@@ -625,11 +627,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						}else if(attr[i].match("nowpage") != null){
 							continue;
 						}else{
-							if(i==0){
-								pageurl=pageurl+attr[i].replace("foreign_query","search_list");
-							}else{
+							if(s==0){
+								pageurl=pageurl+"?"+attr[i];
+							}else if(s > 0){
 								pageurl=pageurl+"&"+attr[i];
 							}
+							s++;
 						}
 					}else if(v=="query"){
 						if(attr[i].match("foreign_name") != null){
@@ -640,12 +643,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							continue;
 						}else if(attr[i].match("post_q") != null){
 							continue;
+						}else if(attr[i].match("invitation_numb") != null){
+							continue;
+						}else if(attr[i].match("is_here_") != null){
+							continue;
 						}else{
-							if(i==0){
-								pageurl=pageurl+attr[i].replace("foreign_query","search_list");
-							}else{
+							if(s==0){
+								pageurl=pageurl+"?"+attr[i];
+							}else if(s > 0){
 								pageurl=pageurl+"&"+attr[i];
 							}
+							s++;
 						}
 					}
 				}
@@ -663,9 +671,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				var page_url=$("#pageurl").val();
 				var attr=page_url.split("&");
 				var pageurl= getUrl("page");
+				var allpagesize= getUrl("allpagesize");
 				$("#nowpage").val(now_index);
 				if(parseInt(page_size) > parseInt(allcount)){
 					alert("每页显示数不能超出总数据量！请重新填写每页显示数");
+				}else if(parseInt(allpagesize) > parseInt(now_index)){
+					alert("已经是最后一页!");
 				}else{
 					$("#page").attr("action",pageurl);
 					$("#page").submit();
@@ -873,12 +884,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								</c:if>
 							</c:forEach>
 						</c:if>
+						<c:if test="${page.allpagesize > page.nowpage}">
 						<li class="next"><a href ="javascript: ;" title="第${page.nowpage+1}页" name="${page.nowpage+1}">Next >></a></li>
+						</c:if>
+						<c:if test="${page.allpagesize <= page.nowpage}">
+						<li class="previous-off"> Next </li>
+						</c:if>
 						<input type="hidden" id="nowpage" name="nowpage" value="${page.nowpage}"/>
 					</ul>
 				</form>
 				<input type="hidden" id="pageurl" name="pageurl" value="${page.pageurl}"/>
 				<input type="hidden" id="allcount" name="allcount" value="${page.allcount}"/>
+				<input type="hidden" id="allpagesize" name="allpagesize" value="${page.allpagesize}"/>
             </DIV>
         </div>
         <div id="message" style="display:none;">

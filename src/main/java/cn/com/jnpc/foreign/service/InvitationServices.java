@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import cn.com.jnpc.ems.dto.User;
@@ -25,6 +27,8 @@ import cn.com.jnpc.foreign.utils.DateUtil;
 import cn.com.jnpc.foreign.utils.JnpcException;
 import cn.com.jnpc.foreign.utils.Untils;
 import cn.com.jnpc.foreign.vo.PageMybatis;
+
+@Transactional
 @Service("InvitationServices")
 public class InvitationServices {
     private static Logger log = Logger.getLogger(InvitationServices.class);
@@ -58,7 +62,7 @@ public class InvitationServices {
     private void setInvitationDao(invitationDao invitationDao) {
 	this.invitationDao = invitationDao;
     }
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public String store(HttpServletRequest request, MultipartFile attachment,
 	    User user) {
 	// 获取行数max
@@ -172,7 +176,7 @@ public class InvitationServices {
 	    return "新建失败!";
 	}
     }
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public String storeUpdata(FiInvitation new_invitation,
 	    HttpServletRequest request, MultipartFile attachment, User user) {
 	// 获取行数max
@@ -407,7 +411,7 @@ public class InvitationServices {
     public List<FiInvitation> QueryList(PageMybatis page) {
 	return invitationDao.SelectAll("selectByPage", page);
     }
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public String del(String idstr) {
 	if (Untils.NotNull(idstr)) {
 	    List<String> getlist = Untils.getlistBystr(idstr);
@@ -426,7 +430,7 @@ public class InvitationServices {
 	    return "需要删除的邀请函列表为空！请确认后再提交";
 	}
     }
-    
+    @Transactional(propagation=Propagation.REQUIRED)
     public FiInvitation UpdataObject(FiInvitation invitation) {
 	return invitationDao.UptataReturnObj("updateByPrimaryKey", invitation);
     }
@@ -435,7 +439,7 @@ public class InvitationServices {
 	 String workpath=Untils.getWorkPath(request,Untils.getSpitpath(attachement.getUrl()));
 	 return workpath;
     }
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public String UpdataInvitation(String invitation_id, String status) {
 	// 在启用邀请函的同时需要动态修改这里的信息.
 	// 启用.失效都将对应存入 foreign 将foreign添加字段用于存放invitation状态.

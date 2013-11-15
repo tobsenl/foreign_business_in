@@ -7,6 +7,8 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.jnpc.ems.dto.User;
 import cn.com.jnpc.foreign.dao.fiMiddleDao;
@@ -16,6 +18,8 @@ import cn.com.jnpc.foreign.po.FiForeigner;
 import cn.com.jnpc.foreign.po.FiInvitation;
 import cn.com.jnpc.foreign.po.FiMiddle;
 import cn.com.jnpc.foreign.utils.Untils;
+
+@Transactional
 @Service("MiddleServices")
 public class MiddleServices {
     FiMiddle middle;
@@ -30,6 +34,7 @@ public class MiddleServices {
     private void setForeignservice(ForeignServices foreignservice) {
         this.foreignservice = foreignservice;
     }
+    @Transactional(propagation=Propagation.REQUIRED)
     public FiMiddle InsertReturObject(String foreign_id,User user){
 	middle=new FiMiddle();
 	middle.setFkPersonId(foreign_id);
@@ -40,10 +45,12 @@ public class MiddleServices {
 	middleDao.InsertReturnID("insert", middle);
 	return middle;
     }
+    @Transactional(propagation=Propagation.REQUIRED)
     public FiMiddle UpdataObject(FiMiddle middle_v){
 	middleDao.Updata("updateByPrimaryKey",middle_v);
 	return middle_v;
     }
+    @Transactional(propagation=Propagation.REQUIRED)
     public void deleteByPrimaryKey(String id){
 	middleDao.DeleteByPrimaryKey("deleteByPrimaryKey",Integer.parseInt(id));
     }

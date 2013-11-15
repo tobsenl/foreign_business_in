@@ -6,6 +6,8 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import cn.com.jnpc.ems.dto.User;
@@ -15,6 +17,7 @@ import cn.com.jnpc.foreign.po.FiAttachment;
 import cn.com.jnpc.foreign.po.FiBlob;
 import cn.com.jnpc.foreign.utils.Untils;
 
+@Transactional
 @Service(value="AttachmentServices")
 public class AttachmentServices {
     private static Logger log = Logger.getLogger(AttachmentServices.class);
@@ -39,7 +42,7 @@ public class AttachmentServices {
     }
 
     String b_id;
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public FiAttachment InsertReturObject(MultipartFile blob_v, User user,
 	    int type) {
 	try {
@@ -90,7 +93,7 @@ public class AttachmentServices {
 	    return attachment;
 	}
     }
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public FiAttachment UpdataReturnObject(MultipartFile blob_v, User user,
 	    String id,int type) {
 	try {
@@ -161,11 +164,11 @@ public class AttachmentServices {
 	    return attachment;
 	}
     }
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public void UpdataObject(FiAttachment attachment) {
 	attachmentdao.Updata("updateByPrimaryKey", attachment);
     }
-
+    
     public FiAttachment QueryById(String id) {
 	FiAttachment attach = attachmentdao.SelectByPrimaryKey(
 		"selectByPrimaryKey", id);
@@ -190,7 +193,7 @@ public class AttachmentServices {
 
 	}
     }
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public void DeleteByID(String id) {
 	attachmentdao.DeleteByPrimaryKey("deleteByPrimaryKey", id);
     }

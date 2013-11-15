@@ -17,6 +17,8 @@ import cn.com.jnpc.foreign.po.FiInout;
 import cn.com.jnpc.foreign.po.FiMiddle;
 import cn.com.jnpc.foreign.po.FiResidencePermit;
 import cn.com.jnpc.foreign.utils.Untils;
+
+@Transactional
 @Service("ResidencePermitServices")
 public class ResidencePermitServices {
     private static Logger log = Logger.getLogger(ResidencePermitServices.class);
@@ -45,7 +47,7 @@ public class ResidencePermitServices {
         this.inoutservices = inoutservices;
     }
 
-    //@Transactional(propagation=Propagation.REQUIRED)
+    @Transactional(propagation=Propagation.REQUIRED)
     public FiResidencePermit InsertReturObject(FiResidencePermit permit,
 	    User user) {
 	try {
@@ -66,11 +68,11 @@ public class ResidencePermitServices {
     public FiResidencePermit QueryById(String id) {
 	return permitDao.SelectByPrimaryKey("selectByPrimaryKey", id);
     }
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public void DeleteByID(String id) {
 	permitDao.DeleteByPrimaryKey("deleteByPrimaryKey", id);
     }
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public FiResidencePermit UpdataReturnObject(FiResidencePermit permit,
 	    User user) {
 	try {
@@ -89,7 +91,7 @@ public class ResidencePermitServices {
 	    return null;
 	}
     }
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public String store(FiResidencePermit permit, List id_list, User user) {
 	for (int i = 0; i < id_list.size(); i++) {
 	    String str = (String) id_list.get(i);

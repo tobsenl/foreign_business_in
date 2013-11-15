@@ -7,6 +7,8 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.jnpc.ems.dto.User;
 import cn.com.jnpc.foreign.dao.fiInOutDao;
@@ -15,6 +17,8 @@ import cn.com.jnpc.foreign.model.FiInoutExample.Criteria;
 import cn.com.jnpc.foreign.po.FiForeigner;
 import cn.com.jnpc.foreign.po.FiInout;
 import cn.com.jnpc.foreign.utils.Untils;
+
+@Transactional
 @Service("InOutServices")
 public class InOutServices {
     private static Logger log = Logger.getLogger(InOutServices.class);
@@ -32,7 +36,7 @@ public class InOutServices {
     public void setForeignServices(ForeignServices foreignServices) {
 	this.foreignServices = foreignServices;
     }
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public void store(FiInout inout, User user) {
 	inout.setCreateDate(new Date());
 	if (user != null) {
@@ -40,7 +44,7 @@ public class InOutServices {
 	}
 	inoutDao.InsertReturObject("insert", inout);
     }
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public String store(FiInout inout, List list_id, User user) {
 	try {
 	    for (int i = 0; i < list_id.size(); i++) {

@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import cn.com.jnpc.ems.dto.User;
@@ -30,6 +32,7 @@ import cn.com.jnpc.foreign.utils.Untils;
 import cn.com.jnpc.foreign.vo.PageMybatis;
 import cn.com.jnpc.foreign.vo.foreigner;
 
+@Transactional
 @Service("ForeignServices")
 public class ForeignServices {
     private static Logger log = Logger.getLogger(ForeignServices.class);
@@ -98,6 +101,7 @@ public class ForeignServices {
      * @param user
      * @return
      */
+    @Transactional(propagation=Propagation.REQUIRED)
     public String store(foreigner foreign, MultipartFile pp_attachment,
 	    MultipartFile ee_attachment, User user) {
 	/**
@@ -231,6 +235,7 @@ public class ForeignServices {
      * @param user
      * @return
      */
+    @Transactional(propagation=Propagation.REQUIRED)
     public String storeUpdata(foreigner foreign, MultipartFile pp_attachment,
 	    MultipartFile ee_attachment, User user) {
 	/**
@@ -421,7 +426,7 @@ public class ForeignServices {
 		foreignerexample);
 	return list;
     }
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public String del(String idstr) {
 	if (Untils.NotNull(idstr)) {
 	    List<String> getlist = Untils.getlistBystr(idstr);
@@ -440,11 +445,11 @@ public class ForeignServices {
 	    return "需要删除的人员列表为空！请确认后再提交";
 	}
     }
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public void UpdataObject(FiForeigner foreign) {
 	foreignDao.UpdataReturnObject("updateByPrimaryKey", foreign);
     }
-
+    @Transactional(propagation=Propagation.REQUIRED)
     public String UpdataIsHere(String id, String status) {
 	FiForeigner foreign_ = QueryByid_fi(id);
 	if (foreign_ != null) {
