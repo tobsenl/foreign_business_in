@@ -482,25 +482,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							s++;
 						}
 					}else if(v=="query"){
-						if(attr[i].match("foreign_name") != null){
-							continue;
-						}else if(attr[i].match("passport_id_q") != null){
-							continue;
-						}else if(attr[i].match("contry_q") != null){
-							continue;
-						}else if(attr[i].match("post_q") != null){
-							continue;
-						}else if(attr[i].match("invitation_numb") != null){
-							continue;
-						}else if(attr[i].match("is_here_") != null){
-							continue;
-						}else{
-							if(s==0){
-								pageurl=pageurl+"?"+attr[i];
-							}else if(s > 0){
-								pageurl=pageurl+"&"+attr[i];
-							}
-							s++;
+						if(attr[i].match("kind") != null){
+							pageurl=pageurl+"?"+attr[i];
 						}
 					}
 				}
