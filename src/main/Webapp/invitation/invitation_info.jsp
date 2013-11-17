@@ -151,9 +151,18 @@ float: left;
 			if(iday > 0 || imonth > 0){
 				if(imonth > 0){
 						imonth=month_+imonth;
-						var t_size_year=Math.floor(imonth/12);
+						var size=imonth/12;
+						var t_size_year=0;
+						if(size == 1){
+							size=0
+						}else{
+							t_size_year=Math.floor(size);
+						}
 						year_= year_ + t_size_year;
 						month_= imonth - (t_size_year*12);
+						if(month_ == 0){
+							month_ = imonth;
+						}
 				}
 				if(iday > 0){
 					//alert("was into");
