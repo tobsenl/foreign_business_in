@@ -401,21 +401,4 @@ public final class DateUtil {
         cal.set(year, month, day);
         return cal.getTime();
     }
-
-    public static void main(String[] args) {
-        // System.out.println(getFullDateWeekTime("2013-01-06 09:00:00"));
-//		Date d = new Date();
-//		System.out.println(dateToString(d,  "yyyy-MM-dd"));
-//		System.out.println(dateDiff("2013-01-06 09:00:00", "2013-01-06 09:00:00","yyyy-MM-dd"));
-//		System.out.println(format("2013-01-05","yyyy-MM-dd", "E yyyy-MM-dd"));
-//	    System.out.println(format("2013-03-29 星期五 09:30", "yyyy-MM-dd E HH:mm", "yyyy-MM-dd HH:mm"));
-//	    System.out.println(new Date("yyyy-MM-dd"));
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//        System.out.println(sdf.format(getFirstDate(2013, 5)));
-//        System.out.println(sdf.format(getLastDate(2013, 5)));
-//        System.out.println(dateToString(getNextMonth(new Date()), "yyyy-MM-dd"));
-//        System.out.println(DateUtil.dateToString(DateUtil.addDay(new Date(), 5), "yyyy-MM-dd HH:mm"));
-        System.out.println(dateToString(getDate(2013, 0, 1), "yyyy-MM-dd HH:mm:ss"));
-        System.out.println(dateToString(addMonth(getDate(2013, 12, 0), -1), "yyyy-MM-dd HH:mm:ss"));
-    }
 }

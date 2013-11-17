@@ -155,10 +155,10 @@ public class AttachmentServices {
 	    // System.out.println(blob);
 	    return attachmentB;
 	} catch (Exception e) {
-	    //log.info(e.getMessage());
-	    //log.info(e.toString());
-	    //log.info(e.getCause());
-	    System.out.println(e.toString()+" /ok/ "+e.getCause());
+	    log.info(e.getMessage());
+	    log.info(e.toString());
+	    log.info(e.getCause());
+	    //System.out.println(e.toString()+" /ok/ "+e.getCause());
 	    return null;
 	} finally {
 	    return attachment;
