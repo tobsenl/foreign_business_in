@@ -260,6 +260,7 @@ public class InvitationServices {
 		    new_invitation.getId());
 	    FiAttachment attch = null;
 	    // 保存附件
+	    if(attachment != null){
 	    if (Untils.NotNull(new_invitation.getFkAttachmentId())
 		    || attachment.getSize() > 0) {
 		if (Untils.NotNull(new_invitation.getFkAttachmentId())) {
@@ -269,6 +270,7 @@ public class InvitationServices {
 		    attch = attchServices
 			    .InsertReturObject(attachment, user, 0);
 		}
+	    }
 		if (attch != null) {
 //		    attch.setCardId(fiinvitation.getInvitationId());
 //		    attch.setEndTime(fiinvitation.getArrivedDate());

@@ -46,6 +46,7 @@ public class QueryServices {
 	List<FiInvitation> invitation_list=null;
 	if(Untils.NotNull(id)){
 	    List<FiMiddle> middle_list=middleservices.QueryByForeign(id);
+	    if(middle_list!=null & middle_list.size()>0){
 	    List list_id=new ArrayList();
 	    for (int i = 0; i < middle_list.size(); i++) {
 		FiMiddle middle=middle_list.get(i);
@@ -55,6 +56,9 @@ public class QueryServices {
 		}
 	    }
 	    return invitationservices.QueryByIdlist(list_id);
+	    }else{
+	    	return null;
+	    }
 	}else{
 	    return null;
 	}
@@ -63,6 +67,7 @@ public class QueryServices {
 	List<FiInvitation> invitation_list=null;
 	if(Untils.NotNull(id)){
 	    List<FiMiddle> middle_list=middleservices.QueryByInvitation(id);
+	    if(middle_list!=null & middle_list.size()>0){
 	    List list_id=new ArrayList();
 	    for (int i = 0; i < middle_list.size(); i++) {
 		FiMiddle middle=middle_list.get(i);
@@ -72,6 +77,10 @@ public class QueryServices {
 		}
 	    }
 	    return foreignservices.QueryByIdlist(list_id);
+	    }else{
+	    	return null;
+	    }
+	    
 	}else{
 	    return null;
 	}

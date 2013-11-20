@@ -27,13 +27,15 @@ function checksubmit(){
 		alert("请选择护照有效期！");
 		return false;
 	}
-	if($('input[name="pp_attachment"]').val()==""){
-		alert("请选择扫描文件上传！");
-		return false;
-	}
 	if($(':radio[name="expert_evidence"]:checked').val()=="1"){
+		if($("#fk_ee_attachment_id").val() == ""){
 		if($('input[name="ee_attachment"]').val()==""){
-			alert("请输入护照扫描件！");
+			alert("请输入专家证扫描件！");
+			return false;
+		}
+		}
+		if($('select[name="residence_permit_kind"]').val() == null){
+			alert("签证类型此时必须为居留许可");
 			return false;
 		}
 		var obj=document.getElementById('residence_permit_kind');
@@ -43,7 +45,7 @@ function checksubmit(){
 			return false;
 		}
 	}
-	if($('select[name="residence_permit_kind"]').val()!="0"){
+	if($('select[name="residence_permit_kind"]').val() !="0" && $('select[name="residence_permit_kind"]').val() != null){
 		if($('input[name="rp_exp_endDate"]').val()==""){
 			alert("请选择签证有效期！");
 			return false;
@@ -62,10 +64,6 @@ function checksubmit(){
 function checkedit(){
 	if($('input[name="invitationId"]').val()==""){
 		alert("邀请函号不能为空！");
-		 return false;
-	}
-	if($('input[name="attachment"]').val()==""){
-		alert("请选择邀请函！");
 		 return false;
 	}
 	var month=$('input[name="month"]').val();
@@ -98,11 +96,11 @@ function checkedit(){
 		alert("请选择来往次数！");
 		 return false;
 	}
-	if($('input[name="arrived_date"]').val()==""){
+	if($('input[name="arrivedDate"]').val()==""){
 		alert("请选择拟入境日期！");
 		return false;
 	}
-	if($('input[name="leaving_date"]').val()==""){
+	if($('input[name="leavingDate"]').val()==""){
 		alert("请选择拟离境日期！");
 		return false;
 	}

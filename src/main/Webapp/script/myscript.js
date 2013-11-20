@@ -52,7 +52,7 @@ function f_submit(){
 	}
 	if($(':radio[name="expert_evidence"]:checked').val()=="1"){
 		if($('input[name="ee_attachment"]').val()==""){
-			alert("请输入护照扫描件！");
+			alert("请选择专家证扫描件！");
 			return false;
 		}
 		var obj=document.getElementById('residence_permit_kind');
