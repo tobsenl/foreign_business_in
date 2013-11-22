@@ -1,0 +1,56 @@
+-- Create sequence 
+create sequence FIATTACHMENT_SEQUENCE
+minvalue 1
+maxvalue 9999999999999999999999999999
+start with 231
+increment by 1
+cache 10;
+
+-- Create sequence 
+create sequence FIBLOB_SEQUENCE
+minvalue 1
+maxvalue 9999999999999999999999999999
+start with 261
+increment by 1
+cache 10;
+
+
+-- Create sequence 
+create sequence FIFOREIGN_SEQUENCE
+minvalue 1
+maxvalue 9999999999999999999999999999
+start with 111
+increment by 1
+cache 10;
+
+-- Create sequence 
+create sequence FIMIDDLE_SEQUENCE
+minvalue 1
+maxvalue 9999999999999999999999999999
+start with 71
+increment by 1
+cache 10;
+
+-- Create sequence 
+create sequence FIRESIDENCEPERMIT_SEQUENCE
+minvalue 1
+maxvalue 9999999999999999999999999999
+start with 151
+increment by 1
+cache 10;
+
+-- Create sequence 
+create sequence INOUT_SEQUENCE
+minvalue 1
+maxvalue 9999999999999999999999999999
+start with 91
+increment by 1
+cache 10;
+
+-- Create sequence 
+create sequence INVITATION_SEQUENCE
+minvalue 1
+maxvalue 9999999999999999999999999999
+start with 91
+increment by 1
+cache 10;

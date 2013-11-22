@@ -1,0 +1,307 @@
+-- Create table
+create table FI_ATTACHMENT
+(
+  id           NUMBER not null,
+  old_name     VARCHAR2(100),
+  store_name   VARCHAR2(100),
+  url          VARCHAR2(500),
+  file_id      VARCHAR2(100),
+  type         NUMBER(1),
+  kf_parent_id VARCHAR2(100),
+  parent_type  VARCHAR2(100),
+  status       NUMBER(1) default 1,
+  start_time   DATE,
+  end_time     DATE,
+  card_id      VARCHAR2(100),
+  create_time  DATE,
+  edit_time    DATE,
+  create_user  VARCHAR2(100),
+  edit_user    VARCHAR2(100),
+  is_defer     NUMBER(1) default 0
+)
+tablespace TS_FA
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table FI_ATTACHMENT
+  add primary key (ID)
+  using index 
+  tablespace TS_FA
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+-- Create table
+create table FI_BLOB
+(
+  id        NUMBER not null,
+  file_v    BLOB,
+  parent_id VARCHAR2(100)
+)
+tablespace TS_FA
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table FI_BLOB
+  add primary key (ID)
+  using index 
+  tablespace TS_FA
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+-- Create table
+create table FI_FOREIGNER
+(
+  id                  NUMBER not null,
+  name                VARCHAR2(200),
+  sex                 NUMBER,
+  birthday            DATE,
+  country             VARCHAR2(100),
+  company_department  VARCHAR2(100),
+  passport_id         VARCHAR2(100),
+  passport_exp_date   DATE,
+  post                VARCHAR2(120),
+  role                VARCHAR2(50),
+  fk_pp_attachment_id VARCHAR2(100),
+  expert_evidence     NUMBER default 0,
+  fk_ee_attachment_id VARCHAR2(100),
+  fk_rp_permit_id     VARCHAR2(100),
+  fk_invitation_id    VARCHAR2(100),
+  fk_beuse            NUMBER default 0,
+  is_here             NUMBER default 0,
+  status              NUMBER default 0,
+  create_date         DATE,
+  edit_date           DATE,
+  create_user         VARCHAR2(100),
+  edit_user           VARCHAR2(100)
+)
+tablespace TS_FA
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table FI_FOREIGNER
+  add primary key (ID)
+  using index 
+  tablespace TS_FA
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+-- Create table
+create table FI_INOUT
+(
+  id               NUMBER not null,
+  begin_time       DATE,
+  end_time         DATE,
+  fk_foreigner_id  VARCHAR2(100),
+  fk_invitation_id VARCHAR2(100),
+  type             NUMBER,
+  content          VARCHAR2(500),
+  status           NUMBER default 0,
+  create_date      DATE,
+  create_user      VARCHAR2(100),
+  edit_date        DATE,
+  edit_user        VARCHAR2(100)
+)
+tablespace TS_FA
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table FI_INOUT
+  add primary key (ID)
+  using index 
+  tablespace TS_FA
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create table
+create table FI_INVITATION
+(
+  id               NUMBER(10) not null,
+  invitation_id    VARCHAR2(100),
+  fk_attachment_id VARCHAR2(100),
+  is_use           NUMBER default 0,
+  stay_time        VARCHAR2(50),
+  goback_times     VARCHAR2(10),
+  arrived_date     DATE,
+  leaving_date     DATE,
+  status           NUMBER default 0,
+  create_date      DATE,
+  edit_date        DATE,
+  create_user      VARCHAR2(100),
+  edit_user        VARCHAR2(100)
+)
+tablespace TS_FA
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table FI_INVITATION
+  add primary key (ID)
+  using index 
+  tablespace TS_FA
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+-- Create table
+create table FI_MIDDLE
+(
+  id               NUMBER not null,
+  fk_invitation_id VARCHAR2(100),
+  fk_person_id     VARCHAR2(100),
+  fk_person_ppid   VARCHAR2(100),
+  create_date      DATE,
+  create_user      VARCHAR2(100),
+  edit_user        VARCHAR2(100),
+  edit_date        DATE,
+  work             VARCHAR2(100),
+  work_address     VARCHAR2(500),
+  living_address   VARCHAR2(500),
+  defer_id         VARCHAR2(100)
+)
+tablespace TS_FA
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table FI_MIDDLE
+  add primary key (ID)
+  using index 
+  tablespace TS_FA
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+-- Create table
+create table FI_RESIDENCE_PERMIT
+(
+  id                    NUMBER not null,
+  residence_permit_id   VARCHAR2(100),
+  residence_permit_kind VARCHAR2(100),
+  rp_exp_enddate        DATE,
+  rp_address            VARCHAR2(500),
+  fk_attachment_id      VARCHAR2(100),
+  fk_foreigner_id       VARCHAR2(100),
+  status                NUMBER default 0,
+  create_date           DATE,
+  create_user           VARCHAR2(100),
+  edit_date             DATE,
+  edit_user             VARCHAR2(100),
+  is_defer              NUMBER(1) default 0
+)
+tablespace TS_FA
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table FI_RESIDENCE_PERMIT
+  add primary key (ID)
+  using index 
+  tablespace TS_FA
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );

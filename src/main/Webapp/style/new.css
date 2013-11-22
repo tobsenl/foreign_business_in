@@ -1,4 +1,4 @@
-ï»¿html {
+html {
 	height: 100%;
 	width: 100%;
 }
@@ -11,7 +11,7 @@ BODY {
 	width: 100%;
 	margin-left: 0;
 	margin-top: 0;
-	overflow: hidden;
+	overflow-x: hidden;
 	margin-left: 0;
 	position: relative;
 }
@@ -64,7 +64,7 @@ em {
 	padding: 0;
 	bottom: 0;
 }
-/*æ•°æ®tableæ ·å¼*/
+/*Êı¾İtableÑùÊ½*/
 .dtable {
 	border: 0;
 	background-color: #698cc3;
@@ -102,13 +102,13 @@ A:hover {
 	TEXT-DECORATION: underline
 }
 
-/*æ™®é€šç²—ä½“*/
+/*ÆÕÍ¨´ÖÌå*/
 .nav {
 	FONT-WEIGHT: bold;
 	FONT-SIZE: 9pt;
 	FONT-FAMILY: Tahoma, Verdana
 }
-/*æ ‡é¢˜å¤´ï¼Œç™½è‰²å­—ä½“ï¼Œç²‰è“è‰²èƒŒæ™¯ï¼Œå­—ä½“å¤§å°9pt*/
+/*±êÌâÍ·£¬°×É«×ÖÌå£¬·ÛÀ¶É«±³¾°£¬×ÖÌå´óĞ¡9pt*/
 .header {
 	FONT-WEIGHT: bold;
 	FONT-SIZE: 9pt;
@@ -116,35 +116,35 @@ A:hover {
 	FONT-FAMILY: Tahoma, Verdana;
 	BACKGROUND-COLOR: #698cc3
 }
-/*åˆ†ç±»ï¼Œé»‘è‰²ï¼Œå¾ˆæµ…çš„ç²‰è“è‰²èƒŒæ™¯ï¼Œå­—ä½“å¤§å°9pt*/
+/*·ÖÀà£¬ºÚÉ«£¬ºÜÇ³µÄ·ÛÀ¶É«±³¾°£¬×ÖÌå´óĞ¡9pt*/
 .category {
 	FONT-SIZE: 9pt;
 	COLOR: #000000;
 	FONT-FAMILY: Tahoma, Verdana;
 	BACKGROUND-COLOR: #efefef
 }
-/*è“è‰²å­—ä½“*/
+/*À¶É«×ÖÌå*/
 .multi {
 	FONT-SIZE: 9pt;
 	COLOR: #003366;
 	FONT-FAMILY: Tahoma, Verdana
 }
-/*å°å·å­—ä½“ï¼Œ8ptå¤§å°*/
+/*Ğ¡ºÅ×ÖÌå£¬8pt´óĞ¡*/
 .smalltxt {
 	FONT-SIZE: 8pt;
 	FONT-FAMILY: Tahoma, Verdana
 }
-/*é»‘è‰²æ™®é€šå¤§å°å­—ä½“ï¼Œ9ptå¤§å°*/
+/*ºÚÉ«ÆÕÍ¨´óĞ¡×ÖÌå£¬9pt´óĞ¡*/
 .mediumtxt {
 	FONT-SIZE: 9pt;
 	COLOR: #000000;
 	FONT-FAMILY: Tahoma, Verdana
 }
-/*ç²—ä½“å­—ä½“*/
+/*´ÖÌå×ÖÌå*/
 .bold {
 	FONT-WEIGHT: bold
 }
-/*ç”¨æ¥æ§åˆ¶è¡¨å•è¯´æ˜å­—æ®µè¡¨æ ¼çš„æ ·å¼æ§åˆ¶*/
+/*ÓÃÀ´¿ØÖÆ±íµ¥ËµÃ÷×Ö¶Î±í¸ñµÄÑùÊ½¿ØÖÆ*/
 .formnametd {
 	FONT-WEIGHT: normal;
 	FONT-SIZE: 9pt;
@@ -152,12 +152,12 @@ A:hover {
 	FONT-FAMILY: Tahoma, Verdana;
 	BACKGROUND-COLOR: #efefef
 }
-/*ç”¨æ¥æ§åˆ¶æ•´ä¸ªè¡¨æ ¼æ ‡é¢˜çš„æ ·å¼æ§åˆ¶ï¼Œå¦‚ï¼šæˆ‘çš„å®¡æ ¸æ–‡ä»¶é‡Œåˆ—è¡¨*/
+/*ÓÃÀ´¿ØÖÆÕû¸ö±í¸ñ±êÌâµÄÑùÊ½¿ØÖÆ£¬Èç£ºÎÒµÄÉóºËÎÄ¼şÀïÁĞ±í*/
 .tabletitle {
 	FONT-WEIGHT: bold;
 	FONT-SIZE: 9pt;
 	FONT-FAMILY: Tahoma, Verdana;
 	color: #003366 /*Modify by LUSS
-    FONT-SIZE: 12pt;face:"æ¥·ä½“_GB2312"; COLOR: #330099; FONT-FAMILY: Tahoma, Verdana; 
+    FONT-SIZE: 12pt;face:"¿¬Ìå_GB2312"; COLOR: #330099; FONT-FAMILY: Tahoma, Verdana; 
 	End Modify*/
 }
