@@ -288,6 +288,10 @@ public class ForeignServices {
 						new JnpcException("pp_attachment store error!");
 					}
 				}
+			}else{
+				if(Untils.NotNull(foreign.getFk_pp_attachment_id())){
+					pp_attachmentObject=sattachment.QueryById(foreign.getFk_pp_attachment_id());
+				}
 			}
 			// 如果选择了专家证 则上传，同时保存勾选状态
 			if (Untils.NotNull(ee_number) && "1".equals(ee_number)) {

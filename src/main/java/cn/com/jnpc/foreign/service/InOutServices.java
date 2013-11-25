@@ -78,7 +78,7 @@ public class InOutServices {
 					}
 				    flag=true;
 				}else{
-				    return foreign.getName()+"当前处于 "+(foreign.getIsHere()==1?"在连 状态":"不在连 状态")+"无法进行"+("1".equals(inout.getType())?"入境":"出境")+"操作";
+				    return foreign.getName()+"当前处于 "+(foreign.getIsHere()==1?"在连 状态":"不在连 状态")+"无法进行"+(1==inout.getType()?"入境":"出境")+"操作";
 				}
 		    } else {
 			return foreign.getName() + "无对应邀请函";
