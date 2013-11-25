@@ -106,36 +106,45 @@ public class ResidencePermitServices {
 				if (Untils.NotNull(foreign.getFkInvitationId())) {
 					if (Untils.NotNull(foreign.getFkBeuse() + "")
 							&& foreign.getFkBeuse() == 1) {
-						List<FiInout> inoutlist= inoutservices.QueryByinvitforeign(foreign.getFkInvitationId(), foreign.getId()+"");
-						FiInout inoutnow= inoutlist.get(0);
-						if(inoutnow.getType()!=0){
-						FiResidencePermit fipermit = new FiResidencePermit();
-						fipermit.setFkForeignerId(foreign.getId() + "");
-						fipermit.setIsDefer(1);
-						fipermit.setResidencePermitKind(permit
-								.getResidencePermitKind());
-						fipermit.setRpAddress(permit.getRpAddress());
-						fipermit.setRpExpEnddate(permit.getRpExpEnddate());
-						fipermit.setStatus(0);
-						FiResidencePermit fipermit_ = InsertReturObject(
-								fipermit, user);
-						foreign.setFkRpPermitId(fipermit_.getId() + "");
-						foreignServices.UpdataObject(foreign);
-						FiMiddle middle = middleservices
-								.QueryByForeign(foreign);
-						middle.setDeferId("1");
-						FiInout inout = new FiInout();
-						inout.setFkForeignerId(foreign.getId() + "");
-						inout.setFkInvitationId(foreign.getFkInvitationId());
-						inout.setBeginTime(new Date());
-						inout.setEndTime(fipermit_.getRpExpEnddate());
-						inout.setStatus(0);
-						inout.setType(2);
+						List<FiInout> inoutlist = inoutservices
+								.QueryByinvitforeign(
+										foreign.getFkInvitationId(),
+										foreign.getId() + "");
+						FiInout inoutnow = inoutlist.get(0);
+						if (foreign.getIsHere() == 1) {
+							if (inoutnow.getType() != 0) {
+								FiResidencePermit fipermit = new FiResidencePermit();
+								fipermit.setFkForeignerId(foreign.getId() + "");
+								fipermit.setIsDefer(1);
+								fipermit.setResidencePermitKind(permit
+										.getResidencePermitKind());
+								fipermit.setRpAddress(permit.getRpAddress());
+								fipermit.setRpExpEnddate(permit
+										.getRpExpEnddate());
+								fipermit.setStatus(0);
+								FiResidencePermit fipermit_ = InsertReturObject(
+										fipermit, user);
+								foreign.setFkRpPermitId(fipermit_.getId() + "");
+								foreignServices.UpdataObject(foreign);
+								FiMiddle middle = middleservices
+										.QueryByForeign(foreign);
+								middle.setDeferId("1");
+								FiInout inout = new FiInout();
+								inout.setFkForeignerId(foreign.getId() + "");
+								inout.setFkInvitationId(foreign
+										.getFkInvitationId());
+								inout.setBeginTime(new Date());
+								inout.setEndTime(fipermit_.getRpExpEnddate());
+								inout.setStatus(0);
+								inout.setType(2);
 
-						inout.setContent(fipermit_.getId() + "");
-						inoutservices.store(inout, user);
-						}else{
-							return foreign.getName() + "已经出境无法进行签证延期";
+								inout.setContent(fipermit_.getId() + "");
+								inoutservices.store(inout, user);
+							} else {
+								return foreign.getName() + "已经出境无法进行签证延期";
+							}
+						} else {
+							return foreign.getName() + "目前不在连无法进行签证延期";
 						}
 					} else {
 						if (foreign.getFkBeuse() == 0) {
