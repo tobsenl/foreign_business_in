@@ -225,6 +225,8 @@
     			$("#form1").clearForm();
     			$("#rp_div").css("display","none");
             	$("#upload_ee").css("display","none");
+            	$("#ee_url").attr("href","javascript:;");
+    			$("#ee_url").html("");
             }
             $(".form").dialog({
                 autoOpen: false,

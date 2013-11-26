@@ -266,8 +266,7 @@ public final class Untils {
 	String url = null;
 	String store_path =null;
 	String syspath =getfilepath();
-	String endsuffix=filename.substring(
-			filename.lastIndexOf("."));
+	String endsuffix=filename.substring(filename.lastIndexOf("."));
 	String newFileName = UUID.randomUUID() + endsuffix;
 	if(Untils.NotNull(oldpath)){
 	    store_path=oldpath;
@@ -372,13 +371,8 @@ public final class Untils {
     public final static String getWorkPath(HttpServletRequest request,
 	    String url) {
 	url=url.replaceAll("\\\\", "/");
-	String basePath = request.getScheme()
-		+ "://"
-		+ request.getServerName()
-		+ ":"
-		+ request.getServerPort()
-		+ "/"
-		+ request.getContextPath();
+	String basePath = request.getScheme()+ "://"+ request.getServerName()
+		+ ":"+ request.getServerPort()+ "/"+ request.getContextPath();
 	return basePath + "/" + url;
     }
 }
