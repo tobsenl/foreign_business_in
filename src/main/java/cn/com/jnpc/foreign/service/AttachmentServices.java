@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import cn.com.jnpc.foreign.utils.Untils;
 
 @Transactional
 @Service(value = "AttachmentServices")
+@Component
 public class AttachmentServices {
 	private static Logger log = Logger.getLogger(AttachmentServices.class);
 	String blob_id = null;
@@ -186,7 +188,7 @@ public class AttachmentServices {
 			if (Untils.NotNull(attach.getFileId())) {
 				FiBlob blob = blobdao.SelectByPrimaryKey("selectByPrimaryKey",
 						attach.getFileId());
-				String url = Untils.getUrl(blob, path, attach.getOldName());
+				String url = Untils.getUrl(blob, path, (Untils.NotNull(attach.getOldName())?attach.getOldName():attach.getUrl()));
 				if (Untils.NotNull(url)) {
 					attach.setUrl(url);
 					UpdataObject(attach);
