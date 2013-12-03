@@ -157,7 +157,8 @@ public class AttachmentServices {
 				}
 			}
 			// System.out.println(blob);
-			return attachmentB;
+			attachment=attachmentB;
+			return attachment;
 		} catch (Exception e) {
 			log.info(e.getMessage());
 			log.info(e.toString());

@@ -23,7 +23,7 @@ import javax.sql.DataSource;
 import com.jnpc.util.Debug;
 
 public class OracleConnection extends SqlGenerator {
-	private static String ds = "jdbc/intrawebnew";
+	private static String ds = "jdbc/intraweb";
 
 
   /**
@@ -242,7 +242,7 @@ public class OracleConnection extends SqlGenerator {
      initContext = new InitialContext();
      }
         Context envContext  = (Context)initContext.lookup(ds);   
-        DataSource dataSource = (DataSource)envContext.lookup("jdbc/intrawebnew");
+        DataSource dataSource = (DataSource)envContext.lookup("jdbc/intraweb");
         try{
           connection = dataSource.getConnection();
         }catch(SQLException ex){

@@ -38,6 +38,8 @@
 <link rel="stylesheet" href="<%=basePath%>style/jquery-ui/base/jquery-ui.css" />
 
 <script src="<%=basePath%>script/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+<script language="JavaScript" src="<%=basePath%>script/UntilsDate.js""></script>
+<script language="JavaScript" src="<%=basePath%>script/Untils.js""></script>
 
 
 <style>
@@ -259,11 +261,6 @@ float: left;
 			$(".button").on("mouseup","#clear",function(){
 				$("#foreign_id_q").val("");
 			});
-			
-			
-			function split( val ) {
-				return val.split( /,\s*/ );
-			}
 			function extractLast( term ) {
 				return split(term).pop();
 			}
@@ -346,8 +343,7 @@ float: left;
 				$("#foreign_id_q").val(temp);
 			});
 			
-			var m = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
+			
 			$("#day,#month").blur(function(){
 				var day=$("#day").val() == 0 ?"":$("#day").val();
 				var month=$("#month").val() == 0?"":$("#month").val();
@@ -356,6 +352,7 @@ float: left;
 				var arrived_date=$("input[name='arrivedDate']").val();
 				getplantime(arrived_date);
 			});
+			
 			function getplantime(arrived_date){
 				var iday=0;
 				var imonth=0;
@@ -369,44 +366,24 @@ float: left;
 				}
 				//选取的年月日
 				//alert(arrived_date !="");
-			if(arrived_date !=""){
-				var timelist=arrived_date.split('-');
-				var year_= parseInt(timelist[0]);//年
-				var month_= parseInt(timelist[1]);//月
-				var day_= parseInt(timelist[2]);//日
-				
-				if(iday > 0 || imonth > 0){
-					if(imonth > 0){
-						imonth=month_+imonth;
-						var size=imonth/12;
-						var t_size_year=0;
-						if(size == 1){
-							size=0
-						}else{
-							t_size_year=Math.floor(size);
+				if(arrived_date !=""){
+					var timelist=arrived_date.split('-');
+					year_= parseInt(timelist[0]);//年
+					month_= parseInt(timelist[1]);//月
+					day_= parseInt(timelist[2]);//日
+					
+					if(iday > 0 || imonth > 0){
+						if(imonth > 0){
+							getMonth(imonth);
 						}
-						year_= year_ + t_size_year;
-						month_= imonth - (t_size_year*12);
-						if(month_ == 0){
-							month_ = imonth;
+						if(iday > 0){
+							getDay(iday);
 						}
+						
+						$("input[name='leavingDate']").val(year_+"-"+month_+"-"+day_);
 					}
-					if(iday > 0){
-						//alert("was into");
-						iday=day_+iday;
-						var chushu=1;
-						if(month_=== 2 && (year_/4==0&&year_/100!=0)||(year_/400==0)){
-							chushu=m[month_-1]+1;
-						}else{
-							chushu=m[month_-1];
-						}
-						var t_size_day=Math.floor(iday/chushu);
-						month_= month_ + t_size_day;
-						day_= iday - (t_size_day*chushu);
-					}
-					$("input[name='leavingDate']").val(year_+"-"+month_+"-"+day_);
+					year_=month_=day_=0;
 				}
-			}
 			}
 			$("input[name='arrivedDate']").focus(function(){
 				WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'%y-%M-%d',onpicking:function(dp){

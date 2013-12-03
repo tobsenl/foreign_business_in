@@ -35,6 +35,7 @@
 <link href="<%=basePath%>style/page.css" Rel="stylesheet" Type="text/css">
 
 <script src="<%=basePath%>script/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+<script language="JavaScript" src="<%=basePath%>script/Untils.js""></script>
 <style>
             .top {
                 height: 80px;
@@ -145,20 +146,10 @@
         </style>
         <script>
         $(document).ready(function(){
-        	function trim(str){ //删除左右两端的空格
-         	     return str.replace(/(^\s*)|(\s*$)/g, "");
-         	}
         	var permit_kind=null;
         	var company_kind=null;
         	var country_kind=null;
-        	function getmatch(obj,val){
-        		for(var i=0;i<obj.length;i++){
-        			val=trim(val);
-        			if(obj[i].id==val){
-        				return obj[i].name;
-        			}
-        		}
-        	}
+        	
         	var options = {
                  	dataType:  'json', 
                  	success : function(data){

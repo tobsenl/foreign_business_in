@@ -28,8 +28,10 @@
 <script src="<%=basePath%>script/ui/jquery.ui.position.js" type="text/javascript"></script>
 <script src="<%=basePath%>script/ui/jquery.ui.menu.js" type="text/javascript"></script>
 <script src="<%=basePath%>script/ui/jquery.ui.autocomplete.js" type="text/javascript"></script>
-<script language="JavaScript" src="<%=basePath%>script/myscript.js"></script>
 
+<script language="JavaScript" src="<%=basePath%>script/myscript.js"></script>
+<script language="JavaScript" src="<%=basePath%>script/UntilsDate.js""></script>
+<script language="JavaScript" src="<%=basePath%>script/Untils.js""></script>
 <style type="text/css">
 body {
 	margin: 0px;
@@ -119,8 +121,7 @@ float: left;
 </style>
 <script type="text/javascript">
 	$(document).ready(function(){
-		var m = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
+		
 		$("#day,#month").blur(function(){
 			var day=$("#day").val() == 0 ?"":$("#day").val();
 			var month=$("#month").val() == 0?"":$("#month").val();
@@ -129,6 +130,7 @@ float: left;
 			var arrived_date=$("input[name='arrived_date']").val();
 			getplantime(arrived_date);
 		});
+		
 		function getplantime(arrived_date){
 			var iday=0;
 			var imonth=0;
@@ -144,41 +146,21 @@ float: left;
 			//alert(arrived_date !="");
 		if(arrived_date !=""){
 			var timelist=arrived_date.split('-');
-			var year_= parseInt(timelist[0]);//年
-			var month_= parseInt(timelist[1]);//月
-			var day_= parseInt(timelist[2]);//日
+			year_= parseInt(timelist[0]);//年
+			month_= parseInt(timelist[1]);//月
+			day_= parseInt(timelist[2]);//日
 			
 			if(iday > 0 || imonth > 0){
 				if(imonth > 0){
-						imonth=month_+imonth;
-						var size=imonth/12;
-						var t_size_year=0;
-						if(size == 1){
-							size=0
-						}else{
-							t_size_year=Math.floor(size);
-						}
-						year_= year_ + t_size_year;
-						month_= imonth - (t_size_year*12);
-						if(month_ == 0){
-							month_ = imonth;
-						}
+					getMonth(imonth);
 				}
 				if(iday > 0){
-					//alert("was into");
-					iday=day_+iday;
-					var chushu=1;
-					if(month_=== 2 && (year_/4==0&&year_/100!=0)||(year_/400==0)){
-						chushu=m[month_-1]+1;
-					}else{
-						chushu=m[month_-1];
-					}
-					var t_size_day=Math.floor(iday/chushu);
-					month_= month_ + t_size_day;
-					day_= iday - (t_size_day*chushu);
+					getDay(iday);
 				}
+				
 				$("input[name='leaving_date']").val(year_+"-"+month_+"-"+day_);
 			}
+			year_=month_=day_=0;
 		}
 		}
 		$("input[name='arrived_date']").focus(function(){

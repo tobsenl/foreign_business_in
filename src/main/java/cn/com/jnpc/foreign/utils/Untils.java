@@ -354,14 +354,19 @@ public final class Untils {
 	    if (file.exists()) {
 		return file.toString();
 	    } else {
-		if (url.substring(url.lastIndexOf(".")).toCharArray().length <= 4) {
-		    file = new File(syspath);
-		    file.mkdirs();
-		    return file.toString();
-		} else {
-		    file.mkdirs();
-		    return file.toString();
-		}
+	    	if(url.lastIndexOf(".") > -1){
+	    		if (url.substring(url.lastIndexOf(".")).toCharArray().length <= 4) {
+	    		    file = new File(syspath);
+	    		    file.mkdirs();
+	    		    return file.toString();
+	    		} else {
+	    		    file.mkdirs();
+	    		    return file.toString();
+	    		}
+	    	}else{
+	    		file.mkdirs();
+    		    return file.toString();
+	    	}
 	    }
 	} else {
 	    return null;
