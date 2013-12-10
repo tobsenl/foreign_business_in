@@ -333,7 +333,7 @@ float: left;
          			if(a.role == 1){
         				$("#role").html("专家");
         			}else if(a.role == 2){
-        				$("#role").html("配偶");
+        				$("#role").html("家属");
         			}else{
         				$("#role").html("无");
         			}
@@ -416,7 +416,7 @@ float: left;
             if(value.role == 1 ){
             	content=content+"专家";
 				}else if(value.role == 2){
-					content=content+"配偶";
+					content=content+"家属";
 				   }else if(value.role == ""){
 					   content=content+"（无对应信息）";
 			   }

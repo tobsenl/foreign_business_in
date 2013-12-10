@@ -67,15 +67,11 @@ function checkedit(){
 		 return false;
 	}
 	var month=$('input[name="month"]').val();
-	if(month==""){
-		alert("请输入的月份！");
-		 return false;
-	}
 	if(isNaN(month)){
 		alert("请输入数字!");
 		return false;
 	}
-	if(parseInt(month)>12||parseInt(month)<=0){
+	if(parseInt(month)<0){
 		alert("请输入正确的月份");
 		return false;
 	}

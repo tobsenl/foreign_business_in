@@ -709,7 +709,7 @@ float: left;
 			<div class="row">
 				<div class="cols1">申请签证有效期<label style="color: red;">*</label></div>
 				<div class="cols2">
-					<input type="text" name="month" id="month" style="text-align: right;">月<input type="text" name="day" id="day" style="text-align: right;">日
+					<input type="text" name="month" id="month" style="text-align: right;">月<input type="text" name="day" id="day" style="text-align: right;">天
 					<input type="hidden" name="stayTime" id="stayTime"/>
 				</div>
 			</div>

@@ -283,7 +283,7 @@ body {
 						<select id="role" id="role" name="role">
 							<option value=""></option>
 							<option value="1">专家</option>
-							<option value="2">配偶</option>
+							<option value="2">家属</option>
 						</select>
 					</div>
 				</div>

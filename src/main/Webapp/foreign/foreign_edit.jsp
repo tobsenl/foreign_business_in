@@ -622,7 +622,7 @@
                     <div class="cols" style="width: 10%;">
                     <c:if test='${foreign.role == null}'>（无对应信息）</c:if>
                     	<c:if test='${foreign.role ==1}'>专家</c:if>
-                    	<c:if test='${foreign.role == 2}'>配偶</c:if>
+                    	<c:if test='${foreign.role == 2}'>家属</c:if>
                     </div>
                     <div class="cols" style="width: 5%;">
                         <div style="width: 100%;text-align: center;" class="edit">
@@ -765,7 +765,7 @@
 						<select id="role" id="role" name="role">
 							<option value=""></option>
 							<option value="1">专家</option>
-							<option value="2">配偶</option>
+							<option value="2">家属</option>
 						</select>
 					</div>
 				</div>

@@ -499,7 +499,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              			if(a.role == 1){
             				$("#role").html("专家");
             			}else if(a.role == 2){
-            				$("#role").html("配偶");
+            				$("#role").html("家属");
             			}else{
             				$("#role").html("无");
             			}
@@ -817,7 +817,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="cols" style="width: 10%;">
                     <c:if test='${foreign.role == null}'>（无对应信息）</c:if>
                         <c:if test='${foreign.role ==1}'>专家</c:if>
-                    	<c:if test='${foreign.role == 2}'>配偶</c:if>
+                    	<c:if test='${foreign.role == 2}'>家属</c:if>
                     </div>
                     <div class="cols" style="width: 10%;">
                     <c:if test='${foreign.isHere == null}'>（无对应信息）</c:if>
