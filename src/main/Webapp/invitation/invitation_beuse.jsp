@@ -222,7 +222,7 @@ float: left;
             			$("#stayTime").val(v.stayTime);
             			if(v.foreign_list !=null && v.foreign_list.length > 0){
             				$.each(eval(v.foreign_list),function(i,foreign){
-            					$("#showlist").append("<div class='cols4'><input type='hidden' name='foreign_id"+(i+1)+"' value='"+foreign.id+"' /><div class='clos5'> 姓名: "+foreign.name+ " 护照号（ "+foreign.passportId+" ）</div><div class='clos6'>X</div></div>");
+            					$("#showlist").append("<div class='cols4'><input type='hidden' name='foreign_id"+(i+1)+"' value='"+foreign.id+"' /><div class='clos5'> 姓名: "+foreign.name+ " 护照号码（ "+foreign.passportId+" ）</div><div class='clos6'>X</div></div>");
             				})
 		   					$("#numb").val(v.foreign_list.length);
             			}

@@ -194,7 +194,7 @@ float: left;
     						data = $.map(date,function(obj){
     							return {
     								value: request.term,
-    								label: " 姓名: "+obj.name+ " 护照号（ "+obj.pp_id+" ）",
+    								label: " 姓名: "+obj.name+ " 护照号码（ "+obj.pp_id+" ）",
     								id: obj.id
     							}
     						})

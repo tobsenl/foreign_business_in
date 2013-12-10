@@ -20,7 +20,7 @@ function checksubmit(){
 		return false;
 	}
 	if($('input[name="passport_id"]').val()==""){
-		alert("请输入护照！");
+		alert("请输入护照号码！");
 		return false;
 	}
 	if($('input[name="passport_exp_date"]').val()==""){

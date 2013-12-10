@@ -42,7 +42,7 @@
 		</property>
 	</bean>
 
-	<!-- 拦截器 -->
+	<!-- 拦截器 
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/query/*" /> 
@@ -53,4 +53,5 @@
 			<bean class="cn.com.jnpc.foreign.utils.SessionInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
+	-->
 </beans>

@@ -258,7 +258,7 @@ body {
 				</div>
 				<div class="row">
 					<div class="cols1">
-						护 照<label style="color: red;">*</label>
+						护照号码<label style="color: red;">*</label>
 					</div>
 					<div class="cols2">
 						<input type="text" id="passport_id" name="passport_id">

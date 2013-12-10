@@ -512,7 +512,7 @@
                     </div>
                 <div class="query_row">
                     <div class="cols1">
-                        护照
+                        护照号码
                     </div>
                     <div class="cols2">
                         <input type="text" id="passport_id_q" name="passport_id_q">
