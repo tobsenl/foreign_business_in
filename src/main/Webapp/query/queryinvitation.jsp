@@ -500,7 +500,7 @@ float: left;
             			var v=data[0];
             			$("#invitationId").html(v.invitationId);
             			$("#fkattachmentid").attr("href",v.picurl);
-            			$("#fkattachmentid").html("点击此处查看 邀请函");
+            			$("#fkattachmentid").html("点击此处查看 邀请函附件");
              			var times=v.stayTime.split(",");
              			if(times.length > 1){
              				$("#stayTime").html(times[0]+"月"+times[1]+"天");
@@ -788,7 +788,7 @@ float: left;
         	<form id="queryform" name="queryform" method="post">
         	<center>邀请函信息查询</center>
             <div class="rows">
-			<div class="colsx1">邀请函ID</div><div class="colsx2"><input type="text" id="invitation_id_q" name="invitation_id_q"></div>
+			<div class="colsx1">邀请函编号</div><div class="colsx2"><input type="text" id="invitation_id_q" name="invitation_id_q"></div>
 			<div class="colsx1">邀请函状态</div><div class="colsx2"><input type="radio" name="is_use_q" value="0">未使用<input type="radio" name="is_use_q" value="1">使用中<input type="radio" name="is_use_q" value="2">已失效</div>
             <div class="colsx1">拟入境日期</div><div class="colsx2"><input type="text" name="indate_q" id="indate_q" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></div>
 			</div>
@@ -806,7 +806,7 @@ float: left;
 				<div class="list">
 					<div class="row_">
 						<div class="title ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all">
-							<div class="cols">邀请函号码</div>
+							<div class="cols">邀请函编号</div>
 							<div class="cols">申请签证有效期</div>
 							<div class="cols">使用状态</div>
 							<div class="cols">往返次数</div>
@@ -904,7 +904,7 @@ float: left;
 		<div class="table">
 			<br />
 			<div class="row">
-				<div class="cols1">邀请函号</div>
+				<div class="cols1">邀请函编号</div>
 				<div class="cols2">
 					<label id="invitationId"></label>
 				</div>

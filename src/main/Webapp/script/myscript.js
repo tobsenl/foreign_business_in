@@ -63,29 +63,15 @@ function f_submit(){
 		}
 
 	}
-	if($('select[name="residence_permit_kind"]').val()!="0"){
-		if($('input[name="rp_exp_endDate"]').val()==""){
-			alert("请选择签证有效期！");
-			return false;
-		}
-		if($('select[name="_Address"]').val()=="0"){
-			alert("请选择居留地址！");
-			return false;
-		}
-		if($("#address").val()==""){
-			alert("请输入具体地点！");
-			return false;
-		}
-	}
 		$("#form1").submit();
 }
 function f_subinv(){
 	if($('input[name="invitation_id"]').val()==""){
-		alert("邀请函号不能为空！");
+		alert("邀请函编号不能为空！");
 		 return false;
 	}
 	if($('input[name="attachment"]').val()==""){
-		alert("请选择邀请函！");
+		alert("请选择要上传的邀请函附件！");
 		 return false;
 	}
 	var month=$('input[name="month"]').val();

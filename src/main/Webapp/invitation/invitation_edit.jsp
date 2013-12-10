@@ -563,7 +563,7 @@ float: left;
         	<form id="queryform" name="queryform" method="post">
         	<center>邀请函信息维护</center>
             <div class="rows">
-			<div class="colsx1">邀请函ID</div><div class="colsx2"><input type="text" id="invitation_id_q" name="invitation_id_q"></div>
+			<div class="colsx1">邀请函编号</div><div class="colsx2"><input type="text" id="invitation_id_q" name="invitation_id_q"></div>
             <div class="colsx1">拟入境日期</div><div class="colsx2"><input type="text" name="indate_q" id="indate_q" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></div>
 			</div>
 			<div class="rows" style="float: left;">
@@ -583,7 +583,7 @@ float: left;
 							<div class="cols">
                             	<input type="checkbox" id="allcheckbox" value="0">
                         	</div>
-							<div class="cols">邀请函号码</div>
+							<div class="cols">邀请函编号</div>
 							<div class="cols">申请签证有效期</div>
 							<div class="cols">使用状态</div>
 							<div class="cols">往返次数</div>
@@ -692,7 +692,7 @@ float: left;
 		<div class="table">
 			<br />
 			<div class="row">
-				<div class="cols1">邀请函号<label style="color: red;">*</label></div>
+				<div class="cols1">邀请函编号<label style="color: red;">*</label></div>
 				<div class="cols2">
 					<input type="text" name="invitationId" id="invitationId" />
 					<input type="hidden" id="id" name="id" />

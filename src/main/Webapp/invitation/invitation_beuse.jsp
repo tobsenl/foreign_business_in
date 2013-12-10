@@ -337,7 +337,7 @@ float: left;
 	   							te=trim(te);
 	   							if($(v).val() != "0"){
 	   		   						id=id+$(v).val()+",";
-	   							}if(te != "邀请函号码"){
+	   							}if(te != "邀请函编号"){
 	   		   						value=value+te+",";
 	   							}
 	   		   				});
@@ -346,7 +346,7 @@ float: left;
    							te=trim(te);
    							if($(temp[0]).val() != "0"){
    		   						id=id+$(temp[0]).val()+",";
-   							}if(te != "邀请函号码"){
+   							}if(te != "邀请函编号"){
    		   						value=value+te+",";
    							}
    						}
@@ -476,7 +476,7 @@ float: left;
         	<form id="queryform" name="queryform" method="post" style="margin-left:10%;">
         	<center>邀请函启用维护</center>
             <div class="rows">
-			<div class="colsx1">邀请函ID</div><div class="colsx2"><input type="text" id="invitation_id_q" name="invitation_id_q"></div>
+			<div class="colsx1">邀请函编号</div><div class="colsx2"><input type="text" id="invitation_id_q" name="invitation_id_q"></div>
 			<div class="colsx1">邀请函状态</div><div class="colsx2"><input type="radio" name="is_use_q" value="0">未使用<input type="radio" name="is_use_q" value="1">使用中</input></div>
             <div class="colsx1">拟入境日期</div><div class="colsx2"><input type="text" name="indate_q" id="indate_q" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></div>
 			</div>
@@ -497,7 +497,7 @@ float: left;
 							<div class="cols">
                             	<input type="checkbox" id="allcheckbox" value="0">
                         	</div>
-							<div class="cols">邀请函号码</div>
+							<div class="cols">邀请函编号</div>
 							<div class="cols">申请签证有效期</div>
 							<div class="cols">使用状态</div>
 							<div class="cols">往返次数</div>
@@ -615,7 +615,7 @@ float: left;
 		<div class="table">
 			<br />
 			<div class="row">
-				<div class="cols1">邀请函号<label style="color: red;">*</label></div>
+				<div class="cols1">邀请函编号<label style="color: red;">*</label></div>
 				<div class="cols2">
 					<input type="text" name="invitationId" id="invitationId" />
 					<input type="hidden" id="id" name="id" />

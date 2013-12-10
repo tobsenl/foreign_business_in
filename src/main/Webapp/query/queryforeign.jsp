@@ -420,7 +420,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	 content=content+"<div class='info_row'>";
             	 content=content+"<div class='info_title ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all'>";
             	 content=content+"<div class='info_cols'>";
-            	 content=content+"邀请函号码";
+            	 content=content+"邀请函编号";
             	 content=content+"</div>";
             	 content=content+"<div class='info_cols'>";
             	 content=content+"是否使用";
@@ -716,7 +716,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                 <div class="query_row">
                      <div class="cols1">
-                        邀请函
+                        邀请函编号
                     </div>
                     <div class="cols2">
                         <input type="text" id="invitation_numb" name="invitation_numb">
@@ -994,7 +994,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="table">
 			<br />
 			<div class="row2">
-				<div class="cols1">邀请函号</div>
+				<div class="cols1">邀请函编号</div>
 				<div class="cols2">
 					<label id="invitationId"></label>
 				</div>

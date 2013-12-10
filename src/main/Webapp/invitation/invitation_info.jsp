@@ -266,7 +266,7 @@ float: left;
 			<div class="rowh1">邀请函信息录入</div>
 			<br />
 			<div class="row">
-				<div class="cols1">邀请函号<label style="color: red;">*</label></div>
+				<div class="cols1">邀请函编号<label style="color: red;">*</label></div>
 				<div class="cols2">
 					<input type="text" name="invitation_id">
 				</div>

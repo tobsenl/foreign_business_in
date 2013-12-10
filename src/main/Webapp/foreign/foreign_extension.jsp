@@ -548,7 +548,7 @@
                     </div>
                 <div class="query_row">
                      <div class="cols1">
-                        邀请函
+                        邀请函编号
                     </div>
                     <div class="cols2">
                         <input type="text" id="invitation_numb" name="invitation_numb">
