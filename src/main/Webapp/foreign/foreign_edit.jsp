@@ -488,6 +488,9 @@
 			$("#pagination-clean").on("blur","input",function(e){
 				check_submit(e);
 			});
+			$("input[name='birthday'],input[name='passport_exp_date'],input[name='rp_exp_endDate']").focus(function(){
+				WdatePicker({dateFmt:'yyyy-MM-dd'});
+			});
         });
         </script>
 </head>
@@ -716,8 +719,7 @@
 						出生日期<label style="color: red;">*</label>
 					</div>
 					<div class="cols2">
-						<input class="Wdate" type="text" name="birthday" id="birthday"
-							onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})" />
+						<input class="Wdate" type="text" name="birthday" id="birthday" />
 					</div>
 				</div>
 				<div class="row_">
@@ -749,8 +751,7 @@
 				<div class="row_">
 					<div class="cols1">护照有效期至<label style="color: red;">*</label></div>
 					<div class="cols2">
-						<input class="Wdate" id="passport_exp_date" type="text" name="passport_exp_date"
-							onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'%y-%M-%d'})" />
+						<input class="Wdate" id="passport_exp_date" type="text" name="passport_exp_date" />
 					</div>
 				</div>
 				<div class="row_">
@@ -806,8 +807,7 @@
 					<div class="row_">
 								<div class="cols1">签证有限期至<label style="color: red;">*</label></div>
 								<div class="cols2">
-									<input class="Wdate" id="rp_exp_endDate" type="text" name="rp_exp_endDate"
-										onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'%y-%M-%d'})" />
+									<input class="Wdate" id="rp_exp_endDate" type="text" name="rp_exp_endDate" />
 								</div>
 					</div>
 					<div class="row_">

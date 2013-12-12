@@ -261,6 +261,9 @@ float: left;
             	$("input:checkbox").prop('checked',this.checked) 
             });
 			
+			$("#indate_q,#leavingDate").focus(function(){
+				WdatePicker({dateFmt:'yyyy-MM-dd'});
+			});
 			
 			function split( val ) {
 				return val.split( /,\s*/ );
@@ -478,7 +481,7 @@ float: left;
             <div class="rows">
 			<div class="colsx1">邀请函编号</div><div class="colsx2"><input type="text" id="invitation_id_q" name="invitation_id_q"></div>
 			<div class="colsx1">邀请函状态</div><div class="colsx2"><input type="radio" name="is_use_q" value="0">未使用<input type="radio" name="is_use_q" value="1">使用中</input></div>
-            <div class="colsx1">拟入境日期</div><div class="colsx2"><input type="text" name="indate_q" id="indate_q" class="Wdate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"></div>
+            <div class="colsx1">拟入境日期</div><div class="colsx2"><input type="text" name="indate_q" id="indate_q" class="Wdate" ></div>
 			</div>
 			<div class="rows" style="float: left;">
 			<div class="colsx1" style="width: 13%;">所含外籍人员</div>
@@ -652,8 +655,7 @@ float: left;
 			<div class="row">
 				<div class="cols1">拟离境日期<label style="color: red;">*</label></div>
 				<div class="cols2">
-					<input class="Wdate" id="leavingDate" type="text" name="leavingDate"
-						onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'%y-%M-%d'})" />
+					<input class="Wdate" id="leavingDate" type="text" name="leavingDate"/>
 				</div>
 			</div>
 			<div class="row">

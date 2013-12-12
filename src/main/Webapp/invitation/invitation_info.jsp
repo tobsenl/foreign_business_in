@@ -164,11 +164,14 @@ float: left;
 		}
 		}
 		$("input[name='arrived_date']").focus(function(){
-			WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'%y-%M-%d',onpicking:function(dp){
+			WdatePicker({dateFmt:'yyyy-MM-dd',onpicking:function(dp){
 				var arrived_date=dp.cal.getNewDateStr();
 				//填写的停留时间
 				getplantime(arrived_date);
 			}});
+		});
+		$("input[name='leaving_date']").focus(function(){
+			WdatePicker({dateFmt:'yyyy-MM-dd'});
 		});
         $(function(){
         	//添加元素的删除
@@ -295,18 +298,13 @@ float: left;
 			<div class="row">
 				<div class="cols1">拟入境日期<label style="color: red;">*</label></div>
 				<div class="cols2">
-				<!-- 
-					<input class="Wdate" id="et1" type="text" name="arrived_date"
-						onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'%y-%M-%d'})" />
-						-->
 					<input class="Wdate" id="et1" type="text" name="arrived_date" />
 				</div>
 			</div>
 			<div class="row">
 				<div class="cols1">拟离境日期<label style="color: red;">*</label></div>
 				<div class="cols2">
-					<input class="Wdate" id="et1" type="text" name="leaving_date"
-						onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'%y-%M-%d'})" />
+					<input class="Wdate" id="et2" type="text" name="leaving_date" />
 				</div>
 			</div>
 			<div class="row">

@@ -174,6 +174,9 @@
             			}
             		}
             	}
+            	$("#rpExpEnddate").focus(function(){
+    				WdatePicker({dateFmt:'yyyy-MM-dd'});
+    			});
             	function trim(str){ //删除左右两端的空格
             	     return str.replace(/(^\s*)|(\s*$)/g, "");
             	}
@@ -839,8 +842,7 @@
                     签证有效期至
                 </div>
                 <div class="cols22">
-                    <input class="Wdate" id="rpExpEnddate" type="text" name="rpExpEnddate"
-										onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'%y-%M-%d'})" />
+                    <input class="Wdate" id="rpExpEnddate" type="text" name="rpExpEnddate" />
                 </div>
             </div>
             <div class="row">

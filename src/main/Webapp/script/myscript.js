@@ -80,12 +80,12 @@ function f_subinv(){
 		return false;
 	}
 	if(parseInt(month)<0){
-		alert("请输入正确的月份");
+		alert("请输入正确的整数!(必须是1的倍数)");
 		return false;
 	}
 	var day=$('input[name="day"]').val();
 	if(day==""){
-		alert("请输入的日期！");
+		alert("请输入天数！");
 		 return false;
 	}
 	if(isNaN(day)){
@@ -93,7 +93,7 @@ function f_subinv(){
 		return false;
 	}
 	if(parseInt(day)>31||parseInt(day)<=0){
-		alert("请输入正确的日期的！");
+		alert("请输入正确的天数！(最大天数不能超过31)");
 		return false;
 	}
 	if($(':radio[name="goback_times"]:checked').val()==undefined){

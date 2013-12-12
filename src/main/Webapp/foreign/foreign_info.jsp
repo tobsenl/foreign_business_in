@@ -184,6 +184,9 @@ body {
 				$("#rp_div").css("display","none");
 				$("#upload_ee").css("display","none");
 			});
+			$("input[name='birthday'],input[name='passport_exp_date'],input[name='rp_exp_endDate']").focus(function(){
+				WdatePicker({dateFmt:'yyyy-MM-dd'});
+			});
 	});
 </script>
 </head>
@@ -229,8 +232,7 @@ body {
 						出生日期<label style="color: red;">*</label>
 					</div>
 					<div class="cols2">
-						<input class="Wdate" type="text" name="birthday"
-							onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})" />
+						<input class="Wdate" type="text" name="birthday" />
 					</div>
 				</div>
 				<div class="row">
@@ -267,8 +269,7 @@ body {
 				<div class="row">
 					<div class="cols1">护照有效期至<label style="color: red;">*</label></div>
 					<div class="cols2">
-						<input class="Wdate" id="et1" type="text" name="passport_exp_date"
-							onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'%y-%M-%d'})" />
+						<input class="Wdate" id="et1" type="text" name="passport_exp_date" />
 					</div>
 				</div>
 				<div class="row">
@@ -331,8 +332,7 @@ body {
 							<div class="Crow">
 								<div class="cols1">签证有限期至<label style="color: red;">*</label></div>
 								<div class="cols2">
-									<input class="Wdate" id="et2" type="text" name="rp_exp_endDate"
-										onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'%y-%M-%d'})" />
+									<input class="Wdate" id="et2" type="text" name="rp_exp_endDate" />
 								</div>
 							</div>
 						</div>
