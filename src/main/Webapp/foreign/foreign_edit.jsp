@@ -805,13 +805,13 @@
 				</div>
 				<div id="rp_div" >
 					<div class="row_">
-								<div class="cols1">签证有限期至<label style="color: red;">*</label></div>
+								<div class="cols1">签证有限期至</div>
 								<div class="cols2">
 									<input class="Wdate" id="rp_exp_endDate" type="text" name="rp_exp_endDate" />
 								</div>
 					</div>
 					<div class="row_">
-						<div class="cols1">居留地址<label style="color: red;">*</label></div>
+						<div class="cols1">居留地址</div>
 						<div class="cols2">
 							<select id="_Address" name="_Address">
 								<option value="0"></option>

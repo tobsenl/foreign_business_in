@@ -330,7 +330,7 @@ body {
 					<div class="row">
 						<div class="colspan">
 							<div class="Crow">
-								<div class="cols1">签证有限期至<label style="color: red;">*</label></div>
+								<div class="cols1">签证有限期至</div>
 								<div class="cols2">
 									<input class="Wdate" id="et2" type="text" name="rp_exp_endDate" />
 								</div>
@@ -338,7 +338,7 @@ body {
 						</div>
 					</div>
 					<div class="row">
-						<div class="cols1">居留地址<label style="color: red;">*</label></div>
+						<div class="cols1">居留地址</div>
 						<div class="cols2">
 							<select id="_Address" name="_Address">
 								<option value="0"></option>

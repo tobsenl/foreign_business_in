@@ -52,27 +52,13 @@ function checkedit(){
 		alert("邀请函编号不能为空！");
 		 return false;
 	}
-	var month=$('input[name="month"]').val();
-	if(isNaN(month)){
-		alert("请输入整数!");
-		return false;
-	}
-	if(parseInt(month)<0){
-		alert("请输入正确的整数!(必须是1的倍数)");
-		return false;
-	}
+	
 	var day=$('input[name="day"]').val();
-	if(day==""){
-		alert("请输入天数！");
-		 return false;
-	}
-	if(isNaN(day)){
-		alert("请输入整数!");
-		return false;
-	}
-	if(parseInt(day)>31||parseInt(day)<=0){
-		alert("请输入正确的天数！(最大天数不能超过31)");
-		return false;
+	if(day!=""){	
+		if(parseInt(day)>31||parseInt(day)<0){
+			alert("请输入正确的天数！(最大天数不能超过31)");
+			return false;
+		}
 	}
 	if($(':radio[name="gobackTimes"]:checked').val()==undefined){
 		alert("请选择来往次数！");
