@@ -76,7 +76,7 @@ function f_subinv(){
 	}
 	var month=$('input[name="month"]').val();
 	if(isNaN(month)){
-		alert("请输入数字!");
+		alert("请输入整数!");
 		return false;
 	}
 	if(parseInt(month)<0){
@@ -89,7 +89,7 @@ function f_subinv(){
 		 return false;
 	}
 	if(isNaN(day)){
-		alert("请输入数字!");
+		alert("请输入整数!");
 		return false;
 	}
 	if(parseInt(day)>31||parseInt(day)<=0){
