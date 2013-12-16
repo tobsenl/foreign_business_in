@@ -54,6 +54,11 @@ function checkedit(){
 	}
 	
 	var day=$('input[name="day"]').val();
+	var month=$('input[name="month"]').val();
+	if(month == "" && day == ""){
+		alert("签证有效期不能为空!");
+		return false;
+	}
 	if(day!=""){	
 		if(parseInt(day)>31||parseInt(day)<0){
 			alert("请输入正确的天数！(最大天数不能超过31)");
