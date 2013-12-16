@@ -288,7 +288,7 @@ float: left;
 				</div>
 			</div>
 			<div class="row">
-			<div class="cols1">来往次数<label style="color: red;">*</label></div>
+			<div class="cols1">入境次数<label style="color: red;">*</label></div>
 			<div class="cols2">
 				<input type="radio" name="goback_times" value="1">一次往返&nbsp;<input
 					type="radio" name="goback_times" value="2">两次往返&nbsp;<input type="radio"

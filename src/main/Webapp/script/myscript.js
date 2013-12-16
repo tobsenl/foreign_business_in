@@ -87,7 +87,7 @@ function f_subinv(){
 		}
 	}
 	if($(':radio[name="goback_times"]:checked').val()==undefined){
-		alert("请选择来往次数！");
+		alert("请选择入境次数！");
 		 return false;
 	}
 	if($('input[name="arrived_date"]').val()==""){

@@ -17,7 +17,7 @@ import cn.com.jnpc.foreign.utils.Untils;
 
 @Controller
 public class LoginController {
-    @RequestMapping(value = "/login.do")
+    @RequestMapping(value = "/login.html")
     public String login(Users user, HttpServletRequest request, Model model) {
 	User use = null;
 	boolean flag = false;
@@ -66,7 +66,7 @@ public class LoginController {
 	}
     }
 
-    @RequestMapping(value = "/login.html")
+    @RequestMapping(value = "/login.do")
     public String login(HttpServletRequest request, Model model) {
 	return "index/index";
     }

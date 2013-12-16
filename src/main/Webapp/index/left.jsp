@@ -88,10 +88,10 @@
         <div style="width:98%;">
             <h3>&nbsp;&nbsp;专家请进</h3>
             <%
-        		//Properties prop=(Properties)session.getAttribute("prop");
-        		//Vector vector=(Vector)session.getAttribute("vec");
-				//if(vector != null){
-				//if(vector.size() > 0){
+        		Properties prop=(Properties)session.getAttribute("prop");
+        		Vector vector=(Vector)session.getAttribute("vec");
+				if(vector != null){
+				if(vector.size() > 0){
             %>
             <div id="accordion1" style="width:98%;">
                 <h3><span ></span>信息录入</h3>
@@ -103,7 +103,7 @@
                         <a href="<%=basePath%>invitation/invitation_info.html" target="main">邀请函信息录入</a>
                     </li>
                 </ul>
-                <%//if(vector.contains(prop.getProperty("to_edit"))){ %>
+                <%if(vector.contains(prop.getProperty("to_edit"))){ %>
                 <h3><span ></span>信息维护</h3>
                 <ul style="list-style: none;">
                     <li>
@@ -125,7 +125,7 @@
                         <a href="<%=basePath%>foreign/foreign_extension.html" target="main">签证延期维护</a>
                     </li>
                 </ul>
-                <%//}if(vector.contains(prop.getProperty("to_query"))){ %>
+                <%}if(vector.contains(prop.getProperty("to_query"))){ %>
                 <h3><span ></span>信息查询</h3>
                 <ul style="list-style: none;">
                     <li>
@@ -145,11 +145,11 @@
                         <a href="javascript:;" target="main">专家引进情况统计</a>
                     </li>
                 </ul>
-                <%//} %>
+                <%} %>
             </div>
-            <%//}}else{%>
+            <%}}else{%>
             	<script type="text/javascript">//alert("数据库连接错误！请稍后再试.");</script>
-            <%//} %>
+            <%} %>
             <div style="height: 27px;width: 97%;margin-top: 2px;text-align: center;" class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons">
                 <a href="<%=basePath%>/loginout.html" style="vertical-align: middle;"><!-- <img src="images/quit.gif" alt="" border="0" height="20px;" /> -->
                     <font size="4">

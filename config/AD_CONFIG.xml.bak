@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="PURE_contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+		<property name="pooled" value="true" />
+		<property name="url" value="ldap://10.10.14.46:389" />
+		<property name="userDn"
+			value="CN=p8admin,OU=ECM,OU=JNPC,DC=ECMUAT,DC=JNPC,DC=COM" />
+		<property name="password" value="filenet" />
+	</bean>
+	<bean id="template" class="cn.com.jnpc.ems.common.LdapTemplateBean">
+		<constructor-arg ref="PURE_contextSource" />
+		<property name="jnpcBasePath" value="OU=JNPC,DC=ECMUAT,DC=JNPC,DC=COM" />
+		<property name="usersBasePath" value="OU=USERS," />
+		<property name="rolesBasePath" value="OU=ECM,OU=ROLES," />
+	</bean>
+</beans>

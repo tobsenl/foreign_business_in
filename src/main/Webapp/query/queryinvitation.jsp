@@ -812,7 +812,7 @@ float: left;
 							<div class="cols">邀请函编号</div>
 							<div class="cols">申请签证有效期</div>
 							<div class="cols">使用状态</div>
-							<div class="cols">往返次数</div>
+							<div class="cols">入境次数</div>
 							<div class="cols">拟入境日期</div>
 							<div class="cols">查看</div>
 						</div>
@@ -925,7 +925,7 @@ float: left;
 				</div>
 			</div>
 			<div class="row">
-				<div class="cols1">来往次数</div>
+				<div class="cols1">入境次数</div>
 				<div class="cols2">
 					<label id="gobackTimes"></label>
 				</div>

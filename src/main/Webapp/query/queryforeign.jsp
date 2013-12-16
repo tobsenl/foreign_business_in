@@ -429,7 +429,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	 content=content+"停留期限";
             	 content=content+"</div>";
             	 content=content+"<div class='info_cols'>";
-            	 content=content+"往返次数";
+            	 content=content+"入境次数";
             	 content=content+"</div>";
             	 content=content+"<div class='info_cols'>";
             	 content=content+"拟入境日期";
@@ -1012,7 +1012,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 			</div>
 			<div class="row2">
-				<div class="cols1">来往次数</div>
+				<div class="cols1">入境次数</div>
 				<div class="cols2">
 					<label id="gobackTimes"></label>
 				</div>
