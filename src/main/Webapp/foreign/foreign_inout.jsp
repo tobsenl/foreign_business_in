@@ -232,11 +232,11 @@
                 		if(trim($("#content").val()) == ""){
                 			return "请填写入境的来华任务";
                 		}if(trim($("#begintime").val()) == ""){
-                			return "请填写时间";
+                			return "请填写日期";
                 		}
                 	}else if(val == "0"){
                 		if(trim($("#begintime").val()) == ""){
-                			return "请填写时间";
+                			return "请填写日期";
                 		}
                 	}
                 	return "验证成功!";
@@ -859,7 +859,7 @@
             </div>
             <div class="row">
                 <div class="cols11">
-                    时间
+                    日期
                 </div>
                 <div class="cols22">
                     <input class="Wdate" id="begintime" type="text" name="begintime" />
